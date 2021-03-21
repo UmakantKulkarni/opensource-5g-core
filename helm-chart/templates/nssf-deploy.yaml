@@ -2,7 +2,6 @@ apiVersion: v1
 kind: Service
 metadata:
   name: open5gs-nssf
-  namespace: 5g-core
   labels:
     epc-mode: nssf
 spec:
@@ -16,8 +15,7 @@ spec:
 apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
 kind: Deployment
 metadata:
-  name: open5gs-nssf-deployment
-  namespace: 5g-core  
+  name: open5gs-nssf-deployment  
   labels:
     epc-mode: nssf
 spec:
