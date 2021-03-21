@@ -40,14 +40,8 @@ spec:
           volumeMounts:
           - name: open5gs-udr-config
             mountPath: /open5gs/config-map/udr.yaml
-            subPath: "udr.yaml"
-          - mountPath: "/root/"
-            name: mongo-ca-cert
-            readOnly: true            
+            subPath: "udr.yaml"          
       volumes:
         - name: open5gs-udr-config
           configMap:
             name: open5gs-udr-config
-        - name: mongo-ca-cert
-          secret:
-            secretName: {{ .Values.mongo.caSecretName }}            
