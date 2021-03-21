@@ -9,7 +9,7 @@ data:
     logger:
         file: /var/log/open5gs/udr.log
 
-    db_uri: mongodb://mongodb-svc
+    db_uri: mongodb://mongodb-svc/open5gs
     udr:
       sbi:
       - addr: 0.0.0.0

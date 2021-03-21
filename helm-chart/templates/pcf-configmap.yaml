@@ -9,7 +9,7 @@ data:
     logger:
         file: /var/log/open5gs/pcf.log
     
-    db_uri: mongodb://mongodb-svc      
+    db_uri: mongodb://mongodb-svc/open5gs    
 
     pcf:
       sbi:     
