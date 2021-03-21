@@ -40,14 +40,8 @@ spec:
           volumeMounts:
           - name: open5gs-pcf-config
             mountPath: /open5gs/config-map/pcf.yaml
-            subPath: "pcf.yaml"
-          - mountPath: "/root/"
-            name: mongo-ca-cert
-            readOnly: true            
+            subPath: "pcf.yaml"          
       volumes:
         - name: open5gs-pcf-config
           configMap:
-            name: open5gs-pcf-config
-        - name: mongo-ca-cert
-          secret:
-            secretName: {{ .Values.mongo.caSecretName }}            
+            name: open5gs-pcf-config         
