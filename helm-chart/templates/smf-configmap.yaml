@@ -38,6 +38,5 @@ data:
 
     upf:
       pfcp:
-        - addr: 10.0.0.149
-#          dnn: {{ .Values.dnn }}
-#       - name: upf-open5gs
+        - name: upf-open5gs
+          dnn: {{ .Values.dnn }}
