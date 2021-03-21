@@ -27,9 +27,7 @@ spec:
     metadata:
       labels:
         epc-mode: pcf
-    spec:
-      nodeSelector:
-        nodegroup: control-plane     
+    spec:    
       containers:
         - name: pcf
           image: "{{ .Values.open5gs.image.repository }}:{{ .Values.open5gs.image.tag }}"

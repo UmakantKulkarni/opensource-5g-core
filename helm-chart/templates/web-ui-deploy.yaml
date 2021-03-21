@@ -73,9 +73,7 @@ spec:
     metadata:
       labels:
         epc-mode: webui
-    spec:
-      nodeSelector:
-        nodegroup: control-plane    
+    spec:    
       containers:
       - name: webui
         imagePullPolicy: {{ .Values.webui.image.pullPolicy }}
