@@ -80,7 +80,7 @@ spec:
         image: "{{ .Values.webui.image.repository }}:{{ .Values.webui.image.tag }}"      
         env:
         - name: DB_URI
-          value: mongodb-svc
+          value: mongodb://mongodb-svc
         - name: NODE_ENV
           value: "production"  
         - name: HOSTNAME
