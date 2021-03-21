@@ -10,7 +10,7 @@ data:
     logger:
         file: /var/log/open5gs/nssf.log
     
-    db_uri: {{ .Values.mongo.uri }}        
+    db_uri: mongodb-svc        
 
     nssf:
       sbi:     

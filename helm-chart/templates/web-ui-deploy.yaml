@@ -81,19 +81,11 @@ spec:
       containers:
       - name: webui
         imagePullPolicy: {{ .Values.webui.image.pullPolicy }}
-        image: "{{ .Values.webui.image.repository }}:{{ .Values.webui.image.tag }}"
-        volumeMounts:
-          - mountPath: "/root/"
-            name: mongo-ca-cert
-            readOnly: true        
+        image: "{{ .Values.webui.image.repository }}:{{ .Values.webui.image.tag }}"      
         env:
         - name: DB_URI
-          value: {{ .Values.mongo.uri }}
+          value: mongodb-svc
         - name: NODE_ENV
           value: "production"  
         - name: HOSTNAME
-          value: '0.0.0.0'             
-      volumes:
-        - name: mongo-ca-cert
-          secret:
-            secretName: {{ .Values.mongo.caSecretName }}               
+          value: '0.0.0.0'               
