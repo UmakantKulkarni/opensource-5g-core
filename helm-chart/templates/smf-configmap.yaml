@@ -7,8 +7,6 @@ metadata:
 data:
   smf.yaml: |
     logger:
-        level: debug
-        domain: pfcp,tlv
         file: /var/log/open5gs/smf.log
 
     parameter:
