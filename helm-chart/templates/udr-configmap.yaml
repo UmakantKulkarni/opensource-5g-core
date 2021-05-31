@@ -2,7 +2,6 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: open5gs-udr-config
-  namespace: 5g-core
   labels:
     epc-mode: udr
 data:
@@ -10,7 +9,7 @@ data:
     logger:
         file: /var/log/open5gs/udr.log
 
-    db_uri: mongodb-svc
+    db_uri: mongodb://mongodb-svc/open5gs
     udr:
       sbi:
       - addr: 0.0.0.0

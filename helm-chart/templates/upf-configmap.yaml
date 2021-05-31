@@ -2,7 +2,6 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: open5gs-upf-config
-  namespace: 5g-core
   labels:
     epc-mode: upf
 data:

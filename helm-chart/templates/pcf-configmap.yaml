@@ -2,7 +2,6 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: open5gs-pcf-config
-  namespace: 5g-core
   labels:
     epc-mode: pcf
 data:
@@ -10,7 +9,7 @@ data:
     logger:
         file: /var/log/open5gs/pcf.log
     
-    db_uri: mongodb-svc      
+    db_uri: mongodb://mongodb-svc/open5gs    
 
     pcf:
       sbi:     
