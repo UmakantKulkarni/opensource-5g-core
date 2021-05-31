@@ -37,14 +37,14 @@ webui:
         # - open5gs-epc.local
 
         ## If TLS is set to true, you can declare what secret will store the key/certificate for TLS
-        # tlsSecret: open5gs-epc.local-tls    
+        # tlsSecret: open5gs-epc.local-tls
 
-dnn: internet  
+dnn: internet
 
 amf:
   mcc: 208
   mnc: 93
-  tac: 7
+  tac: 1
 
 # Primary/Native kubernetes interface
 k8s:
