@@ -10,7 +10,7 @@ open5gs:
 
 ueransim:
   image:
-    repository: umakantk/ueransim
+    repository: umakantk/ransim
     pullPolicy: Always
     tag: "v0.1"
 
