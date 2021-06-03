@@ -6,7 +6,7 @@ open5gs:
   image:
     repository: umakantk/open5gs
     pullPolicy: Always
-    tag: "v0.2"
+    tag: "v0.1"
 
 ueransim:
   image:
@@ -16,10 +16,9 @@ ueransim:
 
 webui:
   image:
-    # repository: registry.gitlab.com/infinitydon/registry/open5gs-webui
-    repository: umakantk/open5gs-webui
+    repository: registry.gitlab.com/infinitydon/registry/open5gs-webui
     pullPolicy: Always
-    tag: "v0.2"
+    tag: "v2.2.2"
   ingress:
     enabled: false
     ## Ingress annotations done as key:value pairs
