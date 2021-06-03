@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 numSubs="$1"
-imsi=208930000000039
+imsi=208930000000000
 IP=172.18.0.4
 PORT=32539
 username=admin
