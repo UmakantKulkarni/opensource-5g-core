@@ -4,13 +4,9 @@ RUN apt -y update
 
 RUN apt -y install wget git vim nano make g++ libsctp-dev lksctp-tools net-tools iproute2 libssl-dev
 
-# RUN cd ~ && wget https://github.com/Kitware/CMake/releases/download/v3.20.3/cmake-3.20.3.tar.gz && tar -xvzf cmake-3.20.3.tar.gz
+RUN cd && wget https://github.com/Kitware/CMake/releases/download/v3.20.3/cmake-3.20.3.tar.gz && tar -xvzf cmake-3.20.3.tar.gz
 
-# RUN cd ~/cmake-3.20.3 && ./bootstrap -- -DCMAKE_BUILD_TYPE:STRING=Release && make && make install
-
-RUN cd && wget "https://cmake.org/files/v3.20/cmake-3.20.0-linux-x86_64.tar.gz" && tar -xvzf cmake-3.20.0-linux-x86_64.tar.gz
-
-RUN cd && cd cmake-3.20.0-linux-x86_64/bin/ && cp cmake /usr/bin/
+RUN cd && cd cmake-3.20.3 && ./bootstrap -- -DCMAKE_BUILD_TYPE:STRING=Release && make && make install
 
 RUN cd && rm -rf cmake-*
 
