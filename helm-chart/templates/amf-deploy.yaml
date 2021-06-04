@@ -1,18 +1,18 @@
-#apiVersion: v1
-#kind: Service
-#metadata:
-#  name: amf-open5gs-sctp
-#  labels:
-#    epc-mode: amf
-#spec:
-#  type: NodePort
-#  selector:
-#    epc-mode: amf
-#  ports:
-#    - protocol: SCTP
-#      port: 38412
-#      targetPort: 38412
-#      nodePort: 30412
+apiVersion: v1
+kind: Service
+metadata:
+  name: amf-open5gs-sctp
+  labels:
+    epc-mode: amf
+spec:
+  type: LoadBalancer
+  selector:
+    epc-mode: amf
+  ports:
+    - protocol: SCTP
+      port: 38412
+      targetPort: 38412
+      nodePort: 30412
 ---
 apiVersion: v1
 kind: Service
@@ -25,9 +25,9 @@ spec:
     epc-mode: amf
   ports:
     - protocol: TCP
-      port: 80   
-      targetPort: 80      
----  
+      port: 80
+      targetPort: 80
+---
 apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
 kind: Deployment
 metadata:
@@ -43,7 +43,7 @@ spec:
     metadata:
       labels:
         epc-mode: amf
-    spec:    
+    spec:
       containers:
         - name: amf
           image: "{{ .Values.open5gs.image.repository }}:{{ .Values.open5gs.image.tag }}"
