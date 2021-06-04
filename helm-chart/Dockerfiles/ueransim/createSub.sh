@@ -12,7 +12,7 @@ AuthHeader="Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyI
 XCSRFTOKENHeader="X-CSRF-TOKEN: eBjhr7PLxbgnAHJJ4YcmCU2WxxY1tYBPo399U="
 URI="http://$IP:$PORT/api/db/Subscriber"
 
-jsonStr='{"profile":"60b58511b367ac00198c387c","imsi":"208930000000027","security":{"k":"465B5CE8 B199B49F AA5F0A2E E238A6BC","amf":"8000","op_type":0,"op_value":"E8ED289D EBA952E4 283B54E8 8E6183CA","op":null,"opc":"E8ED289D EBA952E4 283B54E8 8E6183CA"},"ambr":{"downlink":{"value":1,"unit":3},"uplink":{"value":1,"unit":3}},"slice":[{"sst":1,"default_indicator":true,"_id":"60b58511b367ac00198c387d","session":[{"name":"internet","type":3,"_id":"60b58511b367ac00198c387e","pcc_rule":[],"ambr":{"uplink":{"value":1,"unit":3},"downlink":{"value":1,"unit":3}},"qos":{"index":9,"arp":{"priority_level":8,"pre_emption_capability":1,"pre_emption_vulnerability":1}}}]}],"schema_version":1}'
+jsonStr='{"imsi":"208930000000027","security":{"k":"465B5CE8 B199B49F AA5F0A2E E238A6BC","amf":"8000","op_type":0,"op_value":"E8ED289D EBA952E4 283B54E8 8E6183CA","op":null,"opc":"E8ED289D EBA952E4 283B54E8 8E6183CA"},"ambr":{"downlink":{"value":1,"unit":3},"uplink":{"value":1,"unit":3}},"slice":[{"sst":1,"default_indicator":true,"session":[{"name":"internet","type":3,"pcc_rule":[],"ambr":{"uplink":{"value":1,"unit":3},"downlink":{"value":1,"unit":3}},"qos":{"index":9,"arp":{"priority_level":8,"pre_emption_capability":1,"pre_emption_vulnerability":1}}}]}],"schema_version":1}'
 
 run_loop () {
   for i in $(seq 1 $numSubs);
