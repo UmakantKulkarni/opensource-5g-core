@@ -33,7 +33,7 @@ spec:
       volumes:
       - name: mongodb-persistent-storage
         persistentVolumeClaim:
-          claimName: mongodb-pv-claim
+          claimName: mongodb-pv-claim-open5gs
 ---
 kind: PersistentVolume
 apiVersion: v1
