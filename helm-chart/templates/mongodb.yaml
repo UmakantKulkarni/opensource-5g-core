@@ -52,7 +52,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: mongodb-pv-claim
+  name: mongodb-pv-claim-open5gs
 spec:
   accessModes:
     - ReadWriteOnce
