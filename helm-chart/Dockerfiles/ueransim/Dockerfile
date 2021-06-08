@@ -20,4 +20,6 @@ COPY ./*.yaml UERANSIM/config/
 
 COPY ./*.sh UERANSIM/
 
+RUN cp UERANSIM/build/nr-* /usr/local/bin/
+
 CMD ["sh", "-c", "sleep infinity"]
