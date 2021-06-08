@@ -42,6 +42,7 @@ metadata:
   labels:
     type: local
 spec:
+  persistentVolumeReclaimPolicy: Delete
   capacity:
     storage: 20Gi
   accessModes:
@@ -54,6 +55,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: mongodb-pv-claim-open5gs
 spec:
+  storageClassName: ""
   accessModes:
     - ReadWriteOnce
   resources:
