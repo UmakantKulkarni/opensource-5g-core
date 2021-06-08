@@ -6,7 +6,10 @@ open5gs:
   image:
     repository: umakantk/open5gs
     pullPolicy: Always
-    tag: "v0.3"
+    tag: "v0.22"
+    repository2: umakantk/open5gs
+    pullPolicy2: Always
+    tag2: "v0.12"
 
 ueransim:
   image:
