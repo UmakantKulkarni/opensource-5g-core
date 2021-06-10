@@ -45,3 +45,5 @@ data:
     nrf:
      sbi:
        name: open5gs-nrf
+    pool:
+      256:  16384

@@ -12,3 +12,5 @@ data:
     nrf:
         sbi:
           addr: 0.0.0.0
+    pool:
+      256:  16384

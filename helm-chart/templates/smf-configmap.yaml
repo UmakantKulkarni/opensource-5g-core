@@ -38,3 +38,5 @@ data:
       pfcp:
         - name: upf-open5gs
           dnn: {{ .Values.dnn }}
+    pool:
+      256:  16384

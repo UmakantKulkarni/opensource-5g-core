@@ -16,4 +16,6 @@ data:
         advertise: open5gs-udr
     nrf:
      sbi:
-      name: open5gs-nrf  
+      name: open5gs-nrf
+    pool:
+      256:  16384
