@@ -11,6 +11,10 @@ open5gs:
     pullPolicy2: Always
     tag2: "v0.12"
 
+pool:
+  key: 128
+  val: 65536
+
 ueransim:
   image:
     repository: umakantk/ueransim

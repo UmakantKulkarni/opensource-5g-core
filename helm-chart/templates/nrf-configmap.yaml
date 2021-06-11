@@ -13,4 +13,4 @@ data:
         sbi:
           addr: 0.0.0.0
     pool:
-      256:  16384
+      {{ .Values.pool.key }}: {{ .Values.pool.val }}

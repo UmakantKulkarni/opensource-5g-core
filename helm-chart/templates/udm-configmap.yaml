@@ -17,4 +17,4 @@ data:
      sbi:
       name: open5gs-nrf
     pool:
-      256:  16384
+      {{ .Values.pool.key }}: {{ .Values.pool.val }}

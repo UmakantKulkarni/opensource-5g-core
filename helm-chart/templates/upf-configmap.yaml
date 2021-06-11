@@ -18,4 +18,4 @@ data:
           - addr: 10.45.0.1/16
             dnn: {{ .Values.dnn }}
     pool:
-      256:  16384
+      {{ .Values.pool.key }}: {{ .Values.pool.val }}

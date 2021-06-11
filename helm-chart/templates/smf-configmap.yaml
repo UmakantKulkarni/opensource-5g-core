@@ -39,4 +39,4 @@ data:
         - name: upf-open5gs
           dnn: {{ .Values.dnn }}
     pool:
-      256:  16384
+      {{ .Values.pool.key }}: {{ .Values.pool.val }}
