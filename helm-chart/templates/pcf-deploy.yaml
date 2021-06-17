@@ -30,8 +30,8 @@ spec:
     spec:    
       containers:
         - name: pcf
-          image: "{{ .Values.open5gs.image.repository2 }}:{{ .Values.open5gs.image.tag2 }}"
-          imagePullPolicy: {{ .Values.open5gs.image.pullPolicy2 }}
+          image: "{{ .Values.open5gs.image.repository }}:{{ .Values.open5gs.image.tag }}"
+          imagePullPolicy: {{ .Values.open5gs.image.pullPolicy }}
           command: ["open5gs-pcfd", "-c", "/open5gs/config-map/pcf.yaml"]
           volumeMounts:
           - name: open5gs-pcf-config

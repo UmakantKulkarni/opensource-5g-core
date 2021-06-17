@@ -30,8 +30,8 @@ spec:
     spec:   
       containers:
         - name: udr
-          image: "{{ .Values.open5gs.image.repository2 }}:{{ .Values.open5gs.image.tag2 }}"
-          imagePullPolicy: {{ .Values.open5gs.image.pullPolicy2 }}
+          image: "{{ .Values.open5gs.image.repository }}:{{ .Values.open5gs.image.tag }}"
+          imagePullPolicy: {{ .Values.open5gs.image.pullPolicy }}
           command: ["open5gs-udrd", "-c", "/open5gs/config-map/udr.yaml"]
           volumeMounts:
           - name: open5gs-udr-config
