@@ -40,3 +40,5 @@ data:
           dnn: {{ .Values.dnn }}
     pool:
       {{ .Values.pool.key }}: {{ .Values.pool.val }}
+    max:
+      ue: {{ .Values.max.ue }}

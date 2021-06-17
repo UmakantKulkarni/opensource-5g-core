@@ -12,6 +12,9 @@ pool:
   key: 128
   val: 65536
 
+max:
+  ue: 2048
+
 ueransim:
   image:
     repository: umakantk/ueransim

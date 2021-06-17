@@ -47,3 +47,5 @@ data:
        name: open5gs-nrf
     pool:
       {{ .Values.pool.key }}: {{ .Values.pool.val }}
+    max:
+      ue: {{ .Values.max.ue }}

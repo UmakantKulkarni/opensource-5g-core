@@ -14,3 +14,5 @@ data:
           addr: 0.0.0.0
     pool:
       {{ .Values.pool.key }}: {{ .Values.pool.val }}
+    max:
+      ue: {{ .Values.max.ue }}
