@@ -6,7 +6,7 @@ open5gs:
   image:
     repository: umakantk/open5gs
     pullPolicy: Always
-    tag: "780f829"
+    tag: "a396ea8"
 
 pool:
   key: 128
