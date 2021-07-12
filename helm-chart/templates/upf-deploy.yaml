@@ -36,7 +36,7 @@ spec:
           imagePullPolicy: {{ .Values.open5gs.image.pullPolicy }}
           env:
           - name: PCS_DB_COMM_ENABLED
-            value: {{ .Values.open5gs.pcsDbCommEnabled.upf | default false }}
+            value: {{ .Values.open5gs.pcsDbCommEnabled.upf | default "false" | quote }}
           securityContext:
             privileged: true
           command: ["/bin/sh", "-c"]

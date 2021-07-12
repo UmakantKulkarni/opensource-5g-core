@@ -51,7 +51,7 @@ spec:
           command: ["open5gs-amfd", "-c", "/open5gs/config-map/amf.yaml"]
           env:
           - name: PCS_DB_COMM_ENABLED
-            value: {{ .Values.open5gs.pcsDbCommEnabled.amf | default false }}
+            value: {{ .Values.open5gs.pcsDbCommEnabled.amf | default "false" | quote }}
           volumeMounts:
           - name: open5gs-amf-config
             mountPath: /open5gs/config-map/amf.yaml
