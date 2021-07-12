@@ -32,6 +32,9 @@ spec:
       - name: smf
         image: "{{ .Values.open5gs.image.repository }}:{{ .Values.open5gs.image.tag }}"
         imagePullPolicy: {{ .Values.open5gs.image.pullPolicy }}
+        env:
+          - name: PCS_DB_COMM_ENABLED
+            value: {{ .Values.open5gs.pcsDbCommEnabled.smf | default false }}
         command: ["/bin/sh", "-c"]
         args:
         - open5gs-smfd -c /open5gs/config-map/smf.yaml;

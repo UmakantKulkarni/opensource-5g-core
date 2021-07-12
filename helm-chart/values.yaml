@@ -7,6 +7,10 @@ open5gs:
     repository: umakantk/open5gs
     pullPolicy: Always
     tag: "a396ea8"
+  pcsDbCommEnabled:
+    amf: false
+    smf: false
+    upf: false
 
 pool:
   key: 128
