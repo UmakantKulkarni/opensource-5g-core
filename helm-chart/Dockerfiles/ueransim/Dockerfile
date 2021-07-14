@@ -12,7 +12,9 @@ RUN cd && rm -rf cmake-*
 
 RUN cmake --version
 
-RUN cd && git clone -b v3.2.0 https://github.com/aligungr/UERANSIM && cd UERANSIM && make
+ENV PCS_SETUP_TUN_INTF=false
+
+RUN cd && git clone -b tagV3.2.1 https://github.com/UmakantKulkarni/UERANSIM && cd UERANSIM && make
 
 WORKDIR /root/
 
