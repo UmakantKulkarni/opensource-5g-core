@@ -6,11 +6,11 @@ open5gs:
   image:
     repository: umakantk/open5gs
     pullPolicy: Always
-    tag: "a396ea8"
+    tag: "a396ea8_mongo"
   pcsDbCommEnabled:
-    amf: false
-    smf: false
-    upf: false
+    amf: true
+    smf: true
+    upf: true
 
 pool:
   key: 128
