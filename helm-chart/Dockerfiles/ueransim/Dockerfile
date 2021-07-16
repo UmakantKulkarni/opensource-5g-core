@@ -14,7 +14,7 @@ RUN cmake --version
 
 ENV PCS_SETUP_TUN_INTF=false
 
-RUN cd && git clone -b tagV3.2.1 https://github.com/UmakantKulkarni/UERANSIM && cd UERANSIM && make
+RUN cd && git clone -b 375d538_v3.2.2 https://github.com/UmakantKulkarni/UERANSIM && cd UERANSIM && make
 
 WORKDIR /root/
 
