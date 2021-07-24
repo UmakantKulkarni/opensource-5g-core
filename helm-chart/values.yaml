@@ -7,7 +7,21 @@ open5gs:
     repository: umakantk/open5gs
     pullPolicy: Always
     tag: "0c1a3d7_mongo"
-  pcsDbCommEnabled:
+
+pcs:
+  dbCommEnabled:
+    amf: true
+    smf: true
+    upf: true
+  updateApiEnabled:
+    amf: true
+    smf: true
+    upf: true
+  blockingApiEnabled:
+    amf: true
+    smf: true
+    upf: true
+  isFullyStateless:
     amf: true
     smf: true
     upf: true
@@ -23,7 +37,7 @@ ueransim:
   image:
     repository: umakantk/ueransim
     pullPolicy: Always
-    tag: "v0.2"
+    tag: "v0.3"
 
 webui:
   image:
@@ -65,4 +79,4 @@ amf:
 
 # Primary/Native kubernetes interface
 k8s:
- interface: eth0
+  interface: eth0

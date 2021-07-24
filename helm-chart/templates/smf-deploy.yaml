@@ -34,7 +34,13 @@ spec:
         imagePullPolicy: {{ .Values.open5gs.image.pullPolicy }}
         env:
           - name: PCS_DB_COMM_ENABLED
-            value: {{ .Values.open5gs.pcsDbCommEnabled.smf | default "false" | quote }}
+            value: {{ .Values.pcs.dbCommEnabled.smf | default "false" | quote }}
+          - name: PCS_UPDATE_API_ENABLED
+            value: {{ .Values.pcs.updateApiEnabled.smf | default "true" | quote }}
+          - name: PCS_BLOCKING_API_ENABLED
+            value: {{ .Values.pcs.blockingApiEnabled.smf | default "true" | quote }}
+            - name: PCS_IS_TRANSACTIONAL_STATELESS
+            value: {{ .Values.pcs.isFullyStateless.smf | default "true" | quote }}
         command: ["/bin/sh", "-c"]
         args:
         - open5gs-smfd -c /open5gs/config-map/smf.yaml;

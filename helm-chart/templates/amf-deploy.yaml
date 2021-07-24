@@ -51,7 +51,13 @@ spec:
           command: ["open5gs-amfd", "-c", "/open5gs/config-map/amf.yaml"]
           env:
           - name: PCS_DB_COMM_ENABLED
-            value: {{ .Values.open5gs.pcsDbCommEnabled.amf | default "false" | quote }}
+            value: {{ .Values.pcs.dbCommEnabled.amf | default "false" | quote }}
+          - name: PCS_UPDATE_API_ENABLED
+            value: {{ .Values.pcs.updateApiEnabled.amf | default "true" | quote }}
+          - name: PCS_BLOCKING_API_ENABLED
+            value: {{ .Values.pcs.blockingApiEnabled.amf | default "true" | quote }}
+          - name: PCS_IS_TRANSACTIONAL_STATELESS
+            value: {{ .Values.pcs.isFullyStateless.amf | default "true" | quote }}
           volumeMounts:
           - name: open5gs-amf-config
             mountPath: /open5gs/config-map/amf.yaml
