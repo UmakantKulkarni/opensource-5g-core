@@ -39,7 +39,7 @@ spec:
             value: {{ .Values.pcs.updateApiEnabled.smf | default "true" | quote }}
           - name: PCS_BLOCKING_API_ENABLED
             value: {{ .Values.pcs.blockingApiEnabled.smf | default "true" | quote }}
-            - name: PCS_IS_TRANSACTIONAL_STATELESS
+          - name: PCS_IS_TRANSACTIONAL_STATELESS
             value: {{ .Values.pcs.isFullyStateless.smf | default "true" | quote }}
         command: ["/bin/sh", "-c"]
         args:
