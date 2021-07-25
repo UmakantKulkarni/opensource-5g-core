@@ -52,8 +52,12 @@ spec:
           env:
           - name: PCS_DB_COMM_ENABLED
             value: {{ .Values.pcs.dbCommEnabled.amf | default "false" | quote }}
-          - name: PCS_UPDATE_API_ENABLED
-            value: {{ .Values.pcs.updateApiEnabled.amf | default "true" | quote }}
+          - name: PCS_UPDATE_API_ENABLED_CREATE
+            value: {{ .Values.pcs.updateApiEnabled.amf.create | default "true" | quote }}
+          - name: PCS_UPDATE_API_ENABLED_N1N2
+            value: {{ .Values.pcs.updateApiEnabled.amf.n1n2 | default "true" | quote }}
+          - name: PCS_UPDATE_API_ENABLED_MODIFY
+            value: {{ .Values.pcs.updateApiEnabled.amf.modify | default "true" | quote }}
           - name: PCS_BLOCKING_API_ENABLED
             value: {{ .Values.pcs.blockingApiEnabled.amf | default "true" | quote }}
           - name: PCS_IS_TRANSACTIONAL_STATELESS

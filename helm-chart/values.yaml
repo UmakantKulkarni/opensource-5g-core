@@ -14,9 +14,18 @@ pcs:
     smf: true
     upf: true
   updateApiEnabled:
-    amf: true
-    smf: true
-    upf: true
+    amf:
+      create: true
+      n1n2: true
+      modify: true
+    smf:
+      create: true
+      n1n2: true
+      modify: true
+    upf:
+      create: true
+      n1n2: true
+      modify: true
   blockingApiEnabled:
     amf: true
     smf: true
