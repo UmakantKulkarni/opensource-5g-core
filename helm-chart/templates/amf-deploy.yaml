@@ -62,6 +62,8 @@ spec:
             value: {{ .Values.pcs.blockingApiEnabled.amf | default "true" | quote }}
           - name: PCS_IS_TRANSACTIONAL_STATELESS
             value: {{ .Values.pcs.isFullyStateless.amf | default "true" | quote }}
+          - name: PCS_IS_PROCEDURAL_STATELESS
+            value: {{ .Values.pcs.isProceduralStateless.amf | default "false" | quote }}
           volumeMounts:
           - name: open5gs-amf-config
             mountPath: /open5gs/config-map/amf.yaml

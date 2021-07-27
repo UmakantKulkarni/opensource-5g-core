@@ -34,6 +34,10 @@ pcs:
     amf: true
     smf: true
     upf: true
+  isProceduralStateless:
+    amf: false
+    smf: false
+    upf: false
 
 pool:
   key: 128

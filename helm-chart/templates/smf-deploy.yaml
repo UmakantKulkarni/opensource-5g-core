@@ -45,6 +45,8 @@ spec:
             value: {{ .Values.pcs.blockingApiEnabled.smf | default "true" | quote }}
           - name: PCS_IS_TRANSACTIONAL_STATELESS
             value: {{ .Values.pcs.isFullyStateless.smf | default "true" | quote }}
+          - name: PCS_IS_PROCEDURAL_STATELESS
+            value: {{ .Values.pcs.isProceduralStateless.smf | default "false" | quote }}
         command: ["/bin/sh", "-c"]
         args:
         - open5gs-smfd -c /open5gs/config-map/smf.yaml;

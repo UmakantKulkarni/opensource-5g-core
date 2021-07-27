@@ -47,6 +47,8 @@ spec:
             value: {{ .Values.pcs.blockingApiEnabled.upf | default "true" | quote }}
           - name: PCS_IS_TRANSACTIONAL_STATELESS
             value: {{ .Values.pcs.isFullyStateless.upf | default "true" | quote }}
+          - name: PCS_IS_PROCEDURAL_STATELESS
+            value: {{ .Values.pcs.isProceduralStateless.upf | default "false" | quote }}
           securityContext:
             privileged: true
           command: ["/bin/sh", "-c"]
