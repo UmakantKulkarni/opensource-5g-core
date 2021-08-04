@@ -6,7 +6,7 @@ open5gs:
   image:
     repository: umakantk/open5gs
     pullPolicy: Always
-    tag: "3e7d239_mongo"
+    tag: "7e5a5d7_mongo"
 
 pcs:
   dbCommEnabled:
