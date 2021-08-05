@@ -21,6 +21,17 @@ spec:
       labels:
         app: open5gs-mongodb
     spec:
+      {{ if .Values.pcs.enableNodeAffinity }}
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/pcs-nf-type
+                operator: In
+                values:
+                - udsf
+      {{ end }}
       containers:
       - image: free5gmano/nextepc-mongodb
         name: open5gs-mongodb

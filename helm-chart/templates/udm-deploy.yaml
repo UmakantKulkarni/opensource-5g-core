@@ -27,7 +27,18 @@ spec:
     metadata:
       labels:
         epc-mode: udm
-    spec:   
+    spec:
+      {{ if .Values.pcs.enableNodeAffinity }}
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/pcs-nf-type
+                operator: In
+                values:
+                - udm
+      {{ end }}
       containers:
         - name: udm
           image: "{{ .Values.open5gs.image.repository }}:{{ .Values.open5gs.image.tag }}"

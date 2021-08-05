@@ -9,6 +9,7 @@ open5gs:
     tag: "7e5a5d7_mongo"
 
 pcs:
+  enableNodeAffinity: true
   dbCommEnabled:
     amf: true
     smf: true

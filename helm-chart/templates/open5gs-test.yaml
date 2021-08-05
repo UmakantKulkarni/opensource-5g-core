@@ -12,6 +12,17 @@ spec:
       labels:
         app: open5gs-test
     spec:
+      {{ if .Values.pcs.enableNodeAffinity }}
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/pcs-nf-type
+                operator: In
+                values:
+                - master
+      {{ end }}
       containers:
       - name: myapp-container
         image: "{{ .Values.ueransim.image.repository }}:{{ .Values.ueransim.image.tag }}"
