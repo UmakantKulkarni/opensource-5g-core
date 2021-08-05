@@ -83,7 +83,7 @@ spec:
               - key: kubernetes.io/pcs-nf-type
                 operator: In
                 values:
-                - master
+                - bsf
       {{ end }}
       containers:
       - name: webui
