@@ -6,7 +6,7 @@ open5gs:
   image:
     repository: umakantk/open5gs
     pullPolicy: Always
-    tag: "7e5a5d7_mongo"
+    tag: "af5b3aa_mongo"
 
 pcs:
   enableNodeAffinity: true
