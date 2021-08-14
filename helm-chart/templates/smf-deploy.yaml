@@ -58,6 +58,8 @@ spec:
             value: {{ .Values.pcs.isFullyStateless.smf | default "true" | quote }}
           - name: PCS_IS_PROCEDURAL_STATELESS
             value: {{ .Values.pcs.isProceduralStateless.smf | default "false" | quote }}
+          - name: PCS_DB_COLLECTION_NAME
+            value: {{ .Values.pcs.dbCollectioname.smf | default "smf" | quote }}
         command: ["/bin/sh", "-c"]
         args:
         - open5gs-smfd -c /open5gs/config-map/smf.yaml;

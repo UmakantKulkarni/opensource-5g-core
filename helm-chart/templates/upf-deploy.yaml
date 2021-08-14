@@ -60,6 +60,8 @@ spec:
             value: {{ .Values.pcs.isFullyStateless.upf | default "true" | quote }}
           - name: PCS_IS_PROCEDURAL_STATELESS
             value: {{ .Values.pcs.isProceduralStateless.upf | default "false" | quote }}
+          - name: PCS_DB_COLLECTION_NAME
+            value: {{ .Values.pcs.dbCollectioname.upf | default "upf" | quote }}
           securityContext:
             privileged: true
           command: ["/bin/sh", "-c"]

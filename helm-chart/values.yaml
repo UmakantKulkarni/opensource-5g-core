@@ -6,7 +6,7 @@ open5gs:
   image:
     repository: umakantk/open5gs
     pullPolicy: Always
-    tag: "af5b3aa_mongo"
+    tag: "72c5f80_mongo"
 
 pcs:
   enableNodeAffinity: true
@@ -39,6 +39,11 @@ pcs:
     amf: false
     smf: false
     upf: false
+  dbCollectioname:
+    amf: "amf"
+    smf: "smf"
+    upf: "upf"
+
 
 pool:
   key: 128
