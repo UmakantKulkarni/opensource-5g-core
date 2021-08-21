@@ -41,7 +41,7 @@ pcs:
       modifyrsp: true
     upf:
       create: false
-      modify: false
+      modifyrsp: false
     
   isFullyStateless:
     amf: true
