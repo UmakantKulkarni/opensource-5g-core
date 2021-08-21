@@ -70,7 +70,15 @@ spec:
           - name: PCS_UPDATE_API_ENABLED_MODIFY
             value: {{ .Values.pcs.updateApiEnabled.amf.modify | default "true" | quote }}
           - name: PCS_BLOCKING_API_ENABLED
-            value: {{ .Values.pcs.blockingApiEnabled.amf | default "true" | quote }}
+            value: {{ .Values.pcs.blockingApiEnabled.old | default "true" | quote }}
+          - name: PCS_BLOCKING_API_ENABLED_CREATE
+            value: {{ .Values.pcs.blockingApiEnabled.amf.create | default "true" | quote }}
+          - name: PCS_BLOCKING_API_ENABLED_N1N2
+            value: {{ .Values.pcs.blockingApiEnabled.amf.n1n2 | default "false" | quote }}
+          - name: PCS_BLOCKING_API_ENABLED_MODIFYREQ
+            value: {{ .Values.pcs.blockingApiEnabled.amf.modifyreq | default "false" | quote }}
+          - name: PCS_BLOCKING_API_ENABLED_MODIFYRSP
+            value: {{ .Values.pcs.blockingApiEnabled.amf.modifyrsp | default "false" | quote }}
           - name: PCS_IS_TRANSACTIONAL_STATELESS
             value: {{ .Values.pcs.isFullyStateless.amf | default "true" | quote }}
           - name: PCS_IS_PROCEDURAL_STATELESS

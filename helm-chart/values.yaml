@@ -28,9 +28,21 @@ pcs:
       n1n2: true
       modify: true
   blockingApiEnabled:
-    amf: true
-    smf: true
-    upf: true
+    old: true
+    amf:
+      create: true
+      n1n2: false
+      modifyreq: false
+      modifyrsp: false
+    smf:
+      create: true
+      n1n2: true
+      modifyreq: true
+      modifyrsp: true
+    upf:
+      create: false
+      modify: false
+    
   isFullyStateless:
     amf: true
     smf: true

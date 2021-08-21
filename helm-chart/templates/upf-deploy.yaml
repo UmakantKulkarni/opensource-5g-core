@@ -55,7 +55,11 @@ spec:
           - name: PCS_UPDATE_API_ENABLED_MODIFY
             value: {{ .Values.pcs.updateApiEnabled.upf.modify | default "true" | quote }}
           - name: PCS_BLOCKING_API_ENABLED
-            value: {{ .Values.pcs.blockingApiEnabled.upf | default "true" | quote }}
+            value: {{ .Values.pcs.blockingApiEnabled.old | default "true" | quote }}
+          - name: PCS_BLOCKING_API_ENABLED_CREATE
+            value: {{ .Values.pcs.blockingApiEnabled.upf.create | default "false" | quote }}
+          - name: PCS_BLOCKING_API_ENABLED_UPDATE
+            value: {{ .Values.pcs.blockingApiEnabled.upf.modify | default "false" | quote }}
           - name: PCS_IS_TRANSACTIONAL_STATELESS
             value: {{ .Values.pcs.isFullyStateless.upf | default "true" | quote }}
           - name: PCS_IS_PROCEDURAL_STATELESS
