@@ -6,7 +6,7 @@ open5gs:
   image:
     repository: umakantk/open5gs
     pullPolicy: Always
-    tag: "72c5f80_mongo"
+    tag: "7615869_mongo"
 
 pcs:
   enableNodeAffinity: true
@@ -31,17 +31,17 @@ pcs:
     old: true
     amf:
       create: true
-      n1n2: false
-      modifyreq: false
-      modifyrsp: false
+      n1n2: true
+      modifyreq: true
+      modifyrsp: true
     smf:
       create: true
       n1n2: true
       modifyreq: true
       modifyrsp: true
     upf:
-      create: false
-      modifyrsp: false
+      create: true
+      modifyrsp: true
     
   isFullyStateless:
     amf: true
