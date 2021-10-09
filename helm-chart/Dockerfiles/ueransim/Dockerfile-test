@@ -4,7 +4,9 @@ ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt -y update
 
-RUN apt -y install wget git vim nano make g++ libsctp-dev lksctp-tools net-tools iproute2 libssl-dev tcpdump curl jq iputils-ping gdb
+RUN apt -y install wget git vim nano make g++ libsctp-dev lksctp-tools net-tools iproute2 libssl-dev tcpdump curl jq iputils-ping gdb python3-pip 
+
+RUN pip3 install pymongo
 
 RUN cd && wget https://github.com/Kitware/CMake/releases/download/v3.21.0/cmake-3.21.0.tar.gz && tar -xvzf cmake-3.21.0.tar.gz
 
