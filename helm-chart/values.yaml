@@ -6,7 +6,7 @@ open5gs:
   image:
     repository: umakantk/open5gs
     pullPolicy: Always
-    tag: "7615869_mongo"
+    tag: "35f4cf8_mongo"
 
 pcs:
   enableNodeAffinity: true
@@ -68,7 +68,13 @@ ueransim:
   image:
     repository: umakantk/ueransim
     pullPolicy: Always
-    tag: "v0.3"
+    tag: "v0.4"
+
+mongodb:
+  image:
+    repository: umakantk/open5gs-mongo
+    pullPolicy: IfNotPresent
+    tag: "v0.2"
 
 webui:
   image:

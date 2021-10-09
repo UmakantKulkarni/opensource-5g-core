@@ -33,7 +33,8 @@ spec:
                 - udsf
       {{ end }}
       containers:
-      - image: free5gmano/nextepc-mongodb
+      - image: "{{ .Values.mongodb.image.repository }}:{{ .Values.mongodb.image.tag }}"
+        imagePullPolicy: {{ .Values.mongodb.image.pullPolicy }}
         name: open5gs-mongodb
         ports:
         - containerPort: 27017
