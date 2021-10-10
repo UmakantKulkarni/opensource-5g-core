@@ -48,20 +48,16 @@ spec:
           env:
           - name: PCS_DB_COMM_ENABLED
             value: {{ .Values.pcs.dbCommEnabled.upf | default "false" | quote }}
-          - name: PCS_UPDATE_API_ENABLED_CREATE
-            value: {{ .Values.pcs.updateApiEnabled.upf.create | default "true" | quote }}
-          - name: PCS_UPDATE_API_ENABLED_N1N2
-            value: {{ .Values.pcs.updateApiEnabled.upf.n1n2 | default "true" | quote }}
+          - name: PCS_UPSERT_API_ENABLED_CREATE
+            value: {{ .Values.pcs.upsertApiEnabled.upf.create | default "true" | quote }}
           - name: PCS_UPDATE_API_ENABLED_MODIFY
             value: {{ .Values.pcs.updateApiEnabled.upf.modify | default "true" | quote }}
-          - name: PCS_BLOCKING_API_ENABLED
-            value: {{ .Values.pcs.blockingApiEnabled.old | default "true" | quote }}
+          - name: PCS_REPLACE_API_ENABLED_MODIFY
+            value: {{ .Values.pcs.replaceApiEnabled.upf.modify | default "true" | quote }}
           - name: PCS_BLOCKING_API_ENABLED_CREATE
             value: {{ .Values.pcs.blockingApiEnabled.upf.create | default "false" | quote }}
           - name: PCS_BLOCKING_API_ENABLED_MODIFYRSP
             value: {{ .Values.pcs.blockingApiEnabled.upf.modifyrsp | default "false" | quote }}
-          - name: PCS_IS_TRANSACTIONAL_STATELESS
-            value: {{ .Values.pcs.isFullyStateless.upf | default "true" | quote }}
           - name: PCS_IS_PROCEDURAL_STATELESS
             value: {{ .Values.pcs.isProceduralStateless.upf | default "false" | quote }}
           - name: PCS_DB_COLLECTION_NAME

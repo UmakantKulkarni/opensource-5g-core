@@ -14,21 +14,32 @@ pcs:
     amf: true
     smf: true
     upf: true
+  upsertApiEnabled:
+    amf:
+      create: false
+    smf:
+      create: false
+    upf:
+      create: false
   updateApiEnabled:
     amf:
-      create: true
       n1n2: true
       modify: true
     smf:
-      create: true
       n1n2: true
       modify: true
     upf:
-      create: true
-      n1n2: true
       modify: true
+  replaceApiEnabled:
+    amf:
+      n1n2: false
+      modify: false
+    smf:
+      n1n2: false
+      modify: false
+    upf:
+      modify: false
   blockingApiEnabled:
-    old: true
     amf:
       create: true
       n1n2: true
@@ -43,10 +54,6 @@ pcs:
       create: true
       modifyrsp: true
     
-  isFullyStateless:
-    amf: true
-    smf: true
-    upf: true
   isProceduralStateless:
     amf: false
     smf: false
