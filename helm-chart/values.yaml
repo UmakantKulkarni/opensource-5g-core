@@ -45,15 +45,10 @@ pcs:
       n1n2: true
       modifyreq: true
       modifyrsp: true
-    smf:
-      create: true
-      n1n2: true
-      modifyreq: true
-      modifyrsp: true
     upf:
       create: true
       modifyrsp: true
-    
+
   isProceduralStateless:
     amf: false
     smf: false
@@ -62,7 +57,6 @@ pcs:
     amf: "amf"
     smf: "smf"
     upf: "upf"
-
 
 pool:
   key: 128
