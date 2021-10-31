@@ -8,7 +8,7 @@ RUN apt-get update && \
    flex bison git libsctp-dev libgnutls28-dev libgcrypt-dev libssl-dev libidn11-dev libmongoc-dev libbson-dev libyaml-dev \
    libmicrohttpd-dev libcurl4-gnutls-dev meson iproute2 libnghttp2-dev tcpdump vim net-tools iptables iputils-ping tcpdump \
    cmake curl gnupg meson openssh-client jq libtins-dev gdb && \
-   git clone --recursive -b 35f4cf8_mongo https://github.com/UmakantKulkarni/open5gs && \
+   git clone --recursive -b 7567659_mongo https://github.com/UmakantKulkarni/open5gs && \
    cd open5gs && meson build --prefix=/ && ninja -C build && cd build && ninja install
 
 WORKDIR /
