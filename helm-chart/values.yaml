@@ -57,6 +57,10 @@ pcs:
     amf: "amf"
     smf: "smf"
     upf: "upf"
+  enableSingleRead:
+    amf: false
+    smf: false
+    upf: false
 
 pool:
   key: 128

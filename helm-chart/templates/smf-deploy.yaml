@@ -60,6 +60,8 @@ spec:
             value: {{ .Values.pcs.isProceduralStateless.smf | default "false" | quote }}
           - name: PCS_DB_COLLECTION_NAME
             value: {{ .Values.pcs.dbCollectioname.smf | default "smf" | quote }}
+          - name: PCS_ENABLE_SINGLE_READ
+            value: {{ .Values.pcs.enableSingleRead.smf | default "false" | quote }}
         command: ["/bin/sh", "-c"]
         args:
         - open5gs-smfd -c /open5gs/config-map/smf.yaml;

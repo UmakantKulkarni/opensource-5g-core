@@ -85,6 +85,8 @@ spec:
             value: {{ .Values.pcs.isProceduralStateless.amf | default "false" | quote }}
           - name: PCS_DB_COLLECTION_NAME
             value: {{ .Values.pcs.dbCollectioname.amf | default "amf" | quote }}
+          - name: PCS_ENABLE_SINGLE_READ
+            value: {{ .Values.pcs.enableSingleRead.amf | default "false" | quote }}
           volumeMounts:
           - name: open5gs-amf-config
             mountPath: /open5gs/config-map/amf.yaml

@@ -62,6 +62,8 @@ spec:
             value: {{ .Values.pcs.isProceduralStateless.upf | default "false" | quote }}
           - name: PCS_DB_COLLECTION_NAME
             value: {{ .Values.pcs.dbCollectioname.upf | default "upf" | quote }}
+          - name: PCS_ENABLE_SINGLE_READ
+            value: {{ .Values.pcs.enableSingleRead.upf | default "false" | quote }}
           securityContext:
             privileged: true
           command: ["/bin/sh", "-c"]
