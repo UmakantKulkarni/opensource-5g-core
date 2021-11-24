@@ -1,14 +1,21 @@
 FROM ubuntu:20.04
 
 ENV DEBIAN_FRONTEND noninteractive
+ARG ARG_TIMEZONE=America/Denver
+ENV ENV_TIMEZONE ${ARG_TIMEZONE}
 
 RUN apt-get update && \
    apt-get -yq dist-upgrade && \
    apt-get --no-install-recommends -qqy install python3-pip python3-setuptools python3-wheel ninja-build build-essential \
    flex bison git libsctp-dev libgnutls28-dev libgcrypt-dev libssl-dev libidn11-dev libmongoc-dev libbson-dev libyaml-dev \
    libmicrohttpd-dev libcurl4-gnutls-dev meson iproute2 libnghttp2-dev tcpdump vim net-tools iptables iputils-ping tcpdump \
-   cmake curl gnupg meson openssh-client jq libtins-dev gdb && \
+   cmake curl gnupg meson openssh-client jq libtins-dev gdb tzdata ntp ntpstat ntpdate && \
    git clone --recursive -b 7bcb3ee_mongo https://github.com/UmakantKulkarni/open5gs && \
    cd open5gs && meson build --prefix=/ && ninja -C build && cd build && ninja install
+
+# sync timezone
+RUN echo '$ENV_TIMEZONE' > /etc/timezone \
+    && ln -fsn /usr/share/zoneinfo/$ENV_TIMEZONE /etc/localtime \
+    && dpkg-reconfigure --frontend noninteractive tzdata
 
 WORKDIR /
