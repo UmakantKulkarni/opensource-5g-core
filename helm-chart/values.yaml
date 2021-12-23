@@ -73,7 +73,7 @@ ueransim:
   image:
     repository: umakantk/ueransim
     pullPolicy: Always
-    tag: "v0.4"
+    tag: "v0.5"
 
 mongodb:
   image:
