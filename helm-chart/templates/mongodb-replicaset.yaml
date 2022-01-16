@@ -1,0 +1,82 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb-svc
+spec:
+  ports:
+  - port: 27017
+  selector:
+    app: open5gs-mongodb
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: open5gs-mongodb
+spec:
+  serviceName: mongodb-svc
+  replicas: 2
+  selector:
+    matchLabels:
+      app: open5gs-mongodb
+  template:
+    metadata:
+      labels:
+        app: open5gs-mongodb
+        selector: open5gs-mongodb
+    spec:
+      {{ if .Values.pcs.enableNodeAffinity }}
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/pcs-nf-type
+                operator: In
+                values:
+                - udsf
+      {{ end }}
+      terminationGracePeriodSeconds: 30
+      serviceAccount: mongo-account
+      containers:
+      - name: open5gs-mongodb
+        image: "{{ .Values.mongodb.image.repository }}:{{ .Values.mongodb.image.tag }}"
+        env:
+        command: ["/usr/bin/sh"]
+        args: ["-c", "mongod --replSet=rs0 --bind_ip_all"]
+        ports:
+        - name: mongo-port
+          containerPort: 27017
+        volumeMounts:
+        - name: mongodb-persistent-storage
+          mountPath: /data/db
+      volumes:
+      - name: mongodb-persistent-storage
+        persistentVolumeClaim:
+          claimName: mongodb-pv-claim-open5gs
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: mongodb-pv-volume-open5gs
+  labels:
+    type: local
+spec:
+  persistentVolumeReclaimPolicy: Delete
+  capacity:
+    storage: 20Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongodb-pv-claim-open5gs
+spec:
+  storageClassName: ""
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
