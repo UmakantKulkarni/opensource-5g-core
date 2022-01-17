@@ -47,9 +47,9 @@ spec:
           env:
           - name: DB_URI
             {{ if .Values.pcs.enableNodeAffinity }}
-            value: {{ .Values.mongodb.rsuri.udr }}
+            value: {{ .Values.mongodb.rsuri.udr | quote }}
             {{ else }}
-            value: {{ .Values.mongodb.sauri.udr }}
+            value: {{ .Values.mongodb.sauri.udr | quote }}
             {{ end }}
           volumeMounts:
           - name: open5gs-udr-config

@@ -47,9 +47,9 @@ spec:
           env:
           - name: DB_URI
             {{ if .Values.pcs.enableNodeAffinity }}
-            value: {{ .Values.mongodb.rsuri.ausf }}
+            value: {{ .Values.mongodb.rsuri.ausf | quote }}
             {{ else }}
-            value: {{ .Values.mongodb.sauri.ausf }}
+            value: {{ .Values.mongodb.sauri.ausf | quote }}
             {{ end }}
           volumeMounts:
           - name: open5gs-ausf-config

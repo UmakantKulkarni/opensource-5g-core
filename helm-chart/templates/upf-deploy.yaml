@@ -66,9 +66,9 @@ spec:
             value: {{ .Values.pcs.enableSingleRead.upf | default "false" }}
           - name: DB_URI
             {{ if .Values.pcs.enableNodeAffinity }}
-            value: {{ .Values.mongodb.rsuri.upf }}
+            value: {{ .Values.mongodb.rsuri.upf | quote }}
             {{ else }}
-            value: {{ .Values.mongodb.sauri.upf }}
+            value: {{ .Values.mongodb.sauri.upf | quote }}
             {{ end }}
           securityContext:
             privileged: true

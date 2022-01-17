@@ -45,28 +45,28 @@ spec:
         imagePullPolicy: {{ .Values.open5gs.image.pullPolicy }}
         env:
           - name: PCS_DB_COMM_ENABLED
-            value: {{ .Values.pcs.dbCommEnabled.smf | default "false" }}
+            value: {{ .Values.pcs.dbCommEnabled.smf | default "false" | quote }}
           - name: PCS_UPSERT_API_ENABLED_CREATE
-            value: {{ .Values.pcs.upsertApiEnabled.smf.create | default "true" }}
+            value: {{ .Values.pcs.upsertApiEnabled.smf.create | default "true" | quote }}
           - name: PCS_UPDATE_API_ENABLED_N1N2
-            value: {{ .Values.pcs.updateApiEnabled.smf.n1n2 | default "true" }}
+            value: {{ .Values.pcs.updateApiEnabled.smf.n1n2 | default "true" | quote }}
           - name: PCS_UPDATE_API_ENABLED_MODIFY
-            value: {{ .Values.pcs.updateApiEnabled.smf.modify | default "true" }}
+            value: {{ .Values.pcs.updateApiEnabled.smf.modify | default "true" | quote }}
           - name: PCS_REPLACE_API_ENABLED_N1N2
-            value: {{ .Values.pcs.replaceApiEnabled.smf.n1n2 | default "true" }}
+            value: {{ .Values.pcs.replaceApiEnabled.smf.n1n2 | default "true" | quote }}
           - name: PCS_REPLACE_API_ENABLED_MODIFY
-            value: {{ .Values.pcs.replaceApiEnabled.smf.modify | default "true" }}
+            value: {{ .Values.pcs.replaceApiEnabled.smf.modify | default "true" | quote }}
           - name: PCS_IS_PROCEDURAL_STATELESS
-            value: {{ .Values.pcs.isProceduralStateless.smf | default "false" }}
+            value: {{ .Values.pcs.isProceduralStateless.smf | default "false" | quote }}
           - name: PCS_DB_COLLECTION_NAME
-            value: {{ .Values.pcs.dbCollectioname.smf | default "smf" }}
+            value: {{ .Values.pcs.dbCollectioname.smf | default "smf" | quote }}
           - name: PCS_ENABLE_SINGLE_READ
-            value: {{ .Values.pcs.enableSingleRead.smf | default "false" }}
+            value: {{ .Values.pcs.enableSingleRead.smf | default "false" | quote }}
           - name: DB_URI
             {{ if .Values.pcs.enableNodeAffinity }}
-            value: {{ .Values.mongodb.rsuri.smf }}
+            value: {{ .Values.mongodb.rsuri.smf | quote }}
             {{ else }}
-            value: {{ .Values.mongodb.sauri.smf }}
+            value: {{ .Values.mongodb.sauri.smf | quote }}
             {{ end }}
         command: ["/bin/sh", "-c"]
         args:

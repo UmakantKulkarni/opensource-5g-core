@@ -47,9 +47,9 @@ spec:
           env:
           - name: DB_URI
             {{ if .Values.pcs.enableNodeAffinity }}
-            value: {{ .Values.mongodb.rsuri.pcf }}
+            value: {{ .Values.mongodb.rsuri.pcf | quote }}
             {{ else }}
-            value: {{ .Values.mongodb.sauri.pcf }}
+            value: {{ .Values.mongodb.sauri.pcf | quote }}
             {{ end }}
           volumeMounts:
           - name: open5gs-pcf-config

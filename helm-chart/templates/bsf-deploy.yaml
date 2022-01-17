@@ -47,9 +47,9 @@ spec:
           env:
           - name: DB_URI
             {{ if .Values.pcs.enableNodeAffinity }}
-            value: {{ .Values.mongodb.rsuri.bsf }}
+            value: {{ .Values.mongodb.rsuri.bsf | quote }}
             {{ else }}
-            value: {{ .Values.mongodb.sauri.bsf }}
+            value: {{ .Values.mongodb.sauri.bsf | quote }}
             {{ end }}
           volumeMounts:
           - name: open5gs-bsf-config

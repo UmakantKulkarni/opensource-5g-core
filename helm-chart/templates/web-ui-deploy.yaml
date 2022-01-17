@@ -92,9 +92,9 @@ spec:
         env:
         - name: DB_URI
           {{ if .Values.pcs.enableNodeAffinity }}
-          value: {{ .Values.mongodb.rsuri.webui }}
+          value: {{ .Values.mongodb.rsuri.webui | quote }}
           {{ else }}
-          value: {{ .Values.mongodb.sauri.webui }}
+          value: {{ .Values.mongodb.sauri.webui | quote }}
           {{ end }}
         - name: NODE_ENV
           value: "production"

@@ -49,9 +49,9 @@ spec:
           env:
           - name: DB_URI
             {{ if .Values.pcs.enableNodeAffinity }}
-            value: {{ .Values.mongodb.rsuri.nrf }}
+            value: {{ .Values.mongodb.rsuri.nrf | quote }}
             {{ else }}
-            value: {{ .Values.mongodb.sauri.nrf }}
+            value: {{ .Values.mongodb.sauri.nrf | quote }}
             {{ end }}
           volumeMounts:
             - name: open5gs-nrf-config
