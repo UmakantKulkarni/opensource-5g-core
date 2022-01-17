@@ -14,7 +14,7 @@ metadata:
   name: open5gs-mongodb
 spec:
   serviceName: mongodb-svc
-  replicas: 2
+  replicas: 4
   selector:
     matchLabels:
       app: open5gs-mongodb
@@ -26,6 +26,32 @@ spec:
     spec:      
       terminationGracePeriodSeconds: 30
       serviceAccount: mongo-account
+      {{ if .Values.pcs.enableNodeAffinity }}
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/pcs-nf-type
+                operator: In
+                values:
+                - udsf
+            - matchExpressions:
+              - key: kubernetes.io/pcs-nf-type
+                operator: In
+                values:
+                - amf
+            - matchExpressions:
+              - key: kubernetes.io/pcs-nf-type
+                operator: In
+                values:
+                - smf
+            - matchExpressions:
+              - key: kubernetes.io/pcs-nf-type
+                operator: In
+                values:
+                - upf
+      {{ end }}
       containers:
       - name: open5gs-mongodb
         image: "{{ .Values.mongodb.image.repository }}:{{ .Values.mongodb.image.tag }}"

@@ -65,7 +65,7 @@ metadata:
   labels:
     epc-mode: webui
 spec:
-  replicas: 1
+  replicas: 0
   selector:
     matchLabels:
       epc-mode: webui
