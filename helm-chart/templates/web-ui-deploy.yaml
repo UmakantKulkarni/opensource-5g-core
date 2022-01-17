@@ -91,7 +91,11 @@ spec:
         image: "{{ .Values.webui.image.repository }}:{{ .Values.webui.image.tag }}"
         env:
         - name: DB_URI
-          value: mongodb://mongodb-svc/open5gs
+          {{ if .Values.pcs.enableNodeAffinity }}
+          value: {{ .Values.mongodb.rsuri.webui }}
+          {{ else }}
+          value: {{ .Values.mongodb.sauri.webui }}
+          {{ end }}
         - name: NODE_ENV
           value: "production"
         - name: HOSTNAME

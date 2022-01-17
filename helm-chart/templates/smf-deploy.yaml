@@ -45,23 +45,29 @@ spec:
         imagePullPolicy: {{ .Values.open5gs.image.pullPolicy }}
         env:
           - name: PCS_DB_COMM_ENABLED
-            value: {{ .Values.pcs.dbCommEnabled.smf | default "false" | quote }}
+            value: {{ .Values.pcs.dbCommEnabled.smf | default "false" }}
           - name: PCS_UPSERT_API_ENABLED_CREATE
-            value: {{ .Values.pcs.upsertApiEnabled.smf.create | default "true" | quote }}
+            value: {{ .Values.pcs.upsertApiEnabled.smf.create | default "true" }}
           - name: PCS_UPDATE_API_ENABLED_N1N2
-            value: {{ .Values.pcs.updateApiEnabled.smf.n1n2 | default "true" | quote }}
+            value: {{ .Values.pcs.updateApiEnabled.smf.n1n2 | default "true" }}
           - name: PCS_UPDATE_API_ENABLED_MODIFY
-            value: {{ .Values.pcs.updateApiEnabled.smf.modify | default "true" | quote }}
+            value: {{ .Values.pcs.updateApiEnabled.smf.modify | default "true" }}
           - name: PCS_REPLACE_API_ENABLED_N1N2
-            value: {{ .Values.pcs.replaceApiEnabled.smf.n1n2 | default "true" | quote }}
+            value: {{ .Values.pcs.replaceApiEnabled.smf.n1n2 | default "true" }}
           - name: PCS_REPLACE_API_ENABLED_MODIFY
-            value: {{ .Values.pcs.replaceApiEnabled.smf.modify | default "true" | quote }}
+            value: {{ .Values.pcs.replaceApiEnabled.smf.modify | default "true" }}
           - name: PCS_IS_PROCEDURAL_STATELESS
-            value: {{ .Values.pcs.isProceduralStateless.smf | default "false" | quote }}
+            value: {{ .Values.pcs.isProceduralStateless.smf | default "false" }}
           - name: PCS_DB_COLLECTION_NAME
-            value: {{ .Values.pcs.dbCollectioname.smf | default "smf" | quote }}
+            value: {{ .Values.pcs.dbCollectioname.smf | default "smf" }}
           - name: PCS_ENABLE_SINGLE_READ
-            value: {{ .Values.pcs.enableSingleRead.smf | default "false" | quote }}
+            value: {{ .Values.pcs.enableSingleRead.smf | default "false" }}
+          - name: DB_URI
+            {{ if .Values.pcs.enableNodeAffinity }}
+            value: {{ .Values.mongodb.rsuri.smf }}
+            {{ else }}
+            value: {{ .Values.mongodb.sauri.smf }}
+            {{ end }}
         command: ["/bin/sh", "-c"]
         args:
         - open5gs-smfd -c /open5gs/config-map/smf.yaml;

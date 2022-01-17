@@ -9,7 +9,7 @@ data:
     logger:
         file: /var/log/open5gs/bsf.log
 
-    db_uri: mongodb://mongodb-svc/open5gs
+    db_uri: {{ .Values.mongodb.uri.bsf }}
     bsf:
       sbi:
       - addr: 0.0.0.0

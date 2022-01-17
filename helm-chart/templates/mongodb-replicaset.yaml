@@ -40,17 +40,17 @@ spec:
               - key: kubernetes.io/pcs-nf-type
                 operator: In
                 values:
-                - amf
+                - udsf-amf
             - matchExpressions:
               - key: kubernetes.io/pcs-nf-type
                 operator: In
                 values:
-                - smf
+                - udsf-smf
             - matchExpressions:
               - key: kubernetes.io/pcs-nf-type
                 operator: In
                 values:
-                - upf
+                - udsf-upf
       {{ end }}
       containers:
       - name: open5gs-mongodb

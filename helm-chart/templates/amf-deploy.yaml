@@ -62,31 +62,37 @@ spec:
           command: ["open5gs-amfd", "-c", "/open5gs/config-map/amf.yaml"]
           env:
           - name: PCS_DB_COMM_ENABLED
-            value: {{ .Values.pcs.dbCommEnabled.amf | default "false" | quote }}
+            value: {{ .Values.pcs.dbCommEnabled.amf | default "false" }}
           - name: PCS_UPSERT_API_ENABLED_CREATE
-            value: {{ .Values.pcs.upsertApiEnabled.amf.create | default "true" | quote }}
+            value: {{ .Values.pcs.upsertApiEnabled.amf.create | default "true" }}
           - name: PCS_UPDATE_API_ENABLED_N1N2
-            value: {{ .Values.pcs.updateApiEnabled.amf.n1n2 | default "true" | quote }}
+            value: {{ .Values.pcs.updateApiEnabled.amf.n1n2 | default "true" }}
           - name: PCS_UPDATE_API_ENABLED_MODIFY
-            value: {{ .Values.pcs.updateApiEnabled.amf.modify | default "true" | quote }}
+            value: {{ .Values.pcs.updateApiEnabled.amf.modify | default "true" }}
           - name: PCS_REPLACE_API_ENABLED_N1N2
-            value: {{ .Values.pcs.replaceApiEnabled.amf.n1n2 | default "true" | quote }}
+            value: {{ .Values.pcs.replaceApiEnabled.amf.n1n2 | default "true" }}
           - name: PCS_REPLACE_API_ENABLED_MODIFY
-            value: {{ .Values.pcs.replaceApiEnabled.amf.modify | default "true" | quote }}
+            value: {{ .Values.pcs.replaceApiEnabled.amf.modify | default "true" }}
           - name: PCS_BLOCKING_API_ENABLED_CREATE
-            value: {{ .Values.pcs.blockingApiEnabled.amf.create | default "true" | quote }}
+            value: {{ .Values.pcs.blockingApiEnabled.amf.create | default "true" }}
           - name: PCS_BLOCKING_API_ENABLED_N1N2
-            value: {{ .Values.pcs.blockingApiEnabled.amf.n1n2 | default "false" | quote }}
+            value: {{ .Values.pcs.blockingApiEnabled.amf.n1n2 | default "false" }}
           - name: PCS_BLOCKING_API_ENABLED_MODIFYREQ
-            value: {{ .Values.pcs.blockingApiEnabled.amf.modifyreq | default "false" | quote }}
+            value: {{ .Values.pcs.blockingApiEnabled.amf.modifyreq | default "false" }}
           - name: PCS_BLOCKING_API_ENABLED_MODIFYRSP
-            value: {{ .Values.pcs.blockingApiEnabled.amf.modifyrsp | default "false" | quote }}
+            value: {{ .Values.pcs.blockingApiEnabled.amf.modifyrsp | default "false" }}
           - name: PCS_IS_PROCEDURAL_STATELESS
-            value: {{ .Values.pcs.isProceduralStateless.amf | default "false" | quote }}
+            value: {{ .Values.pcs.isProceduralStateless.amf | default "false" }}
           - name: PCS_DB_COLLECTION_NAME
-            value: {{ .Values.pcs.dbCollectioname.amf | default "amf" | quote }}
+            value: {{ .Values.pcs.dbCollectioname.amf | default "amf" }}
           - name: PCS_ENABLE_SINGLE_READ
-            value: {{ .Values.pcs.enableSingleRead.amf | default "false" | quote }}
+            value: {{ .Values.pcs.enableSingleRead.amf | default "false" }}
+          - name: DB_URI
+            {{ if .Values.pcs.enableNodeAffinity }}
+            value: {{ .Values.mongodb.rsuri.amf }}
+            {{ else }}
+            value: {{ .Values.mongodb.sauri.amf }}
+            {{ end }}
           volumeMounts:
           - name: open5gs-amf-config
             mountPath: /open5gs/config-map/amf.yaml

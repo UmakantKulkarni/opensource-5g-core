@@ -32,3 +32,10 @@ spec:
         imagePullPolicy: Always
         command: ["/bin/sh"]
         args: ["-c", "sleep infinity"]
+        env:
+          - name: DB_URI
+            {{ if .Values.pcs.enableNodeAffinity }}
+            value: {{ .Values.mongodb.rsuri.test }}
+            {{ else }}
+            value: {{ .Values.mongodb.sauri.test }}
+            {{ end }}

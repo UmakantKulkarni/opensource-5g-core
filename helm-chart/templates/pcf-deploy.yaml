@@ -44,6 +44,13 @@ spec:
           image: "{{ .Values.open5gs.image.repository }}:{{ .Values.open5gs.image.tag }}"
           imagePullPolicy: {{ .Values.open5gs.image.pullPolicy }}
           command: ["open5gs-pcfd", "-c", "/open5gs/config-map/pcf.yaml"]
+          env:
+          - name: DB_URI
+            {{ if .Values.pcs.enableNodeAffinity }}
+            value: {{ .Values.mongodb.rsuri.pcf }}
+            {{ else }}
+            value: {{ .Values.mongodb.sauri.pcf }}
+            {{ end }}
           volumeMounts:
           - name: open5gs-pcf-config
             mountPath: /open5gs/config-map/pcf.yaml

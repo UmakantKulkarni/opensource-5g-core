@@ -44,6 +44,13 @@ spec:
           image: "{{ .Values.open5gs.image.repository }}:{{ .Values.open5gs.image.tag }}"
           imagePullPolicy: {{ .Values.open5gs.image.pullPolicy }}
           command: ["open5gs-udmd", "-c", "/open5gs/config-map/udm.yaml"]
+          env:
+          - name: DB_URI
+            {{ if .Values.pcs.enableNodeAffinity }}
+            value: {{ .Values.mongodb.rsuri.udm }}
+            {{ else }}
+            value: {{ .Values.mongodb.sauri.udm }}
+            {{ end }}
           volumeMounts:
           - name: open5gs-udm-config
             mountPath: /open5gs/config-map/udm.yaml
