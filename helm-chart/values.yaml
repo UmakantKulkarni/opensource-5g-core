@@ -11,56 +11,56 @@ open5gs:
 pcs:
   enableNodeAffinity: true
   dbCommEnabled:
-    amf: "true"
-    smf: "true"
-    upf: "true"
+    amf: true
+    smf: true
+    upf: true
   upsertApiEnabled:
     amf:
-      create: "false"
+      create: false
     smf:
-      create: "false"
+      create: false
     upf:
-      create: "false"
+      create: false
   updateApiEnabled:
     amf:
-      n1n2: "true"
-      modify: "true"
+      n1n2: true
+      modify: true
     smf:
-      n1n2: "true"
-      modify: "true"
+      n1n2: true
+      modify: true
     upf:
-      modify: "true"
+      modify: true
   replaceApiEnabled:
     amf:
-      n1n2: "false"
-      modify: "false"
+      n1n2: false
+      modify: false
     smf:
-      n1n2: "false"
-      modify: "false"
+      n1n2: false
+      modify: false
     upf:
-      modify: "false"
+      modify: false
   blockingApiEnabled:
     amf:
-      create: "true"
-      n1n2: "true"
-      modifyreq: "true"
-      modifyrsp: "true"
+      create: true
+      n1n2: true
+      modifyreq: true
+      modifyrsp: true
     upf:
-      create: "true"
-      modifyrsp: "true"
+      create: true
+      modifyrsp: true
 
   isProceduralStateless:
-    amf: "false"
-    smf: "false"
-    upf: "false"
+    amf: false
+    smf: false
+    upf: false
   dbCollectioname:
     amf: "amf"
     smf: "smf"
     upf: "upf"
   enableSingleRead:
-    amf: "false"
-    smf: "false"
-    upf: "false"
+    amf: false
+    smf: false
+    upf: false
 
 pool:
   key: 128
@@ -118,7 +118,7 @@ webui:
     ## For a full list of possible ingress annotations, please see
     ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
     ##
-    ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: "true" will automatically be set
+    ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: true will automatically be set
     # annotations:
     #   kubernetes.io/ingress.class: nginx
 

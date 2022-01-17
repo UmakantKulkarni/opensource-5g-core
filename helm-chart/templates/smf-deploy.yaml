@@ -47,15 +47,15 @@ spec:
           - name: PCS_DB_COMM_ENABLED
             value: {{ .Values.pcs.dbCommEnabled.smf | default "false" | quote }}
           - name: PCS_UPSERT_API_ENABLED_CREATE
-            value: {{ .Values.pcs.upsertApiEnabled.smf.create | default "true" | quote }}
+            value: {{ .Values.pcs.upsertApiEnabled.smf.create | default "false" | quote }}
           - name: PCS_UPDATE_API_ENABLED_N1N2
             value: {{ .Values.pcs.updateApiEnabled.smf.n1n2 | default "true" | quote }}
           - name: PCS_UPDATE_API_ENABLED_MODIFY
             value: {{ .Values.pcs.updateApiEnabled.smf.modify | default "true" | quote }}
           - name: PCS_REPLACE_API_ENABLED_N1N2
-            value: {{ .Values.pcs.replaceApiEnabled.smf.n1n2 | default "true" | quote }}
+            value: {{ .Values.pcs.replaceApiEnabled.smf.n1n2 | default "false" | quote }}
           - name: PCS_REPLACE_API_ENABLED_MODIFY
-            value: {{ .Values.pcs.replaceApiEnabled.smf.modify | default "true" | quote }}
+            value: {{ .Values.pcs.replaceApiEnabled.smf.modify | default "false" | quote }}
           - name: PCS_IS_PROCEDURAL_STATELESS
             value: {{ .Values.pcs.isProceduralStateless.smf | default "false" | quote }}
           - name: PCS_DB_COLLECTION_NAME

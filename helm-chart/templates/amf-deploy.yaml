@@ -64,15 +64,15 @@ spec:
           - name: PCS_DB_COMM_ENABLED
             value: {{ .Values.pcs.dbCommEnabled.amf | default "false" | quote }}
           - name: PCS_UPSERT_API_ENABLED_CREATE
-            value: {{ .Values.pcs.upsertApiEnabled.amf.create | default "true" | quote }}
+            value: {{ .Values.pcs.upsertApiEnabled.amf.create | default "false" | quote }}
           - name: PCS_UPDATE_API_ENABLED_N1N2
             value: {{ .Values.pcs.updateApiEnabled.amf.n1n2 | default "true" | quote }}
           - name: PCS_UPDATE_API_ENABLED_MODIFY
             value: {{ .Values.pcs.updateApiEnabled.amf.modify | default "true" | quote }}
           - name: PCS_REPLACE_API_ENABLED_N1N2
-            value: {{ .Values.pcs.replaceApiEnabled.amf.n1n2 | default "true" | quote }}
+            value: {{ .Values.pcs.replaceApiEnabled.amf.n1n2 | default "false" | quote }}
           - name: PCS_REPLACE_API_ENABLED_MODIFY
-            value: {{ .Values.pcs.replaceApiEnabled.amf.modify | default "true" | quote }}
+            value: {{ .Values.pcs.replaceApiEnabled.amf.modify | default "false" | quote }}
           - name: PCS_BLOCKING_API_ENABLED_CREATE
             value: {{ .Values.pcs.blockingApiEnabled.amf.create | default "true" | quote }}
           - name: PCS_BLOCKING_API_ENABLED_N1N2
