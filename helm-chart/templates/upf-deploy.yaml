@@ -47,23 +47,23 @@ spec:
           imagePullPolicy: {{ .Values.open5gs.image.pullPolicy }}
           env:
           - name: PCS_DB_COMM_ENABLED
-            value: {{ .Values.pcs.dbCommEnabled.upf | default "false" }}
+            value: {{ .Values.pcs.dbCommEnabled.upf | default "false" | quote }}
           - name: PCS_UPSERT_API_ENABLED_CREATE
-            value: {{ .Values.pcs.upsertApiEnabled.upf.create | default "false" }}
+            value: {{ .Values.pcs.upsertApiEnabled.upf.create | default "false" | quote }}
           - name: PCS_UPDATE_API_ENABLED_MODIFY
-            value: {{ .Values.pcs.updateApiEnabled.upf.modify | default "true" }}
+            value: {{ .Values.pcs.updateApiEnabled.upf.modify | default "true" | quote }}
           - name: PCS_REPLACE_API_ENABLED_MODIFY
-            value: {{ .Values.pcs.replaceApiEnabled.upf.modify | default "false" }}
+            value: {{ .Values.pcs.replaceApiEnabled.upf.modify | default "false" | quote }}
           - name: PCS_BLOCKING_API_ENABLED_CREATE
-            value: {{ .Values.pcs.blockingApiEnabled.upf.create | default "false" }}
+            value: {{ .Values.pcs.blockingApiEnabled.upf.create | default "false" | quote }}
           - name: PCS_BLOCKING_API_ENABLED_MODIFYRSP
-            value: {{ .Values.pcs.blockingApiEnabled.upf.modifyrsp | default "false" }}
+            value: {{ .Values.pcs.blockingApiEnabled.upf.modifyrsp | default "false" | quote }}
           - name: PCS_IS_PROCEDURAL_STATELESS
-            value: {{ .Values.pcs.isProceduralStateless.upf | default "false" }}
+            value: {{ .Values.pcs.isProceduralStateless.upf | default "false" | quote }}
           - name: PCS_DB_COLLECTION_NAME
-            value: {{ .Values.pcs.dbCollectioname.upf | default "upf" }}
+            value: {{ .Values.pcs.dbCollectioname.upf | default "upf" | quote }}
           - name: PCS_ENABLE_SINGLE_READ
-            value: {{ .Values.pcs.enableSingleRead.upf | default "false" }}
+            value: {{ .Values.pcs.enableSingleRead.upf | default "false" | quote }}
           - name: DB_URI
             {{ if .Values.pcs.enableNodeAffinity }}
             value: {{ .Values.mongodb.rsuri.upf | quote }}
