@@ -1,3 +1,4 @@
+{{- if .Values.pcs.enableMongoReplicaSet }}
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -35,3 +36,4 @@ roleRef:
   kind: ClusterRole
   name: mongo-role
   apiGroup: rbac.authorization.k8s.io
+  {{- end }}

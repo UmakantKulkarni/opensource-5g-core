@@ -10,6 +10,7 @@ open5gs:
 
 pcs:
   enableNodeAffinity: true
+  enableMongoReplicaSet: true
   dbCommEnabled:
     amf: true
     smf: true

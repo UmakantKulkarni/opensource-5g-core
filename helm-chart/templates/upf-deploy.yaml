@@ -65,7 +65,7 @@ spec:
           - name: PCS_ENABLE_SINGLE_READ
             value: {{ .Values.pcs.enableSingleRead.upf | default "false" | quote }}
           - name: DB_URI
-            {{ if .Values.pcs.enableNodeAffinity }}
+            {{ if .Values.pcs.enableMongoReplicaSet }}
             value: {{ .Values.mongodb.rsuri.upf | quote }}
             {{ else }}
             value: {{ .Values.mongodb.sauri.upf | quote }}

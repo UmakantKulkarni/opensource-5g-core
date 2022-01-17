@@ -34,7 +34,7 @@ spec:
         args: ["-c", "sleep infinity"]
         env:
           - name: DB_URI
-            {{ if .Values.pcs.enableNodeAffinity }}
+            {{ if .Values.pcs.enableMongoReplicaSet }}
             value: {{ .Values.mongodb.rsuri.test | quote }}
             {{ else }}
             value: {{ .Values.mongodb.sauri.test | quote }}

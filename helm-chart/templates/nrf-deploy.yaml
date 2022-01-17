@@ -48,7 +48,7 @@ spec:
           command: ["open5gs-nrfd", "-c", "/open5gs/config-map/nrf.yaml"]
           env:
           - name: DB_URI
-            {{ if .Values.pcs.enableNodeAffinity }}
+            {{ if .Values.pcs.enableMongoReplicaSet }}
             value: {{ .Values.mongodb.rsuri.nrf | quote }}
             {{ else }}
             value: {{ .Values.mongodb.sauri.nrf | quote }}

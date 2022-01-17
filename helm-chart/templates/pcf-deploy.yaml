@@ -46,7 +46,7 @@ spec:
           command: ["open5gs-pcfd", "-c", "/open5gs/config-map/pcf.yaml"]
           env:
           - name: DB_URI
-            {{ if .Values.pcs.enableNodeAffinity }}
+            {{ if .Values.pcs.enableMongoReplicaSet }}
             value: {{ .Values.mongodb.rsuri.pcf | quote }}
             {{ else }}
             value: {{ .Values.mongodb.sauri.pcf | quote }}

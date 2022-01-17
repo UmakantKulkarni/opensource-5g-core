@@ -91,7 +91,7 @@ spec:
         image: "{{ .Values.webui.image.repository }}:{{ .Values.webui.image.tag }}"
         env:
         - name: DB_URI
-          {{ if .Values.pcs.enableNodeAffinity }}
+          {{ if .Values.pcs.enableMongoReplicaSet }}
           value: {{ .Values.mongodb.rsuri.webui | quote }}
           {{ else }}
           value: {{ .Values.mongodb.sauri.webui | quote }}

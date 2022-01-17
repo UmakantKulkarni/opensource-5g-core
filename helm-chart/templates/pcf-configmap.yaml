@@ -9,7 +9,7 @@ data:
     logger:
         file: /var/log/open5gs/pcf.log
     
-    {{ if .Values.pcs.enableNodeAffinity }}
+    {{ if .Values.pcs.enableMongoReplicaSet }}
     db_uri: {{ .Values.mongodb.rsuri.pcf | quote }}
     {{ else }}
     db_uri: {{ .Values.mongodb.sauri.pcf | quote }}
