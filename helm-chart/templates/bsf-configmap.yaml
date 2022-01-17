@@ -9,7 +9,11 @@ data:
     logger:
         file: /var/log/open5gs/bsf.log
 
-    db_uri: {{ .Values.mongodb.uri.bsf }}
+    {{ if .Values.pcs.enableNodeAffinity }}
+    db_uri: {{ .Values.mongodb.rsuri.bsf }}
+    {{ else }}
+    db_uri: {{ .Values.mongodb.sauri.bsf }}
+    {{ end }}
     bsf:
       sbi:
       - addr: 0.0.0.0
