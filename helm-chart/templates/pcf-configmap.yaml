@@ -9,7 +9,11 @@ data:
     logger:
         file: /var/log/open5gs/pcf.log
     
-    db_uri: {{ .Values.mongodb.uri.pcf }}
+    {{ if .Values.pcs.enableNodeAffinity }}
+    db_uri: {{ .Values.mongodb.rsuri.pcf }}
+    {{ else }}
+    db_uri: {{ .Values.mongodb.sauri.pcf }}
+    {{ end }}
 
     pcf:
       sbi:     

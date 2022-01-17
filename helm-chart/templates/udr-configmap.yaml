@@ -9,7 +9,11 @@ data:
     logger:
         file: /var/log/open5gs/udr.log
 
-    db_uri: {{ .Values.mongodb.uri.udr }}
+    {{ if .Values.pcs.enableNodeAffinity }}
+    db_uri: {{ .Values.mongodb.rsuri.udr }}
+    {{ else }}
+    db_uri: {{ .Values.mongodb.sauri.udr }}
+    {{ end }}
     udr:
       sbi:
       - addr: 0.0.0.0
