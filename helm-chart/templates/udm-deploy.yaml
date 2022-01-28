@@ -28,7 +28,7 @@ spec:
       labels:
         epc-mode: udm
     spec:
-      {{ if .Values.pcs.enableNodeAffinity }}
+      {{ if .Values.pcs.nodeAffinity.enabled }}
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -37,7 +37,7 @@ spec:
               - key: kubernetes.io/pcs-nf-type
                 operator: In
                 values:
-                - udm
+                - {{ .Values.pcs.nodeAffinity.udm | quote }}
       {{ end }}
       containers:
         - name: udm

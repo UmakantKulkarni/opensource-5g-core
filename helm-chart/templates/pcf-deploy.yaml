@@ -28,7 +28,7 @@ spec:
       labels:
         epc-mode: pcf
     spec:
-      {{ if .Values.pcs.enableNodeAffinity }}
+      {{ if .Values.pcs.nodeAffinity.enabled }}
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -37,7 +37,7 @@ spec:
               - key: kubernetes.io/pcs-nf-type
                 operator: In
                 values:
-                - pcf
+                - {{ .Values.pcs.nodeAffinity.pcf | quote }}
       {{ end }}
       containers:
         - name: pcf

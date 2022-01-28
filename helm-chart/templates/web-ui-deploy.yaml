@@ -65,7 +65,7 @@ metadata:
   labels:
     epc-mode: webui
 spec:
-  replicas: 0
+  replicas: 1
   selector:
     matchLabels:
       epc-mode: webui
@@ -74,7 +74,7 @@ spec:
       labels:
         epc-mode: webui
     spec:
-      {{ if .Values.pcs.enableNodeAffinity }}
+      {{ if .Values.pcs.nodeAffinity.enabled }}
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -83,7 +83,7 @@ spec:
               - key: kubernetes.io/pcs-nf-type
                 operator: In
                 values:
-                - bsf
+                - {{ .Values.pcs.nodeAffinity.webui | quote }}
       {{ end }}
       containers:
       - name: webui

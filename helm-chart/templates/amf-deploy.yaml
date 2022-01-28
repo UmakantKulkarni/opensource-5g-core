@@ -44,7 +44,7 @@ spec:
       labels:
         epc-mode: amf
     spec:
-      {{ if .Values.pcs.enableNodeAffinity }}
+      {{ if .Values.pcs.nodeAffinity.enabled }}
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -53,7 +53,7 @@ spec:
               - key: kubernetes.io/pcs-nf-type
                 operator: In
                 values:
-                - amf
+                - {{ .Values.pcs.nodeAffinity.amf | quote }}
       {{ end }}
       containers:
         - name: amf

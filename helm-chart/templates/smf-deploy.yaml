@@ -28,7 +28,7 @@ spec:
       labels:
         epc-mode: smf
     spec:
-      {{ if .Values.pcs.enableNodeAffinity }}
+      {{ if .Values.pcs.nodeAffinity.enabled }}
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -37,7 +37,7 @@ spec:
               - key: kubernetes.io/pcs-nf-type
                 operator: In
                 values:
-                - smf
+                - {{ .Values.pcs.nodeAffinity.smf | quote }}
       {{ end }}
       containers:
       - name: smf

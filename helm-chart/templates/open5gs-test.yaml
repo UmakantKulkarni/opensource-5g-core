@@ -12,7 +12,7 @@ spec:
       labels:
         app: open5gs-test
     spec:
-      {{ if .Values.pcs.enableNodeAffinity }}
+      {{ if .Values.pcs.nodeAffinity.enabled }}
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -21,7 +21,7 @@ spec:
               - key: kubernetes.io/pcs-nf-type
                 operator: In
                 values:
-                - bsf
+                - {{ .Values.pcs.nodeAffinity.test | quote }}
       {{ end }}
       containers:
       - name: myapp-container

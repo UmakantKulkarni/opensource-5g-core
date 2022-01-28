@@ -6,11 +6,25 @@ open5gs:
   image:
     repository: umakantk/open5gs
     pullPolicy: Always
-    tag: "a0f2535_mongo"
+    tag: "340b23a_mongo"
 
 pcs:
-  enableNodeAffinity: true
-  enableMongoReplicaSet: true
+  nodeAffinity:
+    enabled: true
+    amf: amf
+    ausf: amf
+    bsf: amf
+    smf: smf
+    pcf: smf
+    udm: smf
+    upf: upf
+    nrf: upf
+    nssf: upf
+    mongo: udsf
+    udr: udsf
+    test: udsf
+    webui: udsf
+  enableMongoReplicaSet: false
   dbCommEnabled:
     amf: true
     smf: true
@@ -91,9 +105,9 @@ mongodb:
     pcf: "mongodb://mongodb-svc/open5gs"
     udr: "mongodb://mongodb-svc/open5gs"
     webui: "mongodb://mongodb-svc/open5gs"
-    amf: "mongodb://mongodb-svc/"
-    smf: "mongodb://mongodb-svc/"
-    upf: "mongodb://mongodb-svc/"
+    amf: "mongodb://mongodb-svc:27017/?waitQueueTimeoutMS=1000"
+    smf: "mongodb://mongodb-svc:27017/?waitQueueTimeoutMS=1000"
+    upf: "mongodb://mongodb-svc:27017/?waitQueueTimeoutMS=1000"
   rsuri:
     ausf: "mongodb://open5gs-mongodb-0.mongodb-svc:27017,open5gs-mongodb-1.mongodb-svc:27017,open5gs-mongodb-2.mongodb-svc:27017,open5gs-mongodb-3.mongodb-svc:27017/open5gs?replicaSet=rs0"
     nssf: "mongodb://open5gs-mongodb-0.mongodb-svc:27017,open5gs-mongodb-1.mongodb-svc:27017,open5gs-mongodb-2.mongodb-svc:27017,open5gs-mongodb-3.mongodb-svc:27017/open5gs?replicaSet=rs0"
@@ -104,9 +118,9 @@ mongodb:
     pcf: "mongodb://open5gs-mongodb-0.mongodb-svc:27017,open5gs-mongodb-1.mongodb-svc:27017,open5gs-mongodb-2.mongodb-svc:27017,open5gs-mongodb-3.mongodb-svc:27017/open5gs?replicaSet=rs0"
     udr: "mongodb://open5gs-mongodb-0.mongodb-svc:27017,open5gs-mongodb-1.mongodb-svc:27017,open5gs-mongodb-2.mongodb-svc:27017,open5gs-mongodb-3.mongodb-svc:27017/open5gs?replicaSet=rs0"
     webui: "mongodb://open5gs-mongodb-0.mongodb-svc:27017,open5gs-mongodb-1.mongodb-svc:27017,open5gs-mongodb-2.mongodb-svc:27017,open5gs-mongodb-3.mongodb-svc:27017/open5gs?replicaSet=rs0"
-    amf: "mongodb://open5gs-mongodb-0.mongodb-svc:27017,open5gs-mongodb-1.mongodb-svc:27017,open5gs-mongodb-2.mongodb-svc:27017,open5gs-mongodb-3.mongodb-svc:27017/?replicaSet=rs0&readPreference=secondary&readPreferenceTags=nf:udsf-amf&w=4&wtimeoutMS=10000"
-    smf: "mongodb://open5gs-mongodb-0.mongodb-svc:27017,open5gs-mongodb-1.mongodb-svc:27017,open5gs-mongodb-2.mongodb-svc:27017,open5gs-mongodb-3.mongodb-svc:27017/?replicaSet=rs0&readPreference=secondary&readPreferenceTags=nf:udsf-smf&w=4&wtimeoutMS=10000"
-    upf: "mongodb://open5gs-mongodb-0.mongodb-svc:27017,open5gs-mongodb-1.mongodb-svc:27017,open5gs-mongodb-2.mongodb-svc:27017,open5gs-mongodb-3.mongodb-svc:27017/?replicaSet=rs0&readPreference=secondary&readPreferenceTags=nf:udsf-upf&w=4&wtimeoutMS=10000"
+    amf: "mongodb://open5gs-mongodb-0.mongodb-svc:27017,open5gs-mongodb-1.mongodb-svc:27017,open5gs-mongodb-2.mongodb-svc:27017,open5gs-mongodb-3.mongodb-svc:27017/replicaSet=rs0"
+    smf: "mongodb://open5gs-mongodb-0.mongodb-svc:27017,open5gs-mongodb-1.mongodb-svc:27017,open5gs-mongodb-2.mongodb-svc:27017,open5gs-mongodb-3.mongodb-svc:27017/replicaSet=rs0"
+    upf: "mongodb://open5gs-mongodb-0.mongodb-svc:27017,open5gs-mongodb-1.mongodb-svc:27017,open5gs-mongodb-2.mongodb-svc:27017,open5gs-mongodb-3.mongodb-svc:27017/replicaSet=rs0"
 
 webui:
   image:

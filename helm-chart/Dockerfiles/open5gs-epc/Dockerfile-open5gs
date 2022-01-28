@@ -9,8 +9,11 @@ RUN apt-get update && \
    apt-get --no-install-recommends -qqy install python3-pip python3-setuptools python3-wheel ninja-build build-essential \
    flex bison git libsctp-dev libgnutls28-dev libgcrypt-dev libssl-dev libidn11-dev libmongoc-dev libbson-dev libyaml-dev \
    libmicrohttpd-dev libcurl4-gnutls-dev meson iproute2 libnghttp2-dev tcpdump vim net-tools iptables iputils-ping tcpdump \
-   cmake curl gnupg meson openssh-client jq libtins-dev gdb tzdata ntp ntpstat ntpdate && \
-   git clone --recursive -b a0f2535_mongo https://github.com/UmakantKulkarni/open5gs && \
+   cmake curl wget gnupg meson openssh-client jq libtins-dev gdb tzdata ntp ntpstat ntpdate libtalloc-dev
+
+#RUN wget https://github.com/mongodb/mongo-c-driver/releases/download/1.20.1/mongo-c-driver-1.20.1.tar.gz && tar xzf mongo-c-driver-1.20.1.tar.gz && cd mongo-c-driver-1.20.1 && mkdir cmake-build && cd cmake-build && cmake -DENABLE_AUTOMATIC_INIT_AND_CLEANUP=OFF .. && cmake --build . && cmake -DCMAKE_INSTALL_PREFIX=/usr .. && cmake --build . --target install
+
+RUN   git clone --recursive -b 340b23a_mongo https://github.com/UmakantKulkarni/open5gs && \
    cd open5gs && meson build --prefix=/ && ninja -C build && cd build && ninja install
 
 # sync timezone

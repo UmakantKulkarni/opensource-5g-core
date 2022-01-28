@@ -28,7 +28,7 @@ spec:
       labels:
         epc-mode: udr
     spec:
-      {{ if .Values.pcs.enableNodeAffinity }}
+      {{ if .Values.pcs.nodeAffinity.enabled }}
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -37,7 +37,7 @@ spec:
               - key: kubernetes.io/pcs-nf-type
                 operator: In
                 values:
-                - udr
+                - {{ .Values.pcs.nodeAffinity.udr | quote }}
       {{ end }}
       containers:
         - name: udr

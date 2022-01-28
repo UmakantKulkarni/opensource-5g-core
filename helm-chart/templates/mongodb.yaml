@@ -22,7 +22,7 @@ spec:
       labels:
         app: open5gs-mongodb
     spec:
-      {{ if .Values.pcs.enableNodeAffinity }}
+      {{ if .Values.pcs.nodeAffinity.enabled }}
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -31,10 +31,11 @@ spec:
               - key: kubernetes.io/pcs-nf-type
                 operator: In
                 values:
-                - udsf
+                - {{ .Values.pcs.nodeAffinity.mongo | quote }}
       {{ end }}
       containers:
       - image: "{{ .Values.mongodb.image.repository }}:{{ .Values.mongodb.image.tag }}"
+        command: ["mongod", "--bind_ip_all"]
         imagePullPolicy: {{ .Values.mongodb.image.pullPolicy }}
         name: open5gs-mongodb
         ports:

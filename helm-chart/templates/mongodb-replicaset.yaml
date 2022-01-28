@@ -57,8 +57,7 @@ spec:
       - name: open5gs-mongodb
         image: "{{ .Values.mongodb.image.repository }}:{{ .Values.mongodb.image.tag }}"
         env:
-        command: ["/usr/bin/sh"]
-        args: ["-c", "mongod --replSet=rs0 --bind_ip_all"]
+        command: ["mongod", "--replSet=rs0", "--bind_ip_all", "--maxConns", "838860", "--setParameter", "connPoolMaxConnsPerHost=500", "--setParameter", "connPoolMaxInUseConnsPerHost=500"]
         ports:
         - name: mongo-port
           containerPort: 27017
