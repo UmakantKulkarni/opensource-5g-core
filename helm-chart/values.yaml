@@ -94,7 +94,7 @@ mongodb:
   image:
     repository: umakantk/open5gs-mongo
     pullPolicy: IfNotPresent
-    tag: "v0.2"
+    tag: "v0.3"
   sauri:
     ausf: "mongodb://mongodb-svc/open5gs"
     nssf: "mongodb://mongodb-svc/open5gs"
