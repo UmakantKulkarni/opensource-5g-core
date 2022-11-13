@@ -6,7 +6,7 @@ open5gs:
   image:
     repository: umakantk/open5gs
     pullPolicy: Always
-    tag: "3b6da3d_mongo"
+    tag: "secure5g_v1"
 
 pcs:
   nodeAffinity:
@@ -88,13 +88,13 @@ ueransim:
   image:
     repository: umakantk/ueransim
     pullPolicy: Always
-    tag: "v0.5"
+    tag: "secure5g_v1"
 
 mongodb:
   image:
     repository: umakantk/open5gs-mongo
     pullPolicy: IfNotPresent
-    tag: "v0.3"
+    tag: "secure5g_v1"
   sauri:
     ausf: "mongodb://mongodb-svc/open5gs"
     nssf: "mongodb://mongodb-svc/open5gs"

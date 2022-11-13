@@ -1,0 +1,29 @@
+FROM ubuntu:22.04
+
+ENV DEBIAN_FRONTEND noninteractive
+
+RUN apt -y update
+
+RUN apt-get update && apt-get -yq dist-upgrade && apt-get --no-install-recommends -qqy install wget git vim nano make g++ libsctp-dev lksctp-tools net-tools iproute2 libssl-dev tcpdump curl jq iputils-ping gdb python3-pip 
+
+RUN pip3 install pymongo
+
+RUN cd && wget https://github.com/Kitware/CMake/releases/download/v3.24.3/cmake-3.24.3.tar.gz && tar -xvzf cmake-3.24.3.tar.gz
+
+RUN cd && cd cmake-3.24.3 && ./bootstrap -- -DCMAKE_BUILD_TYPE:STRING=Release && make && make install
+
+RUN cd && rm -rf cmake-*
+
+RUN cmake --version
+
+ENV PCS_SETUP_TUN_INTF=true
+
+RUN cd && git clone -b secure5g https://github.com/UmakantKulkarni/UERANSIM && cd UERANSIM && make
+
+WORKDIR /root/
+
+RUN git clone https://github.com/UmakantKulkarni/scripts && cd scripts && chmod +x *
+
+RUN cp UERANSIM/build/nr-* /usr/local/bin/
+
+CMD ["sh", "-c", "sleep infinity"]
