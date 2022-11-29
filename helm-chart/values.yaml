@@ -12,16 +12,16 @@ pcs:
   nodeAffinity:
     enabled: true
     amf: amf
-    ausf: amf
-    bsf: amf
+    ausf: ausf
+    bsf: bsf
     smf: smf
-    pcf: smf
-    udm: smf
+    pcf: pcf
+    udm: udm
     upf: upf
-    nrf: upf
-    nssf: upf
+    nrf: nrf
+    nssf: nrf
     mongo: udsf
-    udr: udsf
+    udr: udm
     test: udsf
     webui: udsf
   enableMongoReplicaSet: false
@@ -162,4 +162,4 @@ amf:
 
 # Primary/Native kubernetes interface
 k8s:
-  interface: eth0
+  interface: enp32s0
