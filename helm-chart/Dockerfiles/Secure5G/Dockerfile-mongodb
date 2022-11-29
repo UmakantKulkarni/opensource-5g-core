@@ -1,4 +1,4 @@
-FROM mongo:focal
+FROM mongo:4-focal
 
 ARG ARG_TIMEZONE=America/Indiana/Indianapolis
 ENV ENV_TIMEZONE ${ARG_TIMEZONE}
