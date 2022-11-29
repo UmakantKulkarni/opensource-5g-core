@@ -1,5 +1,8 @@
 FROM mongo:focal
 
+ARG ARG_TIMEZONE=America/Indiana/Indianapolis
+ENV ENV_TIMEZONE ${ARG_TIMEZONE}
+
 RUN apt -y update
 
 RUN apt -y install git vim python3-pip tzdata
@@ -13,3 +16,8 @@ WORKDIR /root/
 RUN git clone https://github.com/UmakantKulkarni/scripts && cd scripts && chmod +x *
 
 RUN sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mongod.conf.orig
+
+# sync timezone
+RUN echo '$ENV_TIMEZONE' > /etc/timezone \
+    && ln -fsn /usr/share/zoneinfo/$ENV_TIMEZONE /etc/localtime \
+    && dpkg-reconfigure --frontend noninteractive tzdata
