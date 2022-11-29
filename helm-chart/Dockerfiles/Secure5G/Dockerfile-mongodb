@@ -2,7 +2,9 @@ FROM mongo:focal
 
 RUN apt -y update
 
-RUN apt -y install git vim python3-pip 
+RUN apt -y install git vim python3-pip tzdata
+
+ENV TZ="America/Indiana/Indianapolis"
 
 RUN pip3 install pymongo
 

@@ -1,8 +1,6 @@
 FROM ubuntu:22.04
 
 ENV DEBIAN_FRONTEND noninteractive
-ARG ARG_TIMEZONE=America/Denver
-ENV ENV_TIMEZONE ${ARG_TIMEZONE}
 
 RUN apt-get update && \
    apt-get -yq dist-upgrade && \
@@ -10,6 +8,8 @@ RUN apt-get update && \
    flex bison git libsctp-dev libgnutls28-dev libgcrypt-dev libssl-dev libidn11-dev libmongoc-dev libbson-dev libyaml-dev \
    libmicrohttpd-dev libcurl4-gnutls-dev meson iproute2 libnghttp2-dev tcpdump vim net-tools iptables iputils-ping tcpdump \
    cmake curl wget gnupg meson openssh-client jq libtins-dev gdb tzdata ntp ntpstat ntpdate libtalloc-dev
+
+ENV TZ="America/Indiana/Indianapolis"
 
 #RUN wget https://github.com/mongodb/mongo-c-driver/releases/download/1.20.1/mongo-c-driver-1.20.1.tar.gz && tar xzf mongo-c-driver-1.20.1.tar.gz && cd mongo-c-driver-1.20.1 && mkdir cmake-build && cd cmake-build && cmake -DENABLE_AUTOMATIC_INIT_AND_CLEANUP=OFF .. && cmake --build . && cmake -DCMAKE_INSTALL_PREFIX=/usr .. && cmake --build . --target install
 
