@@ -36,7 +36,7 @@ data:
 
     upf:
       pfcp:
-        - name: upf-open5gs
+        - name: open5gs-upf
           dnn: {{ .Values.dnn }}
     pool:
       {{ .Values.pool.key }}: {{ .Values.pool.val }}
