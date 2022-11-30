@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: upf-open5gs
+  name: open5gs-upf
   labels:
     epc-mode: upf
 spec:
