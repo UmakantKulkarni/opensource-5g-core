@@ -11,9 +11,9 @@ data:
 
     upf:
         pfcp:
-           dev: {{ .Values.k8s.interface }}
+           dev: {{ .Values.k8s.upf_interface }}
         gtpu:
-           dev: {{ .Values.k8s.interface }}
+           dev: {{ .Values.k8s.upf_interface }}
         subnet:
           - addr: 10.45.0.1/16
             dnn: {{ .Values.dnn }}
