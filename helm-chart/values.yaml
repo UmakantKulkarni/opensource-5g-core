@@ -6,7 +6,7 @@ open5gs:
   image:
     repository: umakantk/open5gs
     pullPolicy: Always
-    tag: "secure5g_v1"
+    tag: "secure5g_v2"
 
 pool:
   key: 128
@@ -19,7 +19,7 @@ ueransim:
   image:
     repository: umakantk/ueransim
     pullPolicy: Always
-    tag: "secure5g_v1"
+    tag: "secure5g_v2"
 
 dnn: internet
 
@@ -69,15 +69,15 @@ pcs:
     enabled: true
     amf: amf
     ausf: ausf
-    bsf: ausf
+    bsf: bsf
     smf: smf
     pcf: pcf
     udm: udm
     upf: upf
     nrf: nrf
-    nssf: nrf
+    nssf: nssf
     mongo: udsf
-    udr: udm
+    udr: udr
     test: udsf
     webui: udsf
   enableMongoReplicaSet: false
@@ -139,7 +139,7 @@ mongodb:
   image:
     repository: umakantk/open5gs-mongo
     pullPolicy: IfNotPresent
-    tag: "secure5g_v1"
+    tag: "secure5g_v2"
   sauri:
     ausf: "mongodb://mongodb-svc/open5gs"
     nssf: "mongodb://mongodb-svc/open5gs"
