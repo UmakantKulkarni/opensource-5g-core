@@ -17,10 +17,10 @@ data:
       client:
         no_tls: true
     upf:
-        pfcp:
-           dev: {{ .Values.k8s.upf_interface }}
+        pfcp:           
+            - dev: {{ .Values.k8s.upf_interface }}
         gtpu:
-           dev: {{ .Values.k8s.upf_interface }}
+          - dev: {{ .Values.k8s.upf_interface }}
         subnet:
           - addr: 10.45.0.1/16
             dnn: {{ .Values.dnn }}
