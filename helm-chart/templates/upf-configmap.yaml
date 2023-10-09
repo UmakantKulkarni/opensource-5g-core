@@ -18,7 +18,7 @@ data:
         no_tls: true
     upf:
         pfcp:           
-            - dev: {{ .Values.k8s.upf_interface }}
+          - dev: {{ .Values.k8s.upf_interface }}
         gtpu:
           - dev: {{ .Values.k8s.upf_interface }}
         subnet:
