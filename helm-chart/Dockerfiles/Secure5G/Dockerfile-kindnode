@@ -1,0 +1,19 @@
+FROM kindest/node:v1.27.3
+
+ARG ARG_TIMEZONE=America/Indiana/Indianapolis
+ENV ENV_TIMEZONE ${ARG_TIMEZONE}
+
+RUN apt -y update
+
+RUN apt -y install git vim python3-pip python3-setuptools python3-wheel tzdata net-tools tshark tcpdump curl wget iptables iputils-ping openssh-client
+
+ENV TZ="America/Indiana/Indianapolis"
+
+WORKDIR /root/
+
+RUN git clone -b ztx_01 https://github.com/UmakantKulkarni/scripts && cd scripts && chmod +x *
+
+# sync timezone
+RUN echo '$ENV_TIMEZONE' > /etc/timezone \
+    && ln -fsn /usr/share/zoneinfo/$ENV_TIMEZONE /etc/localtime \
+    && dpkg-reconfigure --frontend noninteractive tzdata
