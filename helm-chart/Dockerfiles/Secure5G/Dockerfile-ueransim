@@ -12,9 +12,9 @@ ENV TZ="America/Indiana/Indianapolis"
 
 RUN pip3 install pymongo
 
-RUN cd && wget https://github.com/Kitware/CMake/releases/download/v3.25.2/cmake-3.25.2.tar.gz && tar -xvzf cmake-3.25.2.tar.gz
+RUN cd && wget https://github.com/Kitware/CMake/releases/download/v3.27.6/cmake-3.27.6.tar.gz && tar -xvzf cmake-3.27.6.tar.gz
 
-RUN cd && cd cmake-3.25.2 && ./bootstrap -- -DCMAKE_BUILD_TYPE:STRING=Release && make && make install
+RUN cd && cd cmake-3.27.6 && ./bootstrap -- -DCMAKE_BUILD_TYPE:STRING=Release && make && make install
 
 RUN cd && rm -rf cmake-*
 
