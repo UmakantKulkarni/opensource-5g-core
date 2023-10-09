@@ -1,5 +1,6 @@
 FROM kindest/node:v1.27.3
 
+ENV DEBIAN_FRONTEND noninteractive
 ARG ARG_TIMEZONE=America/Indiana/Indianapolis
 ENV ENV_TIMEZONE ${ARG_TIMEZONE}
 
