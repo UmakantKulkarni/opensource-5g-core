@@ -8,7 +8,14 @@ data:
   bsf.yaml: |
     logger:
         file: /var/log/open5gs/bsf.log
-
+    time:
+      t3512:
+        value: 540
+    sbi:
+      server:
+        no_tls: true
+      client:
+        no_tls: true
     {{ if .Values.pcs.enableMongoReplicaSet }}
     db_uri: {{ .Values.mongodb.rsuri.bsf | quote }}
     {{ else }}

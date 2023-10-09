@@ -10,7 +10,14 @@ data:
         file: /var/log/open5gs/amf.log
         #level: debug
         #domain: sbi
-
+    time:
+      t3512:
+        value: 540
+    sbi:
+      server:
+        no_tls: true
+      client:
+        no_tls: true
     amf:
         sbi:
         - addr: 0.0.0.0

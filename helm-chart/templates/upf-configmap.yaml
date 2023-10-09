@@ -8,7 +8,14 @@ data:
   upf.yaml: |
     logger:
         file: /var/log/open5gs/upf.log
-
+    time:
+      t3512:
+        value: 540
+    sbi:
+      server:
+        no_tls: true
+      client:
+        no_tls: true
     upf:
         pfcp:
            dev: {{ .Values.k8s.upf_interface }}
