@@ -6,7 +6,7 @@ open5gs:
   image:
     repository: umakantk/open5gs
     pullPolicy: Always
-    tag: "secure5g_v2"
+    tag: "ztx_01"
 
 pool:
   key: 128
@@ -19,7 +19,7 @@ ueransim:
   image:
     repository: umakantk/ueransim
     pullPolicy: Always
-    tag: "secure5g_v2"
+    tag: "ztx_01"
 
 dnn: internet
 
@@ -68,23 +68,23 @@ pcs:
   nodeAffinity:
     enabled: true
     amf: amf
-    ausf: ausf
-    bsf: bsf
+    ausf: amf
+    bsf: amf
     smf: smf
-    pcf: pcf
-    udm: udm
+    pcf: smf
+    udm: smf
     upf: upf
-    nrf: nrf
-    nssf: nssf
-    mongo: udsf
-    udr: udr
-    test: udsf
-    webui: udsf
+    nrf: upf
+    nssf: upf
+    mongo: nf
+    udr: upf
+    test: nf
+    webui: nf
   enableMongoReplicaSet: false
   dbCommEnabled:
-    amf: true
-    smf: true
-    upf: true
+    amf: false
+    smf: false
+    upf: false
   upsertApiEnabled:
     amf:
       create: false
@@ -139,7 +139,7 @@ mongodb:
   image:
     repository: umakantk/open5gs-mongo
     pullPolicy: IfNotPresent
-    tag: "secure5g_v2"
+    tag: "ztx_01"
   sauri:
     ausf: "mongodb://mongodb-svc/open5gs"
     nssf: "mongodb://mongodb-svc/open5gs"
