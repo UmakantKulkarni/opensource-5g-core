@@ -31,7 +31,7 @@ amf:
 # Primary/Native kubernetes interface
 k8s:
   interface: eno1
-  upf_interface: enp3s0f0np0
+  upf_interface: eth0
 
 webui:
   image:
