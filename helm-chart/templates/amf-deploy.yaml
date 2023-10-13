@@ -59,9 +59,7 @@ spec:
         - name: amf
           image: "{{ .Values.open5gs.image.repository }}:{{ .Values.open5gs.image.tag }}"
           imagePullPolicy: {{ .Values.open5gs.image.pullPolicy }}
-          command: ["open5gs-amfd", "-c", "/open5gs/config-map/amf.yaml"]
-          ports:
-          - containerPort: 38412            
+          command: ["open5gs-amfd", "-c", "/open5gs/config-map/amf.yaml"]            
           env:
           - name: PCS_DB_COMM_ENABLED
             value: {{ .Values.pcs.dbCommEnabled.amf | default "false" | quote }}
