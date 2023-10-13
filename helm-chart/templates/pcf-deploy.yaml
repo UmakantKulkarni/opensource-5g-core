@@ -34,7 +34,7 @@ spec:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
             - matchExpressions:
-              - key: kubernetes.io/pcs-nf-type
+              - key: pcs-nf-type
                 operator: In
                 values:
                 - {{ .Values.pcs.nodeAffinity.pcf | quote }}
