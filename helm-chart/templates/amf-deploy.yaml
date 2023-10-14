@@ -10,8 +10,8 @@ spec:
     epc-mode: amf
   ports:
     - protocol: SCTP
-      port: 30412
-      targetPort: 30412
+      port: 38412
+      targetPort: 38412
       nodePort: 30412
 ---
 apiVersion: v1
@@ -60,9 +60,6 @@ spec:
           image: "{{ .Values.open5gs.image.repository }}:{{ .Values.open5gs.image.tag }}"
           imagePullPolicy: {{ .Values.open5gs.image.pullPolicy }}
           command: ["open5gs-amfd", "-c", "/open5gs/config-map/amf.yaml"]
-          ports:
-          - containerPort: 30412
-            hostPort: 30412
           env:
           - name: PCS_DB_COMM_ENABLED
             value: {{ .Values.pcs.dbCommEnabled.amf | default "false" | quote }}

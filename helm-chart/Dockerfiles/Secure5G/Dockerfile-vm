@@ -1,0 +1,22 @@
+FROM ubuntu:22.04
+
+ENV DEBIAN_FRONTEND noninteractive
+ARG ARG_TIMEZONE=America/Indiana/Indianapolis
+ENV ENV_TIMEZONE ${ARG_TIMEZONE}
+
+RUN apt-get -y update && apt-get -y upgrade && apt-get -y update && apt-get -y dist-upgrade
+
+RUN apt-get update && \
+    apt-get -yq dist-upgrade && \
+    apt-get --no-install-recommends -qqy install python3-pip python3-setuptools python3-wheel ninja-build build-essential flex bison git libsctp-dev libgnutls28-dev libgcrypt-dev libssl-dev libidn11-dev libmongoc-dev libbson-dev libmicrohttpd-dev libcurl4-gnutls-dev meson iproute2 libnghttp2-dev vim iptables cmake gnupg libtins-dev gdb tzdata ntp ntpstat ntpdate libtalloc-dev docker.io apache2-utils default-jre default-jdk wget nano make g++ lksctp-tools net-tools tcpdump curl jq iputils-ping nghttp2-client bash-completion xauth gcc autoconf libtool pkg-config libmnl-dev libyaml-dev sshpass x11-apps feh tshark openssh-client openssh-server systemd systemd-sysv dbus dbus-user-session
+
+ENV TZ="America/Indiana/Indianapolis"
+
+# sync timezone
+RUN echo '$ENV_TIMEZONE' > /etc/timezone \
+    && ln -fsn /usr/share/zoneinfo/$ENV_TIMEZONE /etc/localtime \
+    && dpkg-reconfigure --frontend noninteractive tzdata
+
+WORKDIR /
+
+CMD ["sh", "-c", "sleep infinity"]
