@@ -68,18 +68,18 @@ pcs:
   nodeAffinity:
     enabled: true
     amf: amf
-    ausf: amf
-    bsf: amf
     smf: smf
-    pcf: smf
-    udm: smf
     upf: upf
-    nrf: upf
-    nssf: upf
-    mongo: nf
-    udr: upf
-    test: nf
-    webui: nf
+    ausf: nf1
+    bsf: nf1
+    pcf: nf1
+    mongo: nf1
+    nrf: nf2
+    nssf: nf2
+    udr: nf2
+    udm: nf2    
+    test: master
+    webui: master
   enableMongoReplicaSet: false
   dbCommEnabled:
     amf: false
