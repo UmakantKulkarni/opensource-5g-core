@@ -68,6 +68,8 @@ spec:
             {{ else }}
             value: {{ .Values.mongodb.sauri.smf | quote }}
             {{ end }}
+          - name: OGS_PFCP_UDP_PORT
+            value: {{ .Values.open5gs.pfcp.port | default "8805" | quote }}
         command: ["/bin/sh", "-c"]
         args:
         - open5gs-smfd -c /open5gs/config-map/smf.yaml;
