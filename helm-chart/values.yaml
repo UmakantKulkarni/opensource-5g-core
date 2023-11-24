@@ -9,6 +9,10 @@ open5gs:
     tag: "ztx_01"
   pfcp:
     port: 8805
+  gtpv1:
+    port: 2152
+  gtpv2:
+    port: 2153
 
 pool:
   key: 128
