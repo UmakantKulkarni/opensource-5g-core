@@ -7,6 +7,8 @@ open5gs:
     repository: umakantk/open5gs
     pullPolicy: Always
     tag: "ztx_01"
+  upf:
+    hostNetwork: false
   pfcp:
     port: 8805
     tunintf: "ogstun"
