@@ -10,11 +10,7 @@
     - NET_RAW
   privileged: true
   runAsGroup: 1592
-  args:
-  - sleep infinity;
-  command:
-  - /bin/sh
-  - -c
+  command: ["/root/5gsec/src/app"]
   env:
   - name: ENCRYPTION_ENABLED
     value: {{ .Values.ztx.encryption | default "false" | quote }}
