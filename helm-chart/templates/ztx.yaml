@@ -16,7 +16,7 @@
     value: {{ .Values.ztx.encryption | default "false" | quote }}
   - name: MY_IP
     valueFrom:
-    fieldRef:
-      fieldPath: status.podIP
+      fieldRef:
+        fieldPath: status.podIP
 {{ end }}
 {{- end -}}
