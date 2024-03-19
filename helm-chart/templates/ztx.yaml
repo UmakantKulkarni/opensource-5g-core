@@ -7,6 +7,7 @@ initContainers:
       capabilities:
         add:
         - NET_ADMIN
+      privileged: true
     command: ['sh', '-c']
     args: ["iptables -t mangle -A PREROUTING -p sctp -m mark ! --mark 15 -j NFQUEUE --queue-num 0 ; iptables -t mangle -A OUTPUT -p sctp -m mark ! --mark 15 -j NFQUEUE --queue-num 0 ; iptables -t mangle -A PREROUTING -p udp ! --dport 53 -m mark ! --mark 15 -j NFQUEUE --queue-num 0 ; iptables -t mangle -A OUTPUT -p udp ! --dport 53 -m mark ! --mark 15 -j NFQUEUE --queue-num 0"]
 {{ end }}
