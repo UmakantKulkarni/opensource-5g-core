@@ -42,17 +42,17 @@ spec:
         - containerPort: 27017
           name: mongodb
         volumeMounts:
-        - name: mongodb-persistent-storage
-          mountPath: /data/db
+        - name: mongodb-persistent-storage-{{ .Release.Namespace }}
+          mountPath: /data/db_{{ .Release.Namespace }}
       volumes:
-      - name: mongodb-persistent-storage
+      - name: mongodb-persistent-storage-{{ .Release.Namespace }}
         persistentVolumeClaim:
-          claimName: mongodb-pv-claim-open5gs
+          claimName: mongodb-pv-claim-{{ .Release.Namespace }}
 ---
 kind: PersistentVolume
 apiVersion: v1
 metadata:
-  name: mongodb-pv-volume-open5gs
+  name: mongodb-pv-volume-{{ .Release.Namespace }}
   labels:
     type: local
 spec:
@@ -67,7 +67,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: mongodb-pv-claim-open5gs
+  name: mongodb-pv-claim-{{ .Release.Namespace }}
 spec:
   storageClassName: ""
   accessModes:

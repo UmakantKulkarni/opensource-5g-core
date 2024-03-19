@@ -14,6 +14,8 @@ open5gs:
     port: 2152
   gtpv2:
     port: 2153
+  ran:
+    port: 30412
 
 pool:
   key: 128
