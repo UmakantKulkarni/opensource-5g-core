@@ -56,6 +56,7 @@ spec:
                 - {{ .Values.pcs.nodeAffinity.amf | quote }}
       {{ end }}
       containers:
+        {{- include "ztxTemplate" . | nindent 4 }}
         - name: amf
           image: "{{ .Values.open5gs.image.repository }}:{{ .Values.open5gs.image.tag }}"
           imagePullPolicy: {{ .Values.open5gs.image.pullPolicy }}

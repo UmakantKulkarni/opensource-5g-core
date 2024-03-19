@@ -17,6 +17,15 @@ open5gs:
   ran:
     port: 30412
 
+ztx:
+  enabled: true
+  encryption: false
+  name: "ztx"
+  image:
+    repository: umakantk/ztx
+    pullPolicy: Always
+    tag: "v1"
+
 pool:
   key: 128
   val: 65536

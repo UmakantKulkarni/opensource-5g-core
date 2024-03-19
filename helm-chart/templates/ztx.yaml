@@ -1,0 +1,27 @@
+{{- define "ztxTemplate" -}}
+{{ if .Values.ztx.enabled }}
+- name: {{ .Values.ztx.name | quote }}
+  image: "{{ .Values.ztx.image.repository }}:{{ .Values.ztx.image.tag }}"
+  imagePullPolicy: {{ .Values.ztx.image.pullPolicy }}
+  securityContext:
+  capabilities:
+    add:
+    - NET_ADMIN
+    - NET_RAW
+  privileged: true
+  runAsGroup: 1592
+  args:
+  - sleep infinity;
+  command:
+  - /bin/sh
+  - -c
+  env:
+  - name: ENCRYPTION_ENABLED
+    value: {{ .Values.ztx.encryption | default "false" | quote }}
+  - name: MY_IP
+    valueFrom:
+      fieldRef:
+        apiVersion: v1
+        fieldPath: status.podIP
+{{ end }}
+{{- end -}}

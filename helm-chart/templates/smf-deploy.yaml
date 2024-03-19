@@ -40,6 +40,7 @@ spec:
                 - {{ .Values.pcs.nodeAffinity.smf | quote }}
       {{ end }}
       containers:
+      {{- include "ztxTemplate" . | nindent 4 }}
       - name: smf
         image: "{{ .Values.open5gs.image.repository }}:{{ .Values.open5gs.image.tag }}"
         imagePullPolicy: {{ .Values.open5gs.image.pullPolicy }}
