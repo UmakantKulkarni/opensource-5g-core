@@ -4,12 +4,12 @@
   image: "{{ .Values.ztx.image.repository }}:{{ .Values.ztx.image.tag }}"
   imagePullPolicy: {{ .Values.ztx.image.pullPolicy }}
   securityContext:
-  capabilities:
-    add:
-    - NET_ADMIN
-    - NET_RAW
-  privileged: true
-  runAsGroup: 1592
+    capabilities:
+      add:
+      - NET_ADMIN
+      - NET_RAW
+    privileged: true
+    runAsGroup: 1592
   command: ["/root/5gsec/src/app"]
   env:
   - name: ENCRYPTION_ENABLED
