@@ -27,6 +27,7 @@ ztx:
     repository: umakantk/ztx
     pullPolicy: Always
     tag: "v1"
+    initTag: "init"
 
 pool:
   key: 128
