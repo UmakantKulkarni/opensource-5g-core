@@ -1,10 +1,14 @@
 {{- define "ztxInitContainer" -}}
 {{ if .Values.ztx.enabled }}
 initContainers:
-  - name: init-ztx
+  - name: ztx-init
     image: "{{ .Values.ztx.image.repository }}:{{ .Values.ztx.image.initTag }}"
+    securityContext:
+      capabilities:
+        add:
+        - NET_ADMIN
     command: ['sh', '-c']
-    args: ["iptables -t mangle -A PREROUTING -p sctp -m mark ! --mark 12 -j NFQUEUE --queue-num 0 ; iptables -t mangle -A OUTPUT -p sctp -m mark ! --mark 12 -j NFQUEUE --queue-num 0 ; iptables -t mangle -A PREROUTING -p udp ! --dport 53 -m mark ! --mark 12 -j NFQUEUE --queue-num 0 ; iptables -t mangle -A OUTPUT -p udp ! --dport 53 -m mark ! --mark 12 -j NFQUEUE --queue-num 0"]
+    args: ["iptables -t mangle -A PREROUTING -p sctp -m mark ! --mark 15 -j NFQUEUE --queue-num 0 ; iptables -t mangle -A OUTPUT -p sctp -m mark ! --mark 15 -j NFQUEUE --queue-num 0 ; iptables -t mangle -A PREROUTING -p udp ! --dport 53 -m mark ! --mark 15 -j NFQUEUE --queue-num 0 ; iptables -t mangle -A OUTPUT -p udp ! --dport 53 -m mark ! --mark 15 -j NFQUEUE --queue-num 0"]
 {{ end }}
 {{- end -}}
 
