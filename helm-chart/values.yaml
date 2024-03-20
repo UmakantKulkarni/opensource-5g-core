@@ -9,6 +9,7 @@ open5gs:
     tag: "ztx_01"
   upf:
     hostNetwork: false
+    port: 30805
   pfcp:
     port: 8805
     tunintf: "ogstun"
@@ -97,6 +98,7 @@ pcs:
     mongo: nf1
     nrf: nf2
     nssf: nf2
+    scp: nf2
     udr: nf2
     udm: nf2    
     test: master
@@ -168,6 +170,7 @@ mongodb:
     test: "mongodb://mongodb-svc/"
     bsf: "mongodb://mongodb-svc/open5gs"
     nrf: "mongodb://mongodb-svc/open5gs"
+    scp: "mongodb://mongodb-svc/open5gs"
     pcf: "mongodb://mongodb-svc/open5gs"
     udr: "mongodb://mongodb-svc/open5gs"
     webui: "mongodb://mongodb-svc/open5gs"
@@ -181,6 +184,7 @@ mongodb:
     test: "mongodb://open5gs-mongodb-0.mongodb-svc:27017,open5gs-mongodb-1.mongodb-svc:27017,open5gs-mongodb-2.mongodb-svc:27017,open5gs-mongodb-3.mongodb-svc:27017/replicaSet=rs0"
     bsf: "mongodb://open5gs-mongodb-0.mongodb-svc:27017,open5gs-mongodb-1.mongodb-svc:27017,open5gs-mongodb-2.mongodb-svc:27017,open5gs-mongodb-3.mongodb-svc:27017/open5gs?replicaSet=rs0"
     nrf: "mongodb://open5gs-mongodb-0.mongodb-svc:27017,open5gs-mongodb-1.mongodb-svc:27017,open5gs-mongodb-2.mongodb-svc:27017,open5gs-mongodb-3.mongodb-svc:27017/open5gs?replicaSet=rs0"
+    scp: "mongodb://open5gs-mongodb-0.mongodb-svc:27017,open5gs-mongodb-1.mongodb-svc:27017,open5gs-mongodb-2.mongodb-svc:27017,open5gs-mongodb-3.mongodb-svc:27017/open5gs?replicaSet=rs0"
     pcf: "mongodb://open5gs-mongodb-0.mongodb-svc:27017,open5gs-mongodb-1.mongodb-svc:27017,open5gs-mongodb-2.mongodb-svc:27017,open5gs-mongodb-3.mongodb-svc:27017/open5gs?replicaSet=rs0"
     udr: "mongodb://open5gs-mongodb-0.mongodb-svc:27017,open5gs-mongodb-1.mongodb-svc:27017,open5gs-mongodb-2.mongodb-svc:27017,open5gs-mongodb-3.mongodb-svc:27017/open5gs?replicaSet=rs0"
     webui: "mongodb://open5gs-mongodb-0.mongodb-svc:27017,open5gs-mongodb-1.mongodb-svc:27017,open5gs-mongodb-2.mongodb-svc:27017,open5gs-mongodb-3.mongodb-svc:27017/open5gs?replicaSet=rs0"

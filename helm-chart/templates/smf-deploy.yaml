@@ -80,12 +80,12 @@ spec:
               value: {{ .Values.open5gs.gtpv2.port | default "2153" | quote }}
           command: ["/bin/sh", "-c"]
           args:
-          - open5gs-smfd -c /configs/smf.yaml.in;
-      #     volumeMounts:
-      #       - name: open5gs-smf-config
-      #         mountPath: /configs/smf.yaml.in
-      #         subPath: "smf.yaml"                                       
-      # volumes:
-      #   - name: open5gs-smf-config
-      #     configMap:
-      #       name: open5gs-smf-config                
+          - open5gs-smfd -c /open5gs/config-map/smf.yaml;
+          volumeMounts:
+            - name: open5gs-smf-config
+              mountPath: /open5gs/config-map/smf.yaml
+              subPath: "smf.yaml"                                       
+      volumes:
+        - name: open5gs-smf-config
+          configMap:
+            name: open5gs-smf-config                

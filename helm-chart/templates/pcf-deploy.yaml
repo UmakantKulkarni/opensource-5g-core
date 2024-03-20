@@ -43,7 +43,7 @@ spec:
         - name: pcf
           image: "{{ .Values.open5gs.image.repository }}:{{ .Values.open5gs.image.tag }}"
           imagePullPolicy: {{ .Values.open5gs.image.pullPolicy }}
-          command: ["open5gs-pcfd", "-c", "/configs/pcf.yaml.in"]
+          command: ["open5gs-pcfd", "-c", "/open5gs/config-map/pcf.yaml"]
           env:
           - name: DB_URI
             {{ if .Values.pcs.enableMongoReplicaSet }}
@@ -51,11 +51,11 @@ spec:
             {{ else }}
             value: {{ .Values.mongodb.sauri.pcf | quote }}
             {{ end }}
-      #     volumeMounts:
-      #     - name: open5gs-pcf-config
-      #       mountPath: /configs/pcf.yaml.in
-      #       subPath: "pcf.yaml"          
-      # volumes:
-      #   - name: open5gs-pcf-config
-      #     configMap:
-      #       name: open5gs-pcf-config         
+          volumeMounts:
+          - name: open5gs-pcf-config
+            mountPath: /open5gs/config-map/pcf.yaml
+            subPath: "pcf.yaml"          
+      volumes:
+        - name: open5gs-pcf-config
+          configMap:
+            name: open5gs-pcf-config         

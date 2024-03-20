@@ -43,7 +43,7 @@ spec:
         - name: udr
           image: "{{ .Values.open5gs.image.repository }}:{{ .Values.open5gs.image.tag }}"
           imagePullPolicy: {{ .Values.open5gs.image.pullPolicy }}
-          command: ["open5gs-udrd", "-c", "/configs/udr.yaml.in"]
+          command: ["open5gs-udrd", "-c", "/open5gs/config-map/udr.yaml"]
           env:
           - name: DB_URI
             {{ if .Values.pcs.enableMongoReplicaSet }}
@@ -51,11 +51,11 @@ spec:
             {{ else }}
             value: {{ .Values.mongodb.sauri.udr | quote }}
             {{ end }}
-      #     volumeMounts:
-      #     - name: open5gs-udr-config
-      #       mountPath: /configs/udr.yaml.in
-      #       subPath: "udr.yaml"          
-      # volumes:
-      #   - name: open5gs-udr-config
-      #     configMap:
-      #       name: open5gs-udr-config
+          volumeMounts:
+          - name: open5gs-udr-config
+            mountPath: /open5gs/config-map/udr.yaml
+            subPath: "udr.yaml"          
+      volumes:
+        - name: open5gs-udr-config
+          configMap:
+            name: open5gs-udr-config

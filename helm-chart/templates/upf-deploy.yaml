@@ -5,12 +5,14 @@ metadata:
   labels:
     epc-mode: upf
 spec:
+  type: LoadBalancer
   selector:
     epc-mode: upf
   ports:
     - protocol: UDP
       port: 8805
       targetPort: 8805    
+      nodePort:  {{ .Values.open5gs.upf.port | default 30805 }}
 ---  
 apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
 kind: Deployment
@@ -91,17 +93,17 @@ spec:
             ip link set ogstun up;
             sh -c "echo 1 > /proc/sys/net/ipv4/ip_forward";
             iptables -t nat -A POSTROUTING -s 10.45.0.0/16 ! -o ogstun -j MASQUERADE;
-            open5gs-upfd -c /configs/upf.yaml.in;
+            open5gs-upfd -c /open5gs/config-map/upf.yaml;
           volumeMounts:
-          # - name: open5gs-upf-config
-          #   mountPath: /configs/upf.yaml.in
-          #   subPath: "upf.yaml"
+          - name: open5gs-upf-config
+            mountPath: /open5gs/config-map/upf.yaml
+            subPath: "upf.yaml"
           - mountPath: /dev/net/tun
             name: dev-net-tun            
       volumes:
-        # - name: open5gs-upf-config
-        #   configMap:
-        #     name: open5gs-upf-config
+        - name: open5gs-upf-config
+          configMap:
+            name: open5gs-upf-config
         - name: dev-net-tun
           hostPath:
             path: /dev/net/tun

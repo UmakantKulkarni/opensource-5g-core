@@ -7,23 +7,43 @@ metadata:
 data:
   udm.yaml: |
     logger:
-        file: /var/log/open5gs/udm.log
-    time:
-      t3512:
-        value: 540
-    sbi:
-      server:
-        no_tls: true
-      client:
-        no_tls: true
+      file: /var/log/open5gs/udm.log
+    #  level: info   # fatal|error|warn|info(default)|debug|trace
+
+    global:
+      max:
+        ue: 1024  # The number of UE can be increased depending on memory size.
+    #    peer: 64
+
     udm:
-      sbi:   
-      - addr: 0.0.0.0
-        advertise: open5gs-udm
-    nrf:
-     sbi:
-      name: open5gs-nrf
-    pool:
-      {{ .Values.pool.key }}: {{ .Values.pool.val }}
-    max:
-      ue: {{ .Values.max.ue }}
+    #  hnet:
+    #    - id: 1
+    #      scheme: 1
+    #      key: @sysconfdir@/open5gs/hnet/curve25519-1.key
+    #    - id: 2
+    #      scheme: 2
+    #      key: @sysconfdir@/open5gs/hnet/secp256r1-2.key
+    #    - id: 3
+    #      scheme: 1
+    #     key: @sysconfdir@/open5gs/hnet/curve25519-3.key
+    #    - id: 4
+    #      scheme: 2
+    #      key: @sysconfdir@/open5gs/hnet/secp256r1-4.key
+    #    - id: 5
+    #      scheme: 1
+    #      key: @sysconfdir@/open5gs/hnet/curve25519-5.key
+    #    - id: 6
+    #      scheme: 2
+    #      key: @sysconfdir@/open5gs/hnet/secp256r1-6.key
+      sbi:
+        server:
+          - address: 0.0.0.0
+            port: 80
+            advertise: open5gs-udm
+            no_tls: true
+        client:
+          no_tls: true
+    #      nrf:
+    #        - uri: http://open5gs-nrf:80
+          scp:
+            - uri: http://open5gs-scp:80

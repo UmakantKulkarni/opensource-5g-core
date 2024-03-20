@@ -1,4 +1,4 @@
-db_uri: mongodb://localhost/open5gs
+db_uri: {{ .Values.mongodb.sauri.udr | quote }}
 logger:
   file: /var/log/open5gs/udr.log
 #  level: info   # fatal|error|warn|info(default)|debug|trace
@@ -17,10 +17,10 @@ udr:
         no_tls: true
     client:
       no_tls: true
-      nrf:
-        - uri: http://open5gs-nrf:80
-#      scp:
-#        - uri: http://open5gs-scp:80
+#      nrf:
+#        - uri: http://open5gs-nrf:80
+      scp:
+        - uri: http://open5gs-scp:80
 
 ################################################################################
 # SBI Server

@@ -18,8 +18,8 @@ ENV TZ="America/Indiana/Indianapolis"
 RUN   git clone --recursive -b benchmark https://github.com/UmakantKulkarni/open5gs && \
    cd open5gs && meson build --prefix=/ && ninja -C build && cd build && ninja install
 
-RUN mkdir -p /configs
-COPY config/* /configs/
+#RUN mkdir -p /configs
+#COPY config/* /configs/
 
 # sync timezone
 RUN echo '$ENV_TIMEZONE' > /etc/timezone \

@@ -16,10 +16,10 @@ nssf:
         no_tls: true
     client:
       no_tls: true
-      nrf:
-        - uri: http://open5gs-nrf:80
-#      scp:
-#        - uri: http://open5gs-scp:80
+#      nrf:
+#        - uri: http://open5gs-nrf:80
+      scp:
+        - uri: http://open5gs-scp:80
       nsi:
         - uri: http://open5gs-nrf:80
           s_nssai:

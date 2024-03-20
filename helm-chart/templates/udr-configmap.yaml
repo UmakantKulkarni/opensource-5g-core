@@ -6,29 +6,26 @@ metadata:
     epc-mode: udr
 data:
   udr.yaml: |
-    logger:
-        file: /var/log/open5gs/udr.log
-    time:
-      t3512:
-        value: 540
-    sbi:
-      server:
-        no_tls: true
-      client:
-        no_tls: true
-    {{ if .Values.pcs.enableMongoReplicaSet }}
-    db_uri: {{ .Values.mongodb.rsuri.udr | quote }}
-    {{ else }}
     db_uri: {{ .Values.mongodb.sauri.udr | quote }}
-    {{ end }}
+    logger:
+      file: /var/log/open5gs/udr.log
+    #  level: info   # fatal|error|warn|info(default)|debug|trace
+
+    global:
+      max:
+        ue: 1024  # The number of UE can be increased depending on memory size.
+    #    peer: 64
+
     udr:
       sbi:
-      - addr: 0.0.0.0
-        advertise: open5gs-udr
-    nrf:
-     sbi:
-      name: open5gs-nrf
-    pool:
-      {{ .Values.pool.key }}: {{ .Values.pool.val }}
-    max:
-      ue: {{ .Values.max.ue }}
+        server:
+          - address: 0.0.0.0
+            port: 80
+            advertise: open5gs-udr
+            no_tls: true
+        client:
+          no_tls: true
+    #      nrf:
+    #        - uri: http://open5gs-nrf:80
+          scp:
+            - uri: http://open5gs-scp:80

@@ -6,30 +6,30 @@ metadata:
     epc-mode: pcf
 data:
   pcf.yaml: |
-    logger:
-        file: /var/log/open5gs/pcf.log
-    time:
-      t3512:
-        value: 540
-    sbi:
-      server:
-        no_tls: true
-      client:
-        no_tls: true
-    {{ if .Values.pcs.enableMongoReplicaSet }}
-    db_uri: {{ .Values.mongodb.rsuri.pcf | quote }}
-    {{ else }}
     db_uri: {{ .Values.mongodb.sauri.pcf | quote }}
-    {{ end }}
+    logger:
+      file: /var/log/open5gs/pcf.log
+    #  level: info   # fatal|error|warn|info(default)|debug|trace
+
+    global:
+      max:
+        ue: 1024  # The number of UE can be increased depending on memory size.
+    #    peer: 64
 
     pcf:
-      sbi:     
-      - addr: 0.0.0.0
-        advertise: open5gs-pcf
-    nrf:
-     sbi:
-      name: open5gs-nrf
-    pool:
-      {{ .Values.pool.key }}: {{ .Values.pool.val }}
-    max:
-      ue: {{ .Values.max.ue }}
+      sbi:
+        server:
+          - address: 0.0.0.0
+            port: 80
+            advertise: open5gs-pcf
+            no_tls: true
+        client:
+          no_tls: true
+    #      nrf:
+    #        - uri: http://open5gs-nrf:80
+          scp:
+            - uri: http://open5gs-scp:80
+      metrics:
+        server:
+          - address: 0.0.0.0
+            port: 9090

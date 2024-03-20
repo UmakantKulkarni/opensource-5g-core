@@ -61,7 +61,7 @@ spec:
         - name: amf
           image: "{{ .Values.open5gs.image.repository }}:{{ .Values.open5gs.image.tag }}"
           imagePullPolicy: {{ .Values.open5gs.image.pullPolicy }}
-          command: ["open5gs-amfd", "-c", "/configs/amf.yaml.in"]
+          command: ["open5gs-amfd", "-c", "/open5gs/config-map/amf.yaml"]
           env:
           - name: PCS_DB_COMM_ENABLED
             value: {{ .Values.pcs.dbCommEnabled.amf | default "false" | quote }}
@@ -95,11 +95,11 @@ spec:
             {{ else }}
             value: {{ .Values.mongodb.sauri.amf | quote }}
             {{ end }}
-      #     volumeMounts:
-      #     - name: open5gs-amf-config
-      #       mountPath: /configs/amf.yaml.in
-      #       subPath: "amf.yaml"
-      # volumes:
-      #  - name: open5gs-amf-config
-      #    configMap:
-      #      name: open5gs-amf-config
+          volumeMounts:
+          - name: open5gs-amf-config
+            mountPath: /open5gs/config-map/amf.yaml
+            subPath: "amf.yaml"
+      volumes:
+       - name: open5gs-amf-config
+         configMap:
+           name: open5gs-amf-config
