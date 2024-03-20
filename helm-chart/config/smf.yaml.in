@@ -1,5 +1,5 @@
 logger:
-  file: @localstatedir@/log/open5gs/smf.log
+  file: /var/log/open5gs/smf.log
 #  level: info   # fatal|error|warn|info(default)|debug|trace
 
 global:
@@ -51,7 +51,7 @@ smf:
 #    - ::1
 #  ctf:
 #    enabled: auto   # auto(default)|yes|no
-  freeDiameter: @sysconfdir@/freeDiameter/smf.conf
+#  freeDiameter: @sysconfdir@/freeDiameter/smf.conf
 
 ################################################################################
 # SMF Info
