@@ -5,14 +5,12 @@ metadata:
   labels:
     epc-mode: upf
 spec:
-  type: LoadBalancer
   selector:
     epc-mode: upf
   ports:
     - protocol: UDP
       port: 8805
-      targetPort: 8805    
-      nodePort:  {{ .Values.open5gs.upf.port | default 31805 }}
+      targetPort: {{ .Values.open5gs.pfcp.port | default "8805" | quote }}
 ---  
 apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
 kind: Deployment

@@ -19,14 +19,12 @@ metadata:
   labels:
     epc-mode: smf
 spec:
-  type: LoadBalancer
   selector:
     epc-mode: smf
   ports:
     - protocol: UDP
       port: 8805
-      targetPort: 8805    
-      nodePort:  {{ .Values.open5gs.smf.port | default 30805 }}
+      targetPort: {{ .Values.open5gs.pfcp.port | default "8805" | quote }}
 --- 
 apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
 kind: Deployment

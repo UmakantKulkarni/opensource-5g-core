@@ -30,8 +30,8 @@ data:
             - uri: http://open5gs-scp:80
       pfcp:
         server:
-          - address: 0.0.0.0
-            port: 8805
+          - dev: {{ .Values.k8s.podInterface }}
+            port: {{ .Values.open5gs.pfcp.port | default "8805" | quote }}
         client:
           upf:
             - address: open5gs-upf
