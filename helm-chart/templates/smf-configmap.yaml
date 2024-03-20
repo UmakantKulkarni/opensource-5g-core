@@ -31,7 +31,7 @@ data:
       pfcp:
         server:
           - dev: {{ .Values.k8s.podInterface }}
-            port: {{ .Values.open5gs.pfcp.port | default "8805" | quote }}
+            port: {{ .Values.open5gs.pfcp.port | default 8805 }}
         client:
           upf:
             - address: open5gs-upf
