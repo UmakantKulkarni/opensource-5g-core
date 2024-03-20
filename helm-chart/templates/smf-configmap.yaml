@@ -37,14 +37,14 @@ data:
             - address: open5gs-upf
       gtpc:
         server:
-          - address: 0.0.0.0
+          - dev: {{ .Values.k8s.podInterface }}
       gtpu:
         server:
-          - address: 0.0.0.0
-      metrics:
-        server:
-          - address: 0.0.0.0
-            port: 9090
+          - dev: {{ .Values.k8s.podInterface }}
+      # metrics:
+      #   server:
+      #     - address: 0.0.0.0
+      #       port: 9090
       session:
         - subnet: 10.45.0.1/16
         - subnet: 2001:db8:cafe::1/48

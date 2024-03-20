@@ -76,7 +76,7 @@ spec:
           - name: OGS_PFCP_UDP_PORT
             value: {{ .Values.open5gs.pfcp.port | default "8805" | quote }}
           - name: OGS_TUN_INTERFACE
-            value: {{ .Values.open5gs.pfcp.tunintf | default "ogstun" | quote }}
+            value: {{ .Values.open5gs.upf.tunintf | default "ogstun" | quote }}
           - name: OGS_GTPV1_U_UDP_PORT
             value: {{ .Values.open5gs.gtpv1.port | default "2152" | quote }}
           - name: OGS_GTPV2_C_UDP_PORT
@@ -85,12 +85,12 @@ spec:
             privileged: true
           command: ["/bin/sh", "-c"]
           args:
-          - ip tuntap add name ogstun mode tun;
-            ip addr add 10.45.0.1/16 dev ogstun;
+          - ip tuntap add name {{ .Values.open5gs.upf.tunintf }} mode tun;
+            ip addr add 10.45.0.1/16 dev {{ .Values.open5gs.upf.tunintf }};
             sysctl -w net.ipv6.conf.all.disable_ipv6=1;
-            ip link set ogstun up;
+            ip link set {{ .Values.open5gs.upf.tunintf }} up;
             sh -c "echo 1 > /proc/sys/net/ipv4/ip_forward";
-            iptables -t nat -A POSTROUTING -s 10.45.0.0/16 ! -o ogstun -j MASQUERADE;
+            iptables -t nat -A POSTROUTING -s 10.45.0.0/16 ! -o {{ .Values.open5gs.upf.tunintf }} -j MASQUERADE;
             open5gs-upfd -c /open5gs/config-map/upf.yaml;
           volumeMounts:
           - name: open5gs-upf-config
