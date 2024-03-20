@@ -7,12 +7,9 @@ open5gs:
     repository: umakantk/open5gs
     pullPolicy: Always
     tag: "benchmark"
-  smf:
-    port: 30805
   upf:
     hostNetwork: false
     tunintf: "ogstun"
-    port: 31805
   pfcp:
     port: 8805
   gtpv1:

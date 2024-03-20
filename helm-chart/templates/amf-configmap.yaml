@@ -30,7 +30,7 @@ data:
             - uri: http://open5gs-scp:80
       ngap:
         server:
-          - address: 0.0.0.0
+          - dev: {{ .Values.k8s.podInterface }}
       # metrics:
       #   server:
       #     - address: 0.0.0.0
