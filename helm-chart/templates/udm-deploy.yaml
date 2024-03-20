@@ -51,10 +51,10 @@ spec:
             {{ else }}
             value: {{ .Values.mongodb.sauri.udm | quote }}
             {{ end }}
-          volumeMounts:
-          - name: open5gs-udm-config
-            mountPath: /configs/udm.yaml.in
-            subPath: "udm.yaml"
+      #     volumeMounts:
+      #     - name: open5gs-udm-config
+      #       mountPath: /configs/udm.yaml.in
+      #       subPath: "udm.yaml"
       # volumes:
       #   - name: open5gs-udm-config
       #     configMap:

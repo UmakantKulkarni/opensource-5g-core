@@ -93,9 +93,9 @@ spec:
             iptables -t nat -A POSTROUTING -s 10.45.0.0/16 ! -o ogstun -j MASQUERADE;
             open5gs-upfd -c /configs/upf.yaml.in;
           volumeMounts:
-          - name: open5gs-upf-config
-            mountPath: /configs/upf.yaml.in
-            subPath: "upf.yaml"
+          # - name: open5gs-upf-config
+          #   mountPath: /configs/upf.yaml.in
+          #   subPath: "upf.yaml"
           - mountPath: /dev/net/tun
             name: dev-net-tun            
       volumes:

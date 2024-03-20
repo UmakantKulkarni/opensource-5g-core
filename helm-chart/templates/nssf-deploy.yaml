@@ -51,10 +51,10 @@ spec:
             {{ else }}
             value: {{ .Values.mongodb.sauri.nssf | quote }}
             {{ end }}
-          volumeMounts:
-          - name: open5gs-nssf-config
-            mountPath: /configs/nssf.yaml.in
-            subPath: "nssf.yaml"          
+      #     volumeMounts:
+      #     - name: open5gs-nssf-config
+      #       mountPath: /configs/nssf.yaml.in
+      #       subPath: "nssf.yaml"          
       # volumes:
       #   - name: open5gs-nssf-config
       #     configMap:

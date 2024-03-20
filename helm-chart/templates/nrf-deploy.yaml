@@ -53,10 +53,10 @@ spec:
             {{ else }}
             value: {{ .Values.mongodb.sauri.nrf | quote }}
             {{ end }}
-          volumeMounts:
-            - name: open5gs-nrf-config
-              mountPath: /configs/nrf.yaml.in
-              subPath: "nrf.yaml"
+      #     volumeMounts:
+      #       - name: open5gs-nrf-config
+      #         mountPath: /configs/nrf.yaml.in
+      #         subPath: "nrf.yaml"
       # volumes:
       #   - name: open5gs-nrf-config
       #     configMap:

@@ -51,10 +51,10 @@ spec:
             {{ else }}
             value: {{ .Values.mongodb.sauri.pcf | quote }}
             {{ end }}
-          volumeMounts:
-          - name: open5gs-pcf-config
-            mountPath: /configs/pcf.yaml.in
-            subPath: "pcf.yaml"          
+      #     volumeMounts:
+      #     - name: open5gs-pcf-config
+      #       mountPath: /configs/pcf.yaml.in
+      #       subPath: "pcf.yaml"          
       # volumes:
       #   - name: open5gs-pcf-config
       #     configMap:

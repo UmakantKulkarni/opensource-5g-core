@@ -95,10 +95,10 @@ spec:
             {{ else }}
             value: {{ .Values.mongodb.sauri.amf | quote }}
             {{ end }}
-          volumeMounts:
-          - name: open5gs-amf-config
-            mountPath: /configs/amf.yaml.in
-            subPath: "amf.yaml"
+      #     volumeMounts:
+      #     - name: open5gs-amf-config
+      #       mountPath: /configs/amf.yaml.in
+      #       subPath: "amf.yaml"
       # volumes:
       #  - name: open5gs-amf-config
       #    configMap:

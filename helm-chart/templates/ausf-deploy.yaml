@@ -51,10 +51,10 @@ spec:
             {{ else }}
             value: {{ .Values.mongodb.sauri.ausf | quote }}
             {{ end }}
-          volumeMounts:
-          - name: open5gs-ausf-config
-            mountPath: /configs/ausf.yaml.in
-            subPath: "ausf.yaml"
+      #     volumeMounts:
+      #     - name: open5gs-ausf-config
+      #       mountPath: /configs/ausf.yaml.in
+      #       subPath: "ausf.yaml"
       # volumes:
       #   - name: open5gs-ausf-config
       #     configMap:

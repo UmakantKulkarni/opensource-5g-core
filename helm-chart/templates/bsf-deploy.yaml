@@ -51,10 +51,10 @@ spec:
             {{ else }}
             value: {{ .Values.mongodb.sauri.bsf | quote }}
             {{ end }}
-          volumeMounts:
-          - name: open5gs-bsf-config
-            mountPath: /configs/bsf.yaml/in
-            subPath: "bsf.yaml"
+      #     volumeMounts:
+      #     - name: open5gs-bsf-config
+      #       mountPath: /configs/bsf.yaml/in
+      #       subPath: "bsf.yaml"
       # volumes:
       #   - name: open5gs-bsf-config
       #     configMap:
