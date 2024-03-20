@@ -19,7 +19,7 @@ RUN   git clone --recursive -b benchmark https://github.com/UmakantKulkarni/open
    cd open5gs && meson build --prefix=/ && ninja -C build && cd build && ninja install
 
 RUN mkdir -p /configs
-COPY ../config/* /configs/
+COPY config/* /configs/
 
 # sync timezone
 RUN echo '$ENV_TIMEZONE' > /etc/timezone \
@@ -27,3 +27,11 @@ RUN echo '$ENV_TIMEZONE' > /etc/timezone \
     && dpkg-reconfigure --frontend noninteractive tzdata
 
 WORKDIR /
+
+# cd /opt/opensource-5g-core/helm-chart
+# docker build -t umakantk/open5gs:benchmark -f Dockerfiles/Secure5G/Dockerfile .
+# docker run -it -e NF=amf --name uk1 -d umakantk/open5gs:benchmark sleep infinity
+# docker exec -it uk1 bash
+# docker stop uk1
+# docker rm -f uk1
+# docker push umakantk/open5gs:benchmark
