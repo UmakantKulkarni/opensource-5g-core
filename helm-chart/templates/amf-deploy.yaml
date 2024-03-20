@@ -99,7 +99,7 @@ spec:
           - name: open5gs-amf-config
             mountPath: /configs/amf.yaml.in
             subPath: "amf.yaml"
-      volumes:
-        - name: open5gs-amf-config
-          configMap:
-            name: open5gs-amf-config
+      # volumes:
+      #  - name: open5gs-amf-config
+      #    configMap:
+      #      name: open5gs-amf-config

@@ -55,7 +55,7 @@ spec:
           - name: open5gs-udr-config
             mountPath: /configs/udr.yaml.in
             subPath: "udr.yaml"          
-      volumes:
-        - name: open5gs-udr-config
-          configMap:
-            name: open5gs-udr-config
+      # volumes:
+      #   - name: open5gs-udr-config
+      #     configMap:
+      #       name: open5gs-udr-config

@@ -55,7 +55,7 @@ spec:
           - name: open5gs-bsf-config
             mountPath: /configs/bsf.yaml/in
             subPath: "bsf.yaml"
-      volumes:
-        - name: open5gs-bsf-config
-          configMap:
-            name: open5gs-bsf-config
+      # volumes:
+      #   - name: open5gs-bsf-config
+      #     configMap:
+      #       name: open5gs-bsf-config

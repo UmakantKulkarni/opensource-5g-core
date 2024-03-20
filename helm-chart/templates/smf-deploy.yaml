@@ -85,7 +85,7 @@ spec:
             - name: open5gs-smf-config
               mountPath: /configs/smf.yaml.in
               subPath: "smf.yaml"                                       
-      volumes:
-        - name: open5gs-smf-config
-          configMap:
-            name: open5gs-smf-config                
+      # volumes:
+      #   - name: open5gs-smf-config
+      #     configMap:
+      #       name: open5gs-smf-config                

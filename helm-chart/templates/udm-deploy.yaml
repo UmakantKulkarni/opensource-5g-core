@@ -55,7 +55,7 @@ spec:
           - name: open5gs-udm-config
             mountPath: /configs/udm.yaml.in
             subPath: "udm.yaml"
-      volumes:
-        - name: open5gs-udm-config
-          configMap:
-            name: open5gs-udm-config
+      # volumes:
+      #   - name: open5gs-udm-config
+      #     configMap:
+      #       name: open5gs-udm-config

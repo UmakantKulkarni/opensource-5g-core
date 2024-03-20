@@ -55,7 +55,7 @@ spec:
           - name: open5gs-pcf-config
             mountPath: /configs/pcf.yaml.in
             subPath: "pcf.yaml"          
-      volumes:
-        - name: open5gs-pcf-config
-          configMap:
-            name: open5gs-pcf-config         
+      # volumes:
+      #   - name: open5gs-pcf-config
+      #     configMap:
+      #       name: open5gs-pcf-config         

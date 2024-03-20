@@ -99,9 +99,9 @@ spec:
           - mountPath: /dev/net/tun
             name: dev-net-tun            
       volumes:
-        - name: open5gs-upf-config
-          configMap:
-            name: open5gs-upf-config
+        # - name: open5gs-upf-config
+        #   configMap:
+        #     name: open5gs-upf-config
         - name: dev-net-tun
           hostPath:
             path: /dev/net/tun
