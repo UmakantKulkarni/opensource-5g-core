@@ -37,20 +37,20 @@ data:
             port: 9090
       guami:
         - plmn_id:
-            mcc: 208
-            mnc: 93
+            mcc: {{ .Values.amf.mcc }}
+            mnc: {{ .Values.amf.mnc }}
           amf_id:
             region: 2
             set: 1
       tai:
         - plmn_id:
-            mcc: 208
-            mnc: 93
-          tac: 1
+            mcc: {{ .Values.amf.mcc }}
+            mnc: {{ .Values.amf.mnc }}
+          tac: {{ .Values.amf.tac }}
       plmn_support:
         - plmn_id:
-            mcc: 208
-            mnc: 93
+            mcc: {{ .Values.amf.mcc }}
+            mnc: {{ .Values.amf.mnc }}
           s_nssai:
             - sst: 1
       security:

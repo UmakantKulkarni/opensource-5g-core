@@ -12,7 +12,7 @@ spec:
     - protocol: UDP
       port: 8805
       targetPort: 8805    
-      nodePort:  {{ .Values.open5gs.upf.port | default 30805 }}
+      nodePort:  {{ .Values.open5gs.upf.port | default 31805 }}
 ---  
 apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
 kind: Deployment
