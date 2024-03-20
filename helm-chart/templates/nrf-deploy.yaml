@@ -45,7 +45,7 @@ spec:
         - name: nrf
           image: "{{ .Values.open5gs.image.repository }}:{{ .Values.open5gs.image.tag }}"
           imagePullPolicy: {{ .Values.open5gs.image.pullPolicy }}
-          command: ["open5gs-nrfd", "-c", "/open5gs/config-map/nrf.yaml"]
+          command: ["open5gs-nrfd", "-c", "/configs/nrf.yaml.in"]
           env:
           - name: DB_URI
             {{ if .Values.pcs.enableMongoReplicaSet }}
@@ -55,7 +55,7 @@ spec:
             {{ end }}
           volumeMounts:
             - name: open5gs-nrf-config
-              mountPath: /open5gs/config-map/nrf.yaml
+              mountPath: /configs/nrf.yaml.in
               subPath: "nrf.yaml"
       volumes:
         - name: open5gs-nrf-config

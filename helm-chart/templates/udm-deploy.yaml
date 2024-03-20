@@ -43,7 +43,7 @@ spec:
         - name: udm
           image: "{{ .Values.open5gs.image.repository }}:{{ .Values.open5gs.image.tag }}"
           imagePullPolicy: {{ .Values.open5gs.image.pullPolicy }}
-          command: ["open5gs-udmd", "-c", "/open5gs/config-map/udm.yaml"]
+          command: ["open5gs-udmd", "-c", "/configs/udm.yaml.in"]
           env:
           - name: DB_URI
             {{ if .Values.pcs.enableMongoReplicaSet }}
@@ -53,7 +53,7 @@ spec:
             {{ end }}
           volumeMounts:
           - name: open5gs-udm-config
-            mountPath: /open5gs/config-map/udm.yaml
+            mountPath: /configs/udm.yaml.in
             subPath: "udm.yaml"
       volumes:
         - name: open5gs-udm-config

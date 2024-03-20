@@ -43,7 +43,7 @@ spec:
         - name: bsf
           image: "{{ .Values.open5gs.image.repository }}:{{ .Values.open5gs.image.tag }}"
           imagePullPolicy: {{ .Values.open5gs.image.pullPolicy }}
-          command: ["open5gs-bsfd", "-c", "/open5gs/config-map/bsf.yaml"]
+          command: ["open5gs-bsfd", "-c", "/configs/bsf.yaml.in"]
           env:
           - name: DB_URI
             {{ if .Values.pcs.enableMongoReplicaSet }}
@@ -53,7 +53,7 @@ spec:
             {{ end }}
           volumeMounts:
           - name: open5gs-bsf-config
-            mountPath: /open5gs/config-map/bsf.yaml
+            mountPath: /configs/bsf.yaml/in
             subPath: "bsf.yaml"
       volumes:
         - name: open5gs-bsf-config

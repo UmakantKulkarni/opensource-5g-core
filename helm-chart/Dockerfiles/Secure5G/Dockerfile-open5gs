@@ -15,8 +15,11 @@ ENV TZ="America/Indiana/Indianapolis"
 
 #RUN wget https://github.com/mongodb/mongo-c-driver/releases/download/1.20.1/mongo-c-driver-1.20.1.tar.gz && tar xzf mongo-c-driver-1.20.1.tar.gz && cd mongo-c-driver-1.20.1 && mkdir cmake-build && cd cmake-build && cmake -DENABLE_AUTOMATIC_INIT_AND_CLEANUP=OFF .. && cmake --build . && cmake -DCMAKE_INSTALL_PREFIX=/usr .. && cmake --build . --target install
 
-RUN   git clone --recursive -b ztx_01 https://github.com/UmakantKulkarni/open5gs && \
+RUN   git clone --recursive -b benchmark https://github.com/UmakantKulkarni/open5gs && \
    cd open5gs && meson build --prefix=/ && ninja -C build && cd build && ninja install
+
+RUN mkdir -p /configs
+COPY ../config/* /configs/
 
 # sync timezone
 RUN echo '$ENV_TIMEZONE' > /etc/timezone \
