@@ -6,7 +6,7 @@ open5gs:
   image:
     repository: umakantk/open5gs
     pullPolicy: Always
-    tag: "ztx_01"
+    tag: "benchmark"
   upf:
     hostNetwork: false
     port: 30805
@@ -21,7 +21,7 @@ open5gs:
     port: 30412
 
 ztx:
-  enabled: true
+  enabled: false
   encryption: false
   name: "ztx"
   image:
