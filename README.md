@@ -12,3 +12,8 @@ is controlled by `monitoring.logviewer.enabled` in `values.yaml`. Their
 corresponding NodePort values can be adjusted via
 `monitoring.grafana.nodeport` and `monitoring.logviewer.nodeport`.
 
+## Deploy 5G Core using python-based web server:
+```
+cd webapp
+python3 server.py
+```
