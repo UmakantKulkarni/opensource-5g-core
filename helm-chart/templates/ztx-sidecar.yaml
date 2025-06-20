@@ -72,6 +72,13 @@ initContainers:
     privileged: false
     allowPrivilegeEscalation: false
   command: ["/tmp/5gsec/build/src/ztx"]
+  args:
+    - "-l"
+    - {{ .Values.ztx.logLevel | quote }}
+    - "-k"
+    - {{ .Values.ztx.keyLength | quote }}
+    - "-m"
+    - {{ .Values.ztx.mtlsKeyLength | quote }}
   env:
   - name: ENCRYPTION_ENABLED
     value: {{ .Values.ztx.encryption | default "false" | quote }}

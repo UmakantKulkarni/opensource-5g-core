@@ -25,6 +25,24 @@ monitoring:
   prometheus:
     enabled: true
     nodeport: 30090
+    image:
+      repository: prom/prometheus
+      pullPolicy: IfNotPresent
+      tag: "v2.53.3"
+  grafana:
+    enabled: true
+    nodeport: 30080
+    image:
+      repository: grafana/grafana
+      pullPolicy: IfNotPresent
+      tag: "10.2.3"
+  logviewer:
+    enabled: true
+    nodeport: 30070
+    image:
+      repository: kubernetesui/dashboard
+      pullPolicy: IfNotPresent
+      tag: "v2.7.0"
 open5gs:
   gtpv1:
     port: 2152

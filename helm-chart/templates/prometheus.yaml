@@ -84,7 +84,7 @@ spec:
     spec:
       containers:
         - name: prometheus
-          image: prom/prometheus:v2.53.3
+          image: "{{ .Values.monitoring.prometheus.image.repository }}:{{ .Values.monitoring.prometheus.image.tag }}"
           ports:
             - containerPort: 9090
           volumeMounts:

@@ -4,6 +4,7 @@ import os
 import yaml
 import argparse
 import subprocess
+import json
 from flask import Flask, request, jsonify, render_template
 
 app = Flask(__name__)
@@ -79,8 +80,16 @@ def helm_release_exists(namespace, release_name):
                                 shell=True,
                                 capture_output=True,
                                 text=True)
-        return len(result.stdout.strip()
-                   ) > 0  # Helm returns non-empty output if the release exists
+
+        if result.returncode != 0:
+            return False
+
+        try:
+            releases = json.loads(result.stdout)
+        except json.JSONDecodeError:
+            return False
+
+        return any(r.get("name") == release_name for r in releases)
     except Exception as e:
         print(f"Error checking Helm release: {e}")
         return False

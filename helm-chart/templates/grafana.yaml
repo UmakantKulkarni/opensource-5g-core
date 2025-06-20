@@ -1,0 +1,154 @@
+{{- if .Values.monitoring.grafana.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-datasource
+  namespace: {{ .Release.Namespace }}
+data:
+  datasource.yaml: |
+    apiVersion: 1
+    datasources:
+    - name: Prometheus
+      type: prometheus
+      access: proxy
+      url: http://prometheus:9090
+      isDefault: true
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-dashboard-providers
+  namespace: {{ .Release.Namespace }}
+data:
+  provider.yaml: |
+    apiVersion: 1
+    providers:
+      - name: default
+        orgId: 1
+        folder: ''
+        type: file
+        disableDeletion: false
+        updateIntervalSeconds: 10
+        options:
+          path: /var/lib/grafana/dashboards
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-dashboards
+  namespace: {{ .Release.Namespace }}
+data:
+  amf.json: |
+    {
+      "title": "AMF Metrics",
+      "uid": "amf",
+      "schemaVersion": 16,
+      "version": 1,
+      "panels": [
+        {"type": "timeseries", "title": "gNodeBs", "targets": [{"expr": "gnb"}], "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0}, "id": 1},
+        {"type": "timeseries", "title": "AMF Sessions", "targets": [{"expr": "amf_session"}], "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8}, "id": 2},
+        {"type": "timeseries", "title": "UE Registrations", "targets": [{"expr": "fivegs_amffunction_rm_reginitsucc"}], "gridPos": {"h": 8, "w": 12, "x": 0, "y": 16}, "id": 3},
+        {"type": "timeseries", "title": "Auth Requests", "targets": [{"expr": "fivegs_amffunction_amf_authreq"}], "gridPos": {"h": 8, "w": 12, "x": 0, "y": 24}, "id": 4}
+      ]
+    }
+  smf.json: |
+    {
+      "title": "SMF Metrics",
+      "uid": "smf",
+      "schemaVersion": 16,
+      "version": 1,
+      "panels": [
+        {"type": "timeseries", "title": "Active Sessions", "targets": [{"expr": "fivegs_smffunction_sm_sessionnbr"}], "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0}, "id": 1},
+        {"type": "timeseries", "title": "Active Bearers", "targets": [{"expr": "bearers_active"}], "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8}, "id": 2},
+        {"type": "timeseries", "title": "N4 Session Requests", "targets": [{"expr": "fivegs_smffunction_sm_n4sessionestabreq"}], "gridPos": {"h": 8, "w": 12, "x": 0, "y": 16}, "id": 3},
+        {"type": "timeseries", "title": "Active UEs", "targets": [{"expr": "ues_active"}], "gridPos": {"h": 8, "w": 12, "x": 0, "y": 24}, "id": 4}
+      ]
+    }
+  pcf.json: |
+    {
+      "title": "PCF Metrics",
+      "uid": "pcf",
+      "schemaVersion": 16,
+      "version": 1,
+      "panels": [
+        {"type": "timeseries", "title": "Active Sessions", "targets": [{"expr": "fivegs_pcffunction_pa_sessionnbr"}], "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0}, "id": 1},
+        {"type": "timeseries", "title": "AM Policy Assoc", "targets": [{"expr": "fivegs_pcffunction_pa_policyamassoreq"}], "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8}, "id": 2},
+        {"type": "timeseries", "title": "SM Policy Assoc", "targets": [{"expr": "fivegs_pcffunction_pa_policysmassoreq"}], "gridPos": {"h": 8, "w": 12, "x": 0, "y": 16}, "id": 3}
+      ]
+    }
+  upf.json: |
+    {
+      "title": "UPF Metrics",
+      "uid": "upf",
+      "schemaVersion": 16,
+      "version": 1,
+      "panels": [
+        {"type": "timeseries", "title": "Active Sessions", "targets": [{"expr": "fivegs_upffunction_upf_sessionnbr"}], "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0}, "id": 1},
+        {"type": "timeseries", "title": "N3 Incoming Packets", "targets": [{"expr": "fivegs_ep_n3_gtp_indatapktn3upf"}], "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8}, "id": 2},
+        {"type": "timeseries", "title": "N3 Outgoing Packets", "targets": [{"expr": "fivegs_ep_n3_gtp_outdatapktn3upf"}], "gridPos": {"h": 8, "w": 12, "x": 0, "y": 16}, "id": 3},
+        {"type": "timeseries", "title": "N4 Session Requests", "targets": [{"expr": "fivegs_upffunction_sm_n4sessionestabreq"}], "gridPos": {"h": 8, "w": 12, "x": 0, "y": 24}, "id": 4}
+      ]
+    }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grafana
+  template:
+    metadata:
+      labels:
+        app: grafana
+    spec:
+      containers:
+        - name: grafana
+          image: "{{ .Values.monitoring.grafana.image.repository }}:{{ .Values.monitoring.grafana.image.tag }}"
+          env:
+            - name: GF_AUTH_ANONYMOUS_ENABLED
+              value: "true"
+            - name: GF_AUTH_ANONYMOUS_ORG_ROLE
+              value: "Viewer"
+          ports:
+            - containerPort: 3000
+          volumeMounts:
+            - name: grafana-storage
+              mountPath: /var/lib/grafana
+            - name: grafana-datasource
+              mountPath: /etc/grafana/provisioning/datasources
+            - name: grafana-dashboard-providers
+              mountPath: /etc/grafana/provisioning/dashboards
+            - name: grafana-dashboards
+              mountPath: /var/lib/grafana/dashboards
+      volumes:
+        - name: grafana-storage
+          emptyDir: {}
+        - name: grafana-datasource
+          configMap:
+            name: grafana-datasource
+        - name: grafana-dashboard-providers
+          configMap:
+            name: grafana-dashboard-providers
+        - name: grafana-dashboards
+          configMap:
+            name: grafana-dashboards
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana
+  namespace: {{ .Release.Namespace }}
+spec:
+  type: NodePort
+  selector:
+    app: grafana
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
+      nodePort: {{ .Values.monitoring.grafana.nodeport | default 30080 }}
+{{- end }}
