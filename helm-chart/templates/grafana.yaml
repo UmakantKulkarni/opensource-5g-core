@@ -89,6 +89,25 @@ data:
         {"type": "timeseries", "title": "N4 Session Requests", "targets": [{"expr": "fivegs_upffunction_sm_n4sessionestabreq"}], "gridPos": {"h": 8, "w": 12, "x": 0, "y": 24}, "id": 4}
       ]
     }
+  ztx.json: |
+    {
+      "title": "ZTX Metrics",
+      "uid": "ztx",
+      "schemaVersion": 16,
+      "version": 1,
+      "panels": [
+        {"type": "timeseries", "title": "TCP Packets", "targets": [{"expr": "tcp_packets_total"}], "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0}, "id": 1},
+        {"type": "timeseries", "title": "UDP Packets", "targets": [{"expr": "udp_packets_total"}], "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8}, "id": 2},
+        {"type": "timeseries", "title": "SCTP Packets", "targets": [{"expr": "sctp_packets_total"}], "gridPos": {"h": 8, "w": 12, "x": 0, "y": 16}, "id": 3},
+        {"type": "timeseries", "title": "Packets Skipped", "targets": [{"expr": "packets_skipped_total"}], "gridPos": {"h": 8, "w": 12, "x": 0, "y": 24}, "id": 4},
+        {"type": "timeseries", "title": "Encrypt Ops", "targets": [{"expr": "encrypt_operations_total"}], "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0}, "id": 5},
+        {"type": "timeseries", "title": "Decrypt Ops", "targets": [{"expr": "decrypt_operations_total"}], "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8}, "id": 6},
+        {"type": "timeseries", "title": "Registers", "targets": [{"expr": "rest_register_received_total"}], "gridPos": {"h": 8, "w": 12, "x": 12, "y": 16}, "id": 7},
+        {"type": "timeseries", "title": "Authenticates", "targets": [{"expr": "rest_authenticate_received_total"}], "gridPos": {"h": 8, "w": 12, "x": 12, "y": 24}, "id": 8},
+        {"type": "timeseries", "title": "Configs", "targets": [{"expr": "rest_config_received_total"}], "gridPos": {"h": 8, "w": 12, "x": 12, "y": 32}, "id": 9},
+        {"type": "timeseries", "title": "Protocols", "targets": [{"expr": "rest_protocol_received_total"}], "gridPos": {"h": 8, "w": 12, "x": 12, "y": 40}, "id": 10}
+      ]
+    }
 ---
 apiVersion: apps/v1
 kind: Deployment
