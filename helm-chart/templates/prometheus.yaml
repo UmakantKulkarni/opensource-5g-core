@@ -66,6 +66,11 @@ data:
         static_configs:
           - targets:
               - "open5gs-upf-metrics.{{ .Release.Namespace }}.svc.cluster.local:9090"
+      - job_name: ztx-metrics
+        static_configs:
+          - targets:
+              - "ztx-controller.{{ .Release.Namespace }}.svc.cluster.local:9090"
+              - "ztx-controller.{{ .Release.Namespace }}.svc.cluster.local:15692"
 ---
 apiVersion: apps/v1
 kind: Deployment

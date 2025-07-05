@@ -84,4 +84,21 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
+        - name: ca-server
+          image: "{{ .Values.caServer.image.repository }}:{{ .Values.caServer.image.tag }}"
+          imagePullPolicy: {{ .Values.caServer.image.pullPolicy }}
+          env:
+            - name: CERT_TTL_HOURS
+              value: {{ .Values.caServer.certTTLHours | quote }}
+            - name: PORT
+              value: {{ .Values.caServer.port | quote }}
+          ports:
+            - containerPort: {{ .Values.caServer.port }}
+              name: ca
+          volumeMounts:
+            - name: ca-certs
+              mountPath: /certs
+      volumes:
+        - name: ca-certs
+          emptyDir: {}
 {{ end }}

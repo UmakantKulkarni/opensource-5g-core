@@ -106,6 +106,9 @@ data:
         {"type": "timeseries", "title": "Authenticates", "targets": [{"expr": "rest_authenticate_received_total"}], "gridPos": {"h": 8, "w": 12, "x": 12, "y": 24}, "id": 8},
         {"type": "timeseries", "title": "Configs", "targets": [{"expr": "rest_config_received_total"}], "gridPos": {"h": 8, "w": 12, "x": 12, "y": 32}, "id": 9},
         {"type": "timeseries", "title": "Protocols", "targets": [{"expr": "rest_protocol_received_total"}], "gridPos": {"h": 8, "w": 12, "x": 12, "y": 40}, "id": 10}
+        {"type": "timeseries", "title": "CSR Requests", "targets": [{"expr": "cert_requests_total"}], "gridPos": {"h": 8, "w": 12, "x": 0, "y": 48}, "id": 11},
+        {"type": "timeseries", "title": "Certificates Issued", "targets": [{"expr": "cert_received_total"}], "gridPos": {"h": 8, "w": 12, "x": 12, "y": 48}, "id": 12},
+        {"type": "timeseries", "title": "Peer Verify Success", "targets": [{"expr": "peer_verify_success_total"}], "gridPos": {"h": 8, "w": 12, "x": 0, "y": 56}, "id": 13}
       ]
     }
 ---

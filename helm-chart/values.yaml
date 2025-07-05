@@ -23,6 +23,9 @@ ztx:
   udp: true
   sctp: true
   name: "ztx"
+  logLevel: 1
+  keyLength: 256
+  mtlsKeyLength: 2048
   image:
     repository: umakantk/ztx
     pullPolicy: Always
@@ -31,9 +34,14 @@ ztx:
     controllerTag: "v3"
   health:
     port: 8080
-  logLevel: 1
-  keyLength: 256
-  mtlsKeyLength: 2048
+  caServer:
+    image:
+      repository: umakantk/ztx-ca
+      pullPolicy: IfNotPresent
+      tag: "latest"
+    port: 29615
+    certTTLHours: 240
+  
 
 attack:
   enabled: false
