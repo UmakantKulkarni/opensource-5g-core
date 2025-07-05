@@ -88,8 +88,12 @@ initContainers:
     value: {{ .Values.ztx.caServer.host | default "ztx-controller" | quote }}
   - name: CA_SERVER_PORT
     value: {{ .Values.ztx.caServer.port | default "29615" | quote }}
+  - name: CA_BOOTSTRAP_PORT
+    value: {{ .Values.ztx.caServer.bootstrapPort | default "29651" | quote }}
   - name: CA_AUTH_TOKEN
     value: {{ .Values.ztx.caServer.authToken | default "ztxAuthToken" | quote }}
+  - name: CA_CERT_PASSWORD
+    value: {{ .Values.ztx.caServer.caCertPassword | default "ztxCaCertPassword" | quote }}
   - name: MY_IP
     valueFrom:
       fieldRef:
