@@ -42,7 +42,9 @@ ztx:
       tag: "ca"
     host: "ztx-controller"
     port: 29615
+    bootstrapPort: 29651
     certTTLHours: 240
+    caCertPassword: "ztxCaCertPassword"
     authToken: "ztxAuthToken"
   
 
