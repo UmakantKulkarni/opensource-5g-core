@@ -38,7 +38,7 @@ ztx:
   caServer:
     image:
       repository: umakantk/ztx
-      pullPolicy: IfNotPresent
+      pullPolicy: Always
       tag: "ca"
     host: "ztx-controller"
     port: 29615
