@@ -104,13 +104,15 @@ spec:
               value: {{ .Values.ztx.caServer.port | default "29615" | quote }}
             - name: CA_AUTH_TOKEN
               value: {{ .Values.ztx.caServer.authToken | default "ztxAuthToken" | quote }}
+            - name: MY_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: MY_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
           ports:
             - containerPort: {{ .Values.ztx.caServer.port }}
               name: ca
-          volumeMounts:
-            - name: ca-certs
-              mountPath: /certs
-      volumes:
-        - name: ca-certs
-          emptyDir: {}
 {{ end }}
