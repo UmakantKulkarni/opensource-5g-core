@@ -76,6 +76,8 @@ spec:
               value: {{ .Values.ztx.authentication | default "false" | quote }}
             - name: HEALTH_SERVER_PORT
               value: {{ .Values.ztx.health.port | quote }}
+            - name: CA_SERVER_PORT
+              value: {{ .Values.ztx.caServer.port | default "29615" | quote }}
             - name: MY_IP
               valueFrom:
                 fieldRef:
@@ -85,15 +87,15 @@ spec:
                 fieldRef:
                   fieldPath: metadata.namespace
         - name: ca-server
-          image: "{{ .Values.caServer.image.repository }}:{{ .Values.caServer.image.tag }}"
-          imagePullPolicy: {{ .Values.caServer.image.pullPolicy }}
+          image: "{{ .Values.ztx.caServer.image.repository }}:{{ .Values.ztx.caServer.image.tag }}"
+          imagePullPolicy: {{ .Values.ztx.caServer.image.pullPolicy }}
           env:
             - name: CERT_TTL_HOURS
-              value: {{ .Values.caServer.certTTLHours | quote }}
+              value: {{ .Values.ztx.caServer.certTTLHours | quote }}
             - name: CA_SERVER_PORT
-              value: {{ .Values.caServer.port | default "29615" | quote }}
+              value: {{ .Values.ztx.caServer.port | default "29615" | quote }}
           ports:
-            - containerPort: {{ .Values.caServer.port }}
+            - containerPort: {{ .Values.ztx.caServer.port }}
               name: ca
           volumeMounts:
             - name: ca-certs

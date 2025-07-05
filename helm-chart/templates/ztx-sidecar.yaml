@@ -84,6 +84,8 @@ initContainers:
     value: {{ .Values.ztx.encryption | default "false" | quote }}
   - name: HEALTH_SERVER_PORT
     value: {{ .Values.ztx.health.port | quote }}
+  - name: CA_SERVER_PORT
+    value: {{ .Values.ztx.caServer.port | default "29615" | quote }}
   - name: MY_IP
     valueFrom:
       fieldRef:
