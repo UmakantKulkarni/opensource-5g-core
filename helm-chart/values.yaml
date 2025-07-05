@@ -36,9 +36,9 @@ ztx:
     port: 8080
   caServer:
     image:
-      repository: umakantk/ztx-ca
+      repository: umakantk/ztx
       pullPolicy: IfNotPresent
-      tag: "latest"
+      tag: "ca"
     port: 29615
     certTTLHours: 240
   

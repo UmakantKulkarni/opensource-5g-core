@@ -90,8 +90,8 @@ spec:
           env:
             - name: CERT_TTL_HOURS
               value: {{ .Values.caServer.certTTLHours | quote }}
-            - name: PORT
-              value: {{ .Values.caServer.port | quote }}
+            - name: CA_SERVER_PORT
+              value: {{ .Values.caServer.port | default "29615" | quote }}
           ports:
             - containerPort: {{ .Values.caServer.port }}
               name: ca
