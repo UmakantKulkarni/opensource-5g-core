@@ -49,7 +49,7 @@ attack:
   image:
     repository: umakantk/ueransim
     pullPolicy: Always
-    tag: "ztx_01"
+    tag: "ztx_demo_aug"
 
 monitoring:
   prometheus:
