@@ -2,7 +2,7 @@ open5gs:
   image:
     repository: umakantk/open5gs
     pullPolicy: Always
-    tag: "benchmark"
+    tag: "ztx_demo_aug"
   upf:
     hostNetwork: false
     tunintf: "ogstun"

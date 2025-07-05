@@ -16,10 +16,10 @@ RUN cmake --version
 
 ENV PCS_SETUP_TUN_INTF=true
 
-RUN cd && git clone -b ztx_01 https://github.com/UmakantKulkarni/UERANSIM && cd UERANSIM && make
+RUN cd && git clone -b ztx_demo_aug https://github.com/UmakantKulkarni/UERANSIM && cd UERANSIM && make
 
 # Define the Go version to install
-ENV GO_VERSION=1.23.4
+ENV GO_VERSION=1.24.4
 RUN cd && wget https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz && tar -C /usr/local -xzf go${GO_VERSION}.linux-amd64.tar.gz && rm go${GO_VERSION}.linux-amd64.tar.gz
 ENV PATH="/usr/local/go/bin:$PATH"
 RUN go version
@@ -28,7 +28,7 @@ RUN cd
 
 WORKDIR /root/
 
-RUN git clone -b ztx_cl https://github.com/UmakantKulkarni/scripts && cd scripts && chmod +x * 
+RUN git clone -b ztx_demo_aug https://github.com/UmakantKulkarni/scripts && cd scripts && chmod +x * 
 
 RUN git clone https://github.com/UmakantKulkarni/5GUnSec && cd 5GUnSec && chmod +x *
 
