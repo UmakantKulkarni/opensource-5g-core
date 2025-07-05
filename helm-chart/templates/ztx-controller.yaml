@@ -106,6 +106,8 @@ spec:
           image: "{{ .Values.ztx.caServer.image.repository }}:{{ .Values.ztx.caServer.image.tag }}"
           imagePullPolicy: {{ .Values.ztx.caServer.image.pullPolicy }}
           env:
+            - name: CA_SERVER_HOST
+              value: {{ .Values.ztx.caServer.host | default "ztx-controller" | quote }}
             - name: CERT_TTL_HOURS
               value: {{ .Values.ztx.caServer.certTTLHours | quote }}
             - name: CA_SERVER_PORT
