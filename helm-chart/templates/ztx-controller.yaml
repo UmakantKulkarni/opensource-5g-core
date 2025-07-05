@@ -25,6 +25,10 @@ spec:
       port: {{ .Values.ztx.caServer.port }}
       targetPort: {{ .Values.ztx.caServer.port }}
       name: caserver
+    - protocol: TCP
+      port: {{ .Values.ztx.caServer.bootstrapPort }}
+      targetPort: {{ .Values.ztx.caServer.bootstrapPort }}
+      name: caserver-bootstrap
 ---  
 apiVersion: apps/v1
 kind: Deployment
