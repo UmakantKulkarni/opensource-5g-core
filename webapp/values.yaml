@@ -2,7 +2,7 @@ open5gs:
   image:
     repository: umakantk/open5gs
     pullPolicy: Always
-    tag: "benchmark"
+    tag: "ztx_demo_aug"
   upf:
     hostNetwork: false
     tunintf: "ogstun"
@@ -23,14 +23,28 @@ ztx:
   udp: true
   sctp: true
   name: "ztx"
+  logLevel: 1
+  keyLength: 256
+  mtlsKeyLength: 2048
+  controllerSvc: "ztx-controller"
   image:
     repository: umakantk/ztx
     pullPolicy: Always
-    tag: "v1"
+    tag: "ztx_demo_aug"
     initTag: "init"
-    controllerTag: "v2"
+    controllerTag: "ztx_demo_aug"
   health:
     port: 8080
+  caServer:
+    image:
+      repository: umakantk/ztx
+      pullPolicy: IfNotPresent
+      tag: "ca"
+    host: "ztx-controller"
+    port: 29615
+    certTTLHours: 240
+    authToken: "ztxAuthToken"
+  
 
 attack:
   enabled: false
@@ -38,7 +52,7 @@ attack:
   image:
     repository: umakantk/ueransim
     pullPolicy: Always
-    tag: "ztx_01"
+    tag: "ztx_demo_aug"
 
 monitoring:
   prometheus:
@@ -47,14 +61,14 @@ monitoring:
     image:
       repository: prom/prometheus
       pullPolicy: IfNotPresent
-      tag: "v2.53.3"
+      tag: "v2.53.5"
   grafana:
     enabled: true
     nodeport: 30080
     image:
       repository: grafana/grafana
       pullPolicy: IfNotPresent
-      tag: "10.2.3"
+      tag: "12.0.2"
   logviewer:
     enabled: true
     nodeport: 30070
@@ -74,7 +88,7 @@ ueransim:
   image:
     repository: umakantk/ueransim
     pullPolicy: Always
-    tag: "ztx_01"
+    tag: "ztx_demo_aug"
 
 dnn: internet
 
@@ -177,4 +191,4 @@ mongodb:
   image:
     repository: umakantk/open5gs-mongo
     pullPolicy: IfNotPresent
-    tag: "ztx_02"
+    tag: "ztx_demo_aug"
