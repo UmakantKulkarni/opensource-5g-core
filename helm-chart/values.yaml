@@ -29,9 +29,9 @@ ztx:
   image:
     repository: umakantk/ztx
     pullPolicy: Always
-    tag: "v3"
+    tag: "ztx_demo_aug"
     initTag: "init"
-    controllerTag: "v3"
+    controllerTag: "ztx_demo_aug"
   health:
     port: 8080
   caServer:
@@ -58,14 +58,14 @@ monitoring:
     image:
       repository: prom/prometheus
       pullPolicy: IfNotPresent
-      tag: "v2.53.3"
+      tag: "v2.53.5"
   grafana:
     enabled: true
     nodeport: 30080
     image:
       repository: grafana/grafana
       pullPolicy: IfNotPresent
-      tag: "10.2.3"
+      tag: "12.0.2"
   logviewer:
     enabled: true
     nodeport: 30070
@@ -85,7 +85,7 @@ ueransim:
   image:
     repository: umakantk/ueransim
     pullPolicy: Always
-    tag: "ztx_01"
+    tag: "ztx_demo_aug"
 
 dnn: internet
 
@@ -188,4 +188,4 @@ mongodb:
   image:
     repository: umakantk/open5gs-mongo
     pullPolicy: IfNotPresent
-    tag: "ztx_02"
+    tag: "ztx_demo_aug"

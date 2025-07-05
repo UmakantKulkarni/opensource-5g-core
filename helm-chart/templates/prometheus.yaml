@@ -71,6 +71,7 @@ data:
           - targets:
               - "ztx-controller.{{ .Release.Namespace }}.svc.cluster.local:9090"
               - "ztx-controller.{{ .Release.Namespace }}.svc.cluster.local:15692"
+              - "ztx-controller.{{ .Release.Namespace }}.svc.cluster.local:29615"
 ---
 apiVersion: apps/v1
 kind: Deployment
