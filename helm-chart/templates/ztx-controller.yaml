@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: ztx-controller
+  name: {{ .Values.ztx.controllerSvc | default "ztx-controller" }}
   labels:
     app: ztx-controller
 spec:
@@ -80,8 +80,12 @@ spec:
               value: {{ .Values.ztx.authentication | default "false" | quote }}
             - name: HEALTH_SERVER_PORT
               value: {{ .Values.ztx.health.port | quote }}
+            - name: CA_SERVER_HOST
+              value: {{ .Values.ztx.caServer.host | default "ztx-controller" | quote }}
             - name: CA_SERVER_PORT
               value: {{ .Values.ztx.caServer.port | default "29615" | quote }}
+            - name: CA_AUTH_TOKEN
+              value: {{ .Values.ztx.caServer.authToken | default "ztxAuthToken" | quote }}
             - name: MY_IP
               valueFrom:
                 fieldRef:
@@ -98,6 +102,8 @@ spec:
               value: {{ .Values.ztx.caServer.certTTLHours | quote }}
             - name: CA_SERVER_PORT
               value: {{ .Values.ztx.caServer.port | default "29615" | quote }}
+            - name: CA_AUTH_TOKEN
+              value: {{ .Values.ztx.caServer.authToken | default "ztxAuthToken" | quote }}
           ports:
             - containerPort: {{ .Values.ztx.caServer.port }}
               name: ca

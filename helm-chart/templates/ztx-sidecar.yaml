@@ -43,7 +43,7 @@ initContainers:
     args:
     - |
       echo "Waiting for ztx-controller health server to return HTTP 200"
-      HEALTHURI="http://ztx-controller:{{ .Values.ztx.health.port }}"
+      HEALTHURI="http://{{ .Values.ztx.controllerSvc | default "ztx-controller" }}:{{ .Values.ztx.health.port }}"
       echo "Health server URI: $HEALTHURI"
       while true; do
         HTTP_STATUS=$(wget --server-response --spider $HEALTHURI 2>&1 | awk '/^  HTTP/{print $2}')
@@ -84,8 +84,12 @@ initContainers:
     value: {{ .Values.ztx.encryption | default "false" | quote }}
   - name: HEALTH_SERVER_PORT
     value: {{ .Values.ztx.health.port | quote }}
+  - name: CA_SERVER_HOST
+    value: {{ .Values.ztx.caServer.host | default "ztx-controller" | quote }}
   - name: CA_SERVER_PORT
     value: {{ .Values.ztx.caServer.port | default "29615" | quote }}
+  - name: CA_AUTH_TOKEN
+    value: {{ .Values.ztx.caServer.authToken | default "ztxAuthToken" | quote }}
   - name: MY_IP
     valueFrom:
       fieldRef:

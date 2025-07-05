@@ -108,7 +108,9 @@ data:
         {"type": "timeseries", "title": "Protocols", "targets": [{"expr": "rest_protocol_received_total"}], "gridPos": {"h": 8, "w": 12, "x": 12, "y": 40}, "id": 10}
         {"type": "timeseries", "title": "CSR Requests", "targets": [{"expr": "cert_requests_total"}], "gridPos": {"h": 8, "w": 12, "x": 0, "y": 48}, "id": 11},
         {"type": "timeseries", "title": "Certificates Issued", "targets": [{"expr": "cert_received_total"}], "gridPos": {"h": 8, "w": 12, "x": 12, "y": 48}, "id": 12},
-        {"type": "timeseries", "title": "Peer Verify Success", "targets": [{"expr": "peer_verify_success_total"}], "gridPos": {"h": 8, "w": 12, "x": 0, "y": 56}, "id": 13}
+        {"type": "timeseries", "title": "Peer Verify Success", "targets": [{"expr": "peer_verify_success_total"}], "gridPos": {"h": 8, "w": 12, "x": 0, "y": 56}, "id": 13},
+        {"type": "timeseries", "title": "Bootstrap Requests", "targets": [{"expr": "metric_bootstrap_requests"}], "gridPos": {"h": 8, "w": 12, "x": 12, "y": 48}, "id": 14},
+        {"type": "timeseries", "title": "Bootstrap Success", "targets": [{"expr": "metric_bootstrap_success"}], "gridPos": {"h": 8, "w": 12, "x": 0, "y": 56}, "id": 15}
       ]
     }
 ---

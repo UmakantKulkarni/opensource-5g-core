@@ -26,6 +26,7 @@ ztx:
   logLevel: 1
   keyLength: 256
   mtlsKeyLength: 2048
+  controllerSvc: "ztx-controller"
   image:
     repository: umakantk/ztx
     pullPolicy: Always
@@ -39,8 +40,10 @@ ztx:
       repository: umakantk/ztx
       pullPolicy: IfNotPresent
       tag: "ca"
+    host: "ztx-controller"
     port: 29615
     certTTLHours: 240
+    authToken: "ztxAuthToken"
   
 
 attack:
