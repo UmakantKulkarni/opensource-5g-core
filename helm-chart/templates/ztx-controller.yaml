@@ -105,6 +105,9 @@ spec:
         - name: ca-server
           image: "{{ .Values.ztx.caServer.image.repository }}:{{ .Values.ztx.caServer.image.tag }}"
           imagePullPolicy: {{ .Values.ztx.caServer.image.pullPolicy }}
+          command: ["python3"]
+          args:
+            - "/app/ca_server.py"
           env:
             - name: CA_SERVER_HOST
               value: {{ .Values.ztx.caServer.host | default "ztx-controller" | quote }}
