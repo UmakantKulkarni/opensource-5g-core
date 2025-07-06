@@ -12,10 +12,10 @@ spec:
     - protocol: TCP
       port: 15692   
       targetPort: 15692
-      name: local
+      name: mtls
     - protocol: TCP
-      port: 15692   
-      targetPort: 15692
+      port: 15926   
+      targetPort: 15926
       name: rest
     - protocol: TCP
       port: 61592   
