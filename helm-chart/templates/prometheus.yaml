@@ -70,6 +70,7 @@ data:
         static_configs:
           - targets:
               - "ztx-controller.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.ztx.promPort | default 9090 }}"
+              - "ztx-controller.{{ .Release.Namespace }}.svc.cluster.local:9090"
       - job_name: 'ztx-sidecar-metrics'
         kubernetes_sd_configs:
           - role: pod
