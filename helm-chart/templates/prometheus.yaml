@@ -77,7 +77,7 @@ data:
           - source_labels: [__meta_kubernetes_container_name]  # Get the container name
             regex: {{ .Values.ztx.name | quote }}  # Match your sidecar container name
             action: keep  # Keep only the matching container targets
-    ---
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
