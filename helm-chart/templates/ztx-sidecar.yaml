@@ -79,6 +79,9 @@ initContainers:
     - {{ .Values.ztx.keyLength | quote }}
     - "-m"
     - {{ .Values.ztx.mtlsKeyLength | quote }}
+  ports:
+    - containerPort: {{ .Values.ztx.promPort | default 9090 }}
+      name: metrics
   env:
   - name: ENCRYPTION_ENABLED
     value: {{ .Values.ztx.encryption | default "false" | quote }}

@@ -34,8 +34,8 @@ spec:
       targetPort: {{ .Values.ztx.caServer.bootstrapPort }}
       name: caserver-bootstrap
     - protocol: TCP
-      port: {{ .Values.ztx.promPort | default "9090" }}
-      targetPort: {{ .Values.ztx.promPort | default "9090" }}
+      port: {{ .Values.ztx.promPort | default 9090 }}
+      targetPort: {{ .Values.ztx.promPort | default 9090 }}
       name: metrics
 ---  
 apiVersion: apps/v1
@@ -83,6 +83,9 @@ spec:
             - {{ .Values.ztx.keyLength | quote }}
             - "-m"
             - {{ .Values.ztx.mtlsKeyLength | quote }}
+          ports:
+            - containerPort: {{ .Values.ztx.promPort | default 9090 }}
+              name: metrics
           env:
             - name: ENCRYPTION_ENABLED
               value: {{ .Values.ztx.encryption | default "false" | quote }}
@@ -118,6 +121,9 @@ spec:
           command: ["python3"]
           args:
             - "/app/ca_server.py"
+          ports:
+            - containerPort: {{ .Values.ztx.promPort | default 9090 }}
+              name: metrics
           env:
             - name: CA_SERVER_HOST
               value: {{ .Values.ztx.caServer.host | default "ztx-controller" | quote }}
