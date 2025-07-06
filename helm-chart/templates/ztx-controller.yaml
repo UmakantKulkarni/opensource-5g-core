@@ -37,6 +37,10 @@ spec:
       port: {{ .Values.ztx.promPort | default 9090 }}
       targetPort: {{ .Values.ztx.promPort | default 9090 }}
       name: metrics
+    - protocol: TCP
+      port: 9090
+      targetPort: 9090
+      name: cametrics
 ---  
 apiVersion: apps/v1
 kind: Deployment
@@ -122,8 +126,8 @@ spec:
           args:
             - "/app/ca_server.py"
           ports:
-            - containerPort: {{ .Values.ztx.promPort | default 9090 }}
-              name: metrics
+            - containerPort: 9090
+              name: cametrics
           env:
             - name: CA_SERVER_HOST
               value: {{ .Values.ztx.caServer.host | default "ztx-controller" | quote }}
