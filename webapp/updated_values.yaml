@@ -26,6 +26,7 @@ ztx:
   logLevel: 1
   keyLength: 256
   mtlsKeyLength: 2048
+  promPort: 9090
   controllerSvc: "ztx-controller"
   image:
     repository: umakantk/ztx

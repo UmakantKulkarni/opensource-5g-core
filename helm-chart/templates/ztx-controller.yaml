@@ -98,6 +98,8 @@ spec:
               value: {{ .Values.ztx.caServer.authToken | default "ztxAuthToken" | quote }}
             - name: CA_CERT_PASSWORD
               value: {{ .Values.ztx.caServer.caCertPassword | default "ztxCaCertPassword" | quote }}
+            - name: PROMETHEUS_PORT
+              value: {{ .Values.ztx.promPort | default "9090" | quote }}
             - name: MY_IP
               valueFrom:
                 fieldRef:
@@ -125,6 +127,8 @@ spec:
               value: {{ .Values.ztx.caServer.authToken | default "ztxAuthToken" | quote }}
             - name: CA_CERT_PASSWORD
               value: {{ .Values.ztx.caServer.caCertPassword | default "ztxCaCertPassword" | quote }}
+            - name: PROMETHEUS_PORT
+              value: {{ .Values.ztx.promPort | default "9090" | quote }}
             - name: MY_IP
               valueFrom:
                 fieldRef:
