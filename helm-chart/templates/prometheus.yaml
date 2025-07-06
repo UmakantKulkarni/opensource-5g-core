@@ -66,11 +66,18 @@ data:
         static_configs:
           - targets:
               - "open5gs-upf-metrics.{{ .Release.Namespace }}.svc.cluster.local:9090"
-      - job_name: ztx-metrics
+      - job_name: ztx-controller-metrics
         static_configs:
           - targets:
-              - "ztx-controller.{{ .Release.Namespace }}.svc.cluster.local:9090"
----
+              - "ztx-controller.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.ztx.promPort | default 9090 }}"
+      - job_name: 'ztx-sidecar-metrics'
+        kubernetes_sd_configs:
+          - role: pod  # Discover all pods
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_container_name]  # Get the container name
+            regex: {{ .Values.ztx.name | quote }}  # Match your sidecar container name
+            action: keep  # Keep only the matching container targets
+    ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:

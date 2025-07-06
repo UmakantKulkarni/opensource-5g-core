@@ -29,6 +29,10 @@ spec:
       port: {{ .Values.ztx.caServer.bootstrapPort }}
       targetPort: {{ .Values.ztx.caServer.bootstrapPort }}
       name: caserver-bootstrap
+    - protocol: TCP
+      port: {{ .Values.ztx.promPort | default "9090" }}
+      targetPort: {{ .Values.ztx.promPort | default "9090" }}
+      name: metrics
 ---  
 apiVersion: apps/v1
 kind: Deployment
