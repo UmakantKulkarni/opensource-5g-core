@@ -79,6 +79,13 @@ monitoring:
       repository: kubernetesui/dashboard
       pullPolicy: IfNotPresent
       tag: "v2.7.0"
+  fluentBit:
+    enabled: true
+    httpEndpoint:
+      host: 130.127.134.71
+      port: 9215
+      uri: /log-endpoint
+      tls: false
 
 pool:
   key: 128
