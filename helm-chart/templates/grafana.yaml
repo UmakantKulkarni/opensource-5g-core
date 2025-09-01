@@ -46,9 +46,9 @@ data:
       "version": 1,
       "panels": [
         {"type": "timeseries", "title": "gNodeBs", "targets": [{"expr": "gnb"}], "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0}, "id": 1},
-        {"type": "timeseries", "title": "AMF Sessions", "targets": [{"expr": "amf_session"}], "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8}, "id": 2},
-        {"type": "timeseries", "title": "UE Registrations", "targets": [{"expr": "fivegs_amffunction_rm_reginitsucc"}], "gridPos": {"h": 8, "w": 12, "x": 0, "y": 16}, "id": 3},
-        {"type": "timeseries", "title": "Auth Requests", "targets": [{"expr": "fivegs_amffunction_amf_authreq"}], "gridPos": {"h": 8, "w": 12, "x": 0, "y": 24}, "id": 4}
+        {"type": "timeseries", "title": "AMF Sessions", "targets": [{"expr": "amf_session"}], "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0}, "id": 2},
+        {"type": "timeseries", "title": "UE Registrations", "targets": [{"expr": "fivegs_amffunction_rm_reginitsucc"}], "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8}, "id": 3},
+        {"type": "timeseries", "title": "Auth Requests", "targets": [{"expr": "fivegs_amffunction_amf_authreq"}], "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8}, "id": 4}
       ]
     }
   smf.json: |
@@ -59,9 +59,9 @@ data:
       "version": 1,
       "panels": [
         {"type": "timeseries", "title": "Active Sessions", "targets": [{"expr": "fivegs_smffunction_sm_sessionnbr"}], "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0}, "id": 1},
-        {"type": "timeseries", "title": "Active Bearers", "targets": [{"expr": "bearers_active"}], "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8}, "id": 2},
-        {"type": "timeseries", "title": "N4 Session Requests", "targets": [{"expr": "fivegs_smffunction_sm_n4sessionestabreq"}], "gridPos": {"h": 8, "w": 12, "x": 0, "y": 16}, "id": 3},
-        {"type": "timeseries", "title": "Active UEs", "targets": [{"expr": "ues_active"}], "gridPos": {"h": 8, "w": 12, "x": 0, "y": 24}, "id": 4}
+        {"type": "timeseries", "title": "Active Bearers", "targets": [{"expr": "bearers_active"}], "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0}, "id": 2},
+        {"type": "timeseries", "title": "N4 Session Requests", "targets": [{"expr": "fivegs_smffunction_sm_n4sessionestabreq"}], "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8}, "id": 3},
+        {"type": "timeseries", "title": "Active UEs", "targets": [{"expr": "ues_active"}], "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8}, "id": 4}
       ]
     }
   pcf.json: |
@@ -72,8 +72,8 @@ data:
       "version": 1,
       "panels": [
         {"type": "timeseries", "title": "Active Sessions", "targets": [{"expr": "fivegs_pcffunction_pa_sessionnbr"}], "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0}, "id": 1},
-        {"type": "timeseries", "title": "AM Policy Assoc", "targets": [{"expr": "fivegs_pcffunction_pa_policyamassoreq"}], "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8}, "id": 2},
-        {"type": "timeseries", "title": "SM Policy Assoc", "targets": [{"expr": "fivegs_pcffunction_pa_policysmassoreq"}], "gridPos": {"h": 8, "w": 12, "x": 0, "y": 16}, "id": 3}
+        {"type": "timeseries", "title": "AM Policy Assoc", "targets": [{"expr": "fivegs_pcffunction_pa_policyamassoreq"}], "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0}, "id": 2},
+        {"type": "timeseries", "title": "SM Policy Assoc", "targets": [{"expr": "fivegs_pcffunction_pa_policysmassoreq"}], "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8}, "id": 3}
       ]
     }
   upf.json: |
@@ -84,9 +84,9 @@ data:
       "version": 1,
       "panels": [
         {"type": "timeseries", "title": "Active Sessions", "targets": [{"expr": "fivegs_upffunction_upf_sessionnbr"}], "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0}, "id": 1},
-        {"type": "timeseries", "title": "N3 Incoming Packets", "targets": [{"expr": "fivegs_ep_n3_gtp_indatapktn3upf"}], "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8}, "id": 2},
-        {"type": "timeseries", "title": "N3 Outgoing Packets", "targets": [{"expr": "fivegs_ep_n3_gtp_outdatapktn3upf"}], "gridPos": {"h": 8, "w": 12, "x": 0, "y": 16}, "id": 3},
-        {"type": "timeseries", "title": "N4 Session Requests", "targets": [{"expr": "fivegs_upffunction_sm_n4sessionestabreq"}], "gridPos": {"h": 8, "w": 12, "x": 0, "y": 24}, "id": 4}
+        {"type": "timeseries", "title": "N3 Incoming Packets", "targets": [{"expr": "fivegs_ep_n3_gtp_indatapktn3upf"}], "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0}, "id": 2},
+        {"type": "timeseries", "title": "N3 Outgoing Packets", "targets": [{"expr": "fivegs_ep_n3_gtp_outdatapktn3upf"}], "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8}, "id": 3},
+        {"type": "timeseries", "title": "N4 Session Requests", "targets": [{"expr": "fivegs_upffunction_sm_n4sessionestabreq"}], "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8}, "id": 4}
       ]
     }
   ztx.json: |
@@ -96,25 +96,131 @@ data:
       "schemaVersion": 16,
       "version": 1,
       "panels": [
-        {"type": "timeseries", "title": "TCP Packets", "targets": [{"expr": "tcp_packets_total"}], "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0}, "id": 1},
-        {"type": "timeseries", "title": "UDP Packets", "targets": [{"expr": "udp_packets_total"}], "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8}, "id": 2},
-        {"type": "timeseries", "title": "SCTP Packets", "targets": [{"expr": "sctp_packets_total"}], "gridPos": {"h": 8, "w": 12, "x": 0, "y": 16}, "id": 3},
-        {"type": "timeseries", "title": "Packets Skipped", "targets": [{"expr": "packets_skipped_total"}], "gridPos": {"h": 8, "w": 12, "x": 0, "y": 24}, "id": 4},
-        {"type": "timeseries", "title": "Encrypt Ops", "targets": [{"expr": "encrypt_operations_total"}], "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0}, "id": 5},
-        {"type": "timeseries", "title": "Decrypt Ops", "targets": [{"expr": "decrypt_operations_total"}], "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8}, "id": 6},
-        {"type": "timeseries", "title": "Registers", "targets": [{"expr": "rest_register_received_total"}], "gridPos": {"h": 8, "w": 12, "x": 12, "y": 16}, "id": 7},
-        {"type": "timeseries", "title": "Authenticates", "targets": [{"expr": "rest_authenticate_received_total"}], "gridPos": {"h": 8, "w": 12, "x": 12, "y": 24}, "id": 8},
-        {"type": "timeseries", "title": "Configs", "targets": [{"expr": "rest_config_received_total"}], "gridPos": {"h": 8, "w": 12, "x": 12, "y": 32}, "id": 9},
-        {"type": "timeseries", "title": "Protocols", "targets": [{"expr": "rest_protocol_received_total"}], "gridPos": {"h": 8, "w": 12, "x": 12, "y": 40}, "id": 10},
-        {"type": "timeseries", "title": "CSR Requests", "targets": [{"expr": "cert_requests_total"}], "gridPos": {"h": 8, "w": 12, "x": 0, "y": 48}, "id": 11},
-        {"type": "timeseries", "title": "Certificates Issued", "targets": [{"expr": "cert_received_total"}], "gridPos": {"h": 8, "w": 12, "x": 12, "y": 48}, "id": 12},
-        {"type": "timeseries", "title": "Peer Verify Success", "targets": [{"expr": "peer_verify_success_total"}], "gridPos": {"h": 8, "w": 12, "x": 0, "y": 56}, "id": 13},
-        {"type": "timeseries", "title": "Bootstrap Requests", "targets": [{"expr": "bootstrap_requests_total"}], "gridPos": {"h": 8, "w": 12, "x": 12, "y": 48}, "id": 14},
-        {"type": "timeseries", "title": "Bootstrap Success", "targets": [{"expr": "bootstrap_success_total"}], "gridPos": {"h": 8, "w": 12, "x": 0, "y": 56}, "id": 15},
-        {"type": "timeseries", "title": "CSR requests received", "targets": [{"expr": "csr_requests_total"}], "gridPos": {"h": 8, "w": 12, "x": 12, "y": 48}, "id": 16},
-        {"type": "timeseries", "title": "Certificates issued", "targets": [{"expr": "certificates_issued_total"}], "gridPos": {"h": 8, "w": 12, "x": 0, "y": 56}, "id": 17},
-        {"type": "timeseries", "title": "Failed token validations", "targets": [{"expr": "token_validation_failures_total"}], "gridPos": {"h": 8, "w": 12, "x": 12, "y": 48}, "id": 18},
-        {"type": "timeseries", "title": "Invalid CSR submissions", "targets": [{"expr": "csr_failures_total"}], "gridPos": {"h": 8, "w": 12, "x": 0, "y": 56}, "id": 19}
+        { "type": "timeseries", "title": "TCP Packets", "targets": [{ "expr": "ztx_tcp_packets_total" }], "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 }, "id": 1 },
+        { "type": "timeseries", "title": "Encrypt Ops", "targets": [{ "expr": "ztx_encrypt_operations_total" }], "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 }, "id": 5 },
+
+        { "type": "timeseries", "title": "UDP Packets", "targets": [{ "expr": "ztx_udp_packets_total" }], "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 }, "id": 2 },
+        { "type": "timeseries", "title": "Decrypt Ops", "targets": [{ "expr": "ztx_decrypt_operations_total" }], "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 }, "id": 6 },
+
+        { "type": "timeseries", "title": "SCTP Packets", "targets": [{ "expr": "ztx_sctp_packets_total" }], "gridPos": { "h": 8, "w": 12, "x": 0, "y": 16 }, "id": 3 },
+        { "type": "timeseries", "title": "Registers", "targets": [{ "expr": "ztx_rest_register_received_total" }], "gridPos": { "h": 8, "w": 12, "x": 12, "y": 16 }, "id": 7 },
+
+        { "type": "timeseries", "title": "Packets Skipped", "targets": [{ "expr": "ztx_packets_skipped_total" }], "gridPos": { "h": 8, "w": 12, "x": 0, "y": 24 }, "id": 4 },
+        { "type": "timeseries", "title": "Authenticates", "targets": [{ "expr": "ztx_rest_authenticate_received_total" }], "gridPos": { "h": 8, "w": 12, "x": 12, "y": 24 }, "id": 8 },
+
+        { "type": "timeseries", "title": "CSR Requests", "targets": [{ "expr": "ztx_cert_requests_total" }], "gridPos": { "h": 8, "w": 12, "x": 0, "y": 32 }, "id": 11 },
+        { "type": "timeseries", "title": "Configs", "targets": [{ "expr": "ztx_rest_config_received_total" }], "gridPos": { "h": 8, "w": 12, "x": 12, "y": 32 }, "id": 9 },
+
+        { "type": "timeseries", "title": "Peer Verify Success", "targets": [{ "expr": "ztx_peer_verify_success_total" }], "gridPos": { "h": 8, "w": 12, "x": 0, "y": 40 }, "id": 13 },
+        { "type": "timeseries", "title": "Protocols", "targets": [{ "expr": "ztx_rest_protocol_received_total" }], "gridPos": { "h": 8, "w": 12, "x": 12, "y": 40 }, "id": 10 },
+
+        { "type": "timeseries", "title": "Bootstrap Requests", "targets": [{ "expr": "ztx_bootstrap_requests_total" }], "gridPos": { "h": 8, "w": 12, "x": 0, "y": 48 }, "id": 14 },
+        { "type": "timeseries", "title": "Certificates Issued", "targets": [{ "expr": "ztx_cert_received_total" }], "gridPos": { "h": 8, "w": 12, "x": 12, "y": 48 }, "id": 12 },
+
+        { "type": "timeseries", "title": "Bootstrap Success", "targets": [{ "expr": "ztx_bootstrap_success_total" }], "gridPos": { "h": 8, "w": 12, "x": 0, "y": 56 }, "id": 15 },
+        { "type": "timeseries", "title": "Number of Shared Secrets", "targets": [{ "expr": "ztx_shared_secret_derivations_total" }], "gridPos": { "h": 8, "w": 12, "x": 12, "y": 56 }, "id": 16 },
+
+        { "type": "timeseries", "title": "Same Src-Dst Pkts", "targets": [{ "expr": "ztx_same_src_dst_drop_total" }], "gridPos": { "h": 8, "w": 12, "x": 0, "y": 64 }, "id": 17 },
+        { "type": "timeseries", "title": "Key Retrieval Failures", "targets": [{ "expr": "ztx_key_retrieval_failures_total" }], "gridPos": { "h": 8, "w": 12, "x": 12, "y": 64 }, "id": 18 },
+
+        { "type": "timeseries", "title": "Decrypt Failures", "targets": [{ "expr": "ztx_decrypt_failures_total" }], "gridPos": { "h": 8, "w": 12, "x": 0, "y": 72 }, "id": 19 },
+        { "type": "timeseries", "title": "Unsupported Protocols", "targets": [{ "expr": "ztx_unsupported_protocol_total" }], "gridPos": { "h": 8, "w": 12, "x": 12, "y": 72 }, "id": 20 },
+
+        {
+          "type": "table",
+          "title": "AES Key Length per Application",
+          "gridPos": { "h": 8, "w": 24, "x": 0, "y": 80 },
+          "id": 21,
+          "targets": [
+            { "expr": "ztx_aes_key_length", "format": "table", "instant": true }
+          ],
+          "options": {
+            "showHeader": true,
+            "sortBy": [{ "displayName": "instance", "desc": false }]
+          },
+          "fieldConfig": {
+            "defaults": { "unit": "none", "decimals": 0, "custom": {} },
+            "overrides": []
+          }
+        },
+
+        {
+          "type": "timeseries",
+          "title": "Anomaly Score Updates Received",
+          "targets": [{ "expr": "ztx_rest_score_received_total" }],
+          "gridPos": { "h": 8, "w": 8, "x": 0, "y": 88 },
+          "id": 22
+        },
+        {
+          "type": "bargauge",
+          "title": "Anomaly Level",
+          "targets": [{ "expr": "ztx_current_anomaly_level" }],
+          "gridPos": { "h": 8, "w": 8, "x": 8, "y": 88 },
+          "id": 23,
+          "fieldConfig": {
+            "defaults": {
+              "unit": "none",
+              "min": -1,
+              "max": 2,
+              "decimals": 0,
+              "mappings": [
+                {
+                  "type": "value",
+                  "options": {
+                    "0": { "text": "Low",    "color": "green"  },
+                    "1": { "text": "Medium", "color": "orange" },
+                    "2": { "text": "High",   "color": "red"    }
+                  }
+                }
+              ],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  { "value": null, "color": "green" },
+                  { "value": 1, "color": "orange" },
+                  { "value": 2, "color": "red" }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "options": {
+            "orientation": "vertical",
+            "showUnfilled": true,
+            "reduceOptions": { "calcs": ["lastNotNull"], "fields": "" },
+            "displayMode": "basic"
+          }
+        },
+        {
+          "type": "gauge",
+          "title": "Anomaly Score",
+          "targets": [{ "expr": "ztx_anomaly_score" }],
+          "gridPos": { "h": 8, "w": 8, "x": 16, "y": 88 },
+          "id": 24,
+          "fieldConfig": {
+            "defaults": {
+              "unit": "none",
+              "min": 0,
+              "max": 1,
+              "decimals": 4,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  { "value": null, "color": "green" },
+                  { "value": 0.34, "color": "orange" },
+                  { "value": 0.67, "color": "red" }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "options": {
+            "showThresholdLabels": true,
+            "showThresholdMarkers": true,
+            "gauge": { "minValue": 0, "maxValue": 1 },
+            "reduceOptions": { "calcs": ["lastNotNull"], "fields": "" }
+          }
+        }
       ]
     }
 ---

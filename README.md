@@ -8,9 +8,12 @@ This repo contains the code templates that was used in the Opensource 5G core.
 
 Prometheus, Grafana and a Log Viewer are included in the Helm chart. Grafana can
 be enabled or disabled using `monitoring.grafana.enabled` while the log viewer
-is controlled by `monitoring.logviewer.enabled` in `values.yaml`. Their
+is controlled by `monitoring.kubernetesui.enabled` in `values.yaml`. Their
 corresponding NodePort values can be adjusted via
-`monitoring.grafana.nodeport` and `monitoring.logviewer.nodeport`.
+`monitoring.grafana.nodeport` and `monitoring.kubernetesui.nodeport`.
+
+The optional log forwarder streams container logs to a remote HTTP endpoint.
+See `docs/logforwarder.md` for an overview of its architecture and usage.
 
 ## Deploy 5G Core using python-based web server:
 ```

@@ -41,6 +41,22 @@ spec:
       port: 9090
       targetPort: 9090
       name: cametrics
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ztx-controller-external
+  namespace: {{ .Release.Namespace }}
+spec:
+  type: LoadBalancer
+  selector:
+    app: ztx-controller
+  ports:
+    - name: ztx-external
+      protocol: TCP
+      port: {{ .Values.ztx.health.port | default 8080 }}
+      targetPort: {{ .Values.ztx.health.port | default 8080 }}
+      nodePort:  {{ .Values.ztx.health.nodeport | default 32080 }}
 ---  
 apiVersion: apps/v1
 kind: Deployment

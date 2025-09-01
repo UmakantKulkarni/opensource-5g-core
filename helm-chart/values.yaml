@@ -2,7 +2,7 @@ open5gs:
   image:
     repository: umakantk/open5gs
     pullPolicy: Always
-    tag: "ztx_demo_aug"
+    tag: "v2.7.2"
   upf:
     hostNetwork: false
     tunintf: "ogstun"
@@ -36,6 +36,7 @@ ztx:
     controllerTag: "ztx_demo_aug"
   health:
     port: 8080
+    nodePort: 32080
   caServer:
     image:
       repository: umakantk/ztx
@@ -72,13 +73,29 @@ monitoring:
       repository: grafana/grafana
       pullPolicy: IfNotPresent
       tag: "12.0.2"
-  logviewer:
+  kubernetesui:
     enabled: true
     nodeport: 30070
     image:
       repository: kubernetesui/dashboard
       pullPolicy: IfNotPresent
       tag: "v2.7.0"
+  metricsScraper:
+    enabled: true
+    image:
+      repository: kubernetesui/metrics-scraper
+      pullPolicy: IfNotPresent
+      tag: "v1.0.8"
+  logforwarder:
+    enabled: false
+    namespace: ztx5gc
+    remoteUrl: "http://127.0.0.1:9000/logs"
+    labelSelector: ""
+    containerRegex: "microservice|amf|ausf|bsf|nrf|nssf|pcf|scp|smf|test|udm|udr|upf"
+    image:
+      repository: umakantk/k8slogforwarder
+      tag: v1.0
+    mode: real
 
 pool:
   key: 128
@@ -118,7 +135,7 @@ webui:
 
 pcs:
   nodeAffinity:
-    enabled: true
+    enabled: false
     amf: amf
     smf: smf
     upf: upf

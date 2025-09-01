@@ -70,18 +70,19 @@ data:
         static_configs:
           - targets:
               - "ztx-controller.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.ztx.promPort | default 9090 }}"
-              - "ztx-controller.{{ .Release.Namespace }}.svc.cluster.local:9090"
       - job_name: 'ztx-sidecar-metrics'
         kubernetes_sd_configs:
           - role: pod
         relabel_configs:
-          - source_labels: [__meta_kubernetes_container_name]
+          - source_labels: [__meta_kubernetes_pod_container_name]
             regex: "{{ .Values.ztx.name }}"
             action: keep
           - source_labels: [__address__]
             target_label: __address__
             regex: (.+):\d+
             replacement: $1:{{ .Values.ztx.promPort }}
+          - source_labels: [__meta_kubernetes_pod_name]
+            target_label: instance
           - target_label: job
             replacement: ztx-sidecar
 ---

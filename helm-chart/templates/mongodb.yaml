@@ -92,7 +92,7 @@ spec:
             - "--mongodb.global-conn-pool"
           ports:
             - containerPort: 9090
-              name: metrics
+              name: mngoexprtmtrcs
           resources:
             requests:
               memory: "256Mi"
