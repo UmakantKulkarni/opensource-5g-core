@@ -169,7 +169,7 @@ def update_values():
     namespace = data.pop("helmNamespace", "default")
     release_name = data.pop("helmReleaseName", "5gcore")
     helm_chart_path = data.pop("helmChartPath",
-                               "/opt/opensource-5g-core/helm-chart")
+                               "/tmp/opensource-5g-core/helm-chart")
     kubectl_config = data.pop("kubectlConfigPath",
                               "/etc/kubernetes/admin.conf")
 
@@ -217,7 +217,7 @@ def upgrade_release():
     namespace = data.pop("helmNamespace", "default")
     release_name = data.pop("helmReleaseName", "5gcore")
     helm_chart_path = data.pop("helmChartPath",
-                               "/opt/opensource-5g-core/helm-chart")
+                               "/tmp/opensource-5g-core/helm-chart")
 
     # Helm upgrade
     command = (
