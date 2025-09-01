@@ -117,7 +117,7 @@ def landing():
 @app.route("/create")
 def create():
     """Render form for creating or updating deployments."""
-    namespace = request.args.get("namespace", "default")
+    namespace = request.args.get("namespace", "ztx5gc")
     release = request.args.get("release", "5gcore")
     mode = request.args.get("mode", "create")
 
@@ -155,7 +155,7 @@ def manage():
 @app.route("/release_exists")
 def release_exists_route():
     """Return whether a Helm release exists."""
-    namespace = request.args.get("namespace", "default")
+    namespace = request.args.get("namespace", "ztx5gc")
     release = request.args.get("release", "5gcore")
     exists = helm_release_exists(namespace, release)
     return jsonify({"exists": exists})
@@ -166,7 +166,7 @@ def update_values():
     data = request.json
 
     # Extract Helm-specific inputs
-    namespace = data.pop("helmNamespace", "default")
+    namespace = data.pop("helmNamespace", "ztx5gc")
     release_name = data.pop("helmReleaseName", "5gcore")
     helm_chart_path = data.pop("helmChartPath",
                                "/tmp/opensource-5g-core/helm-chart")
@@ -214,7 +214,7 @@ def upgrade_release():
     data = request.json
 
     # Extract Helm-specific inputs
-    namespace = data.pop("helmNamespace", "default")
+    namespace = data.pop("helmNamespace", "ztx5gc")
     release_name = data.pop("helmReleaseName", "5gcore")
     helm_chart_path = data.pop("helmChartPath",
                                "/tmp/opensource-5g-core/helm-chart")
@@ -238,7 +238,7 @@ def upgrade_release():
 def delete_release():
     """Delete an existing Helm release."""
     data = request.json
-    namespace = data.get("helmNamespace", "default")
+    namespace = data.get("helmNamespace", "ztx5gc")
     release_name = data.get("helmReleaseName", "5gcore")
 
     command = f"helm -n {namespace} uninstall {release_name}"
