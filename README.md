@@ -23,7 +23,7 @@ python3 server.py
 
 ## ZTX images access & citation
 
-If you would like to use this repository and pull ZTX-specific Docker images in your Helm chart, please contact me on LinkedIn (https://www.linkedin.com/in/umakantkulkarni/) and I will grant you access. Also, please cite our paper if you are using these Helm charts for your project. Below is the BibTeX citation details:
+If you would like to use this repository and pull ZTX-specific Docker images in your Helm chart, please contact me on LinkedIn (https://www.linkedin.com/in/umakantkulkarni/) and I will grant you access. Accordingly modify values.yaml with these credentials. Also, please cite our paper if you are using these Helm charts for your project. Below is the BibTeX citation details:
 
 ```bibtex
 @INPROCEEDINGS{10774032,
