@@ -48,6 +48,12 @@ ztx:
     certTTLHours: 240
     caCertPassword: "ztxCaCertPassword"
     authToken: "ztxAuthToken"
+  imagePullSecret:
+    enabled: true
+    name: ztx-private-registry
+    server: index.docker.io
+    username: token
+    password: ""
   
 
 attack:

@@ -72,6 +72,7 @@ spec:
       labels:
         app: ztx-controller
     spec:
+      {{- include "ztxImagePullSecrets" . }}
       {{ if .Values.pcs.nodeAffinity.enabled }}
       affinity:
         nodeAffinity:

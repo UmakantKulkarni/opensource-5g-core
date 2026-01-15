@@ -10,6 +10,14 @@ iptables -t mangle -A PREROUTING -p udp ! --sport 53 -m mark ! --mark 15 -j NFQU
 iptables -t mangle -A PREROUTING -p sctp -m mark ! --mark 15 -j NFQUEUE --queue-num 0 ; iptables -t mangle -A OUTPUT -p sctp -m mark ! --mark 15 -j NFQUEUE --queue-num 0
 {{- end }}
 
+{{- /* Render imagePullSecrets for ZTX-injected pods when enabled */ -}}
+{{- define "ztxImagePullSecrets" -}}
+{{- if and .Values.ztx.enabled .Values.ztx.imagePullSecret.enabled }}
+imagePullSecrets:
+  - name: {{ .Values.ztx.imagePullSecret.name | quote }}
+{{- end }}
+{{- end -}}
+
 {{- define "ztxInitContainer" -}}
 {{ if .Values.ztx.enabled }}
 
@@ -29,6 +37,7 @@ iptables -t mangle -A PREROUTING -p sctp -m mark ! --mark 15 -j NFQUEUE --queue-
 
 {{- $iptableRule = printf "%s ; iptables-save" $iptableRule -}}
 
+{{- include "ztxImagePullSecrets" . }}
 initContainers:
   - name: ztx-init
     image: "{{ .Values.ztx.image.repository }}:{{ .Values.ztx.image.initTag }}"
