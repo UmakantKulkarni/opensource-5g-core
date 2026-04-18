@@ -45,8 +45,19 @@ spec:
             sleep infinity;
           env:
             - name: DB_URI
-              {{ if .Values.pcs.enableMongoReplicaSet }}
-              value: "mongodb://mongodb-svc/"
-              {{ else }}
-              value: "mongodb://mongodb-svc/"
-              {{ end }}
+              value: {{ include "mongodbUri" . | quote }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: open5gs-test
+  labels:
+    epc-mode: test
+spec:
+  selector:
+    epc-mode: test
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+---
