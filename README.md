@@ -23,6 +23,8 @@ python3 server.py
 
 ## ZTX images access & citation
 
+For a reusable step-by-step Helm integration guide, see [docs/ztx-integration.md](docs/ztx-integration.md).
+
 If you would like to use this repository and pull ZTX-specific Docker images in your Helm chart, please contact me on LinkedIn (https://www.linkedin.com/in/umakantkulkarni/) and I will grant you access. Accordingly modify values.yaml with these credentials. Also, please cite our paper if you are using these Helm charts for your project. Below is the BibTeX citation details:
 
 ```bibtex
