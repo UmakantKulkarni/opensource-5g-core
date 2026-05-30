@@ -27,3 +27,25 @@ roleRef:
   kind: Role
   name: service-and-endpoint-reader
   apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: open5gs-cluster-service-reader
+rules:
+- apiGroups: [""]
+  resources: ["namespaces", "services"]
+  verbs: ["get", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: open5gs-cluster-service-binding
+subjects:
+- kind: ServiceAccount
+  name: open5gs
+  namespace: {{ .Values.namespace }}
+roleRef:
+  kind: ClusterRole
+  name: open5gs-cluster-service-reader
+  apiGroup: rbac.authorization.k8s.io
