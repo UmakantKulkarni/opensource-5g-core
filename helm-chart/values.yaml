@@ -21,7 +21,7 @@ ztx:
   encryption: true
   tcp: true
   udp: true
-  sctp: true
+  sctp: false
   name: "ztx"
   logLevel: 1
   keyLength: 256
@@ -56,8 +56,10 @@ ztx:
     password: ""
   
 
-attack:
+intruder:
   enabled: false
+  attack:
+    enabled: false
   hostNetwork: false
   image:
     repository: umakantk/ueransim
@@ -154,7 +156,7 @@ pcs:
     scp: upf
     udr: smf
     udm: smf
-    microservice: amf
+    intruder: amf
     test: amf
     webui: master
     ztx: master
