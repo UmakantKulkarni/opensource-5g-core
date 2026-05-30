@@ -88,7 +88,7 @@ find_test_pod() {
 }
 
 run_inside_test_container() {
-    kubectl exec -n "$NAMESPACE" "$POD_NAME" -c "$TEST_CONTAINER" -- bash -s -- "$@"
+    kubectl exec -i -n "$NAMESPACE" "$POD_NAME" -c "$TEST_CONTAINER" -- bash -s -- "$@"
 }
 
 ###############################################################################
