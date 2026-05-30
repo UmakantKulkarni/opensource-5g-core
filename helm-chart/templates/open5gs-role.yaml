@@ -2,12 +2,12 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: open5gs
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Release.Namespace }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Release.Namespace }}
   name: service-and-endpoint-reader
 rules:
 - apiGroups: [""]
@@ -18,11 +18,11 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: service-and-endpoint-binding
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Release.Namespace }}
 subjects:
 - kind: ServiceAccount
   name: open5gs
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Release.Namespace }}
 roleRef:
   kind: Role
   name: service-and-endpoint-reader
@@ -31,7 +31,7 @@ roleRef:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: open5gs-cluster-service-reader
+  name: open5gs-cluster-service-reader-{{ .Release.Namespace }}
 rules:
 - apiGroups: [""]
   resources: ["namespaces", "services"]
@@ -40,12 +40,12 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: open5gs-cluster-service-binding
+  name: open5gs-cluster-service-binding-{{ .Release.Namespace }}
 subjects:
 - kind: ServiceAccount
   name: open5gs
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Release.Namespace }}
 roleRef:
   kind: ClusterRole
-  name: open5gs-cluster-service-reader
+  name: open5gs-cluster-service-reader-{{ .Release.Namespace }}
   apiGroup: rbac.authorization.k8s.io
