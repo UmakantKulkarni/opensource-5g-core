@@ -80,22 +80,19 @@ spec:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
             - matchExpressions:
-              - key: kubernetes.io/pcs-nf-type
+              - key: pcs-nf-type
                 operator: In
                 values:
                 - {{ .Values.pcs.nodeAffinity.webui | quote }}
       {{ end }}
+      serviceAccountName: open5gs
       containers:
       - name: webui
         imagePullPolicy: {{ .Values.webui.image.pullPolicy }}
         image: "{{ .Values.webui.image.repository }}:{{ .Values.webui.image.tag }}"
         env:
         - name: DB_URI
-          {{ if .Values.pcs.enableMongoReplicaSet }}
-          value: {{ .Values.mongodb.rsuri.webui | quote }}
-          {{ else }}
-          value: {{ .Values.mongodb.sauri.webui | quote }}
-          {{ end }}
+          value: {{ include "mongodbUri" . | quote }}
         - name: NODE_ENV
           value: "production"
         - name: HOSTNAME

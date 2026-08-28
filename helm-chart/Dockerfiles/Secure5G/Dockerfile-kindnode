@@ -1,0 +1,31 @@
+FROM kindest/node:v1.32.0
+
+ENV DEBIAN_FRONTEND noninteractive
+ARG ARG_TIMEZONE=America/Indiana/Indianapolis
+ENV ENV_TIMEZONE ${ARG_TIMEZONE}
+
+RUN apt -y update
+
+RUN apt -y install git vim python3-pip python3-setuptools python3-wheel tzdata net-tools tshark tcpdump curl wget iptables iputils-ping openssh-client libssl-dev
+
+ENV TZ="America/Indiana/Indianapolis"
+
+WORKDIR /root/
+
+RUN git clone -b ztx_cl https://github.com/UmakantKulkarni/scripts && cd scripts && chmod +x *
+
+# sync timezone
+RUN echo '$ENV_TIMEZONE' > /etc/timezone \
+    && ln -fsn /usr/share/zoneinfo/$ENV_TIMEZONE /etc/localtime \
+    && dpkg-reconfigure --frontend noninteractive tzdata
+
+# https://kind.sigs.k8s.io/docs/user/configuration/#per-node-options
+# https://hub.docker.com/r/kindest/node/tags
+
+# kind: Cluster
+# apiVersion: kind.x-k8s.io/v1alpha4
+# nodes:
+# - role: control-plane
+#   image: kindest/node:v1.16.4@sha256:b91a2c2317a000f3a783489dfb755064177dbc3a0b2f4147d50f04825d016f55
+# - role: worker
+#   image: kindest/node:v1.16.4@sha256:b91a2c2317a000f3a783489dfb755064177dbc3a0b2f4147d50f04825d016f55

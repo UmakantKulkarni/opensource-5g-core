@@ -7,16 +7,29 @@ metadata:
 data:
   ausf.yaml: |
     logger:
-        file: /var/log/open5gs/ausf.log
+      file:
+        path: /var/log/open5gs/ausf.log
+    #  level: info   # fatal|error|warn|info(default)|debug|trace
+
+    global:
+      max:
+        ue: 2048  # The number of UE can be increased depending on memory size.
+    #    peer: 64
 
     ausf:
       sbi:
-      - addr: 0.0.0.0
-        advertise: open5gs-ausf
-    nrf:
-     sbi:
-      name: open5gs-nrf
-    pool:
-      {{ .Values.pool.key }}: {{ .Values.pool.val }}
-    max:
-      ue: {{ .Values.max.ue }}
+        server:
+          - address: 0.0.0.0
+            port: 80
+            advertise: open5gs-ausf
+            no_tls: true
+        client:
+          no_tls: true
+    #      nrf:
+    #        - uri: http://open5gs-nrf:80
+          scp:
+            - uri: http://open5gs-scp:80
+      metrics:
+        server:
+          - address: 0.0.0.0
+            port: 9090

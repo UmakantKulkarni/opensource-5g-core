@@ -5,14 +5,15 @@ metadata:
   labels:
     epc-mode: amf
 spec:
-  type: LoadBalancer
+  # type: LoadBalancer
+  type: NodePort
   selector:
     epc-mode: amf
   ports:
     - protocol: SCTP
       port: 38412
       targetPort: 38412
-      nodePort: 30412
+      nodePort:  {{ .Values.open5gs.ran.port | default 30412 }}
 ---
 apiVersion: v1
 kind: Service
@@ -27,6 +28,20 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: open5gs-amf-metrics
+  labels:
+    epc-mode: amf
+spec:
+  selector:
+    epc-mode: amf
+  ports:
+    - protocol: TCP
+      port: 9090
+      targetPort: 9090
 ---
 apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
 kind: Deployment
@@ -50,12 +65,15 @@ spec:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
             - matchExpressions:
-              - key: kubernetes.io/pcs-nf-type
+              - key: pcs-nf-type
                 operator: In
                 values:
                 - {{ .Values.pcs.nodeAffinity.amf | quote }}
       {{ end }}
+      {{- include "ztxInitContainer" . | nindent 6 }}
+      serviceAccountName: open5gs
       containers:
+        {{- include "ztxAppTemplate" . | nindent 8 }}
         - name: amf
           image: "{{ .Values.open5gs.image.repository }}:{{ .Values.open5gs.image.tag }}"
           imagePullPolicy: {{ .Values.open5gs.image.pullPolicy }}
@@ -88,16 +106,12 @@ spec:
           - name: PCS_ENABLE_SINGLE_READ
             value: {{ .Values.pcs.enableSingleRead.amf | default "false" | quote }}
           - name: DB_URI
-            {{ if .Values.pcs.enableMongoReplicaSet }}
-            value: {{ .Values.mongodb.rsuri.amf | quote }}
-            {{ else }}
-            value: {{ .Values.mongodb.sauri.amf | quote }}
-            {{ end }}
+            value: {{ include "mongodbUri" . | quote }}
           volumeMounts:
           - name: open5gs-amf-config
             mountPath: /open5gs/config-map/amf.yaml
             subPath: "amf.yaml"
       volumes:
-        - name: open5gs-amf-config
-          configMap:
-            name: open5gs-amf-config
+       - name: open5gs-amf-config
+         configMap:
+           name: open5gs-amf-config

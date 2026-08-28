@@ -1,0 +1,120 @@
+{{- define "tcpRule" -}}
+iptables -t mangle -A PREROUTING -p tcp -m mark ! --mark 15 -m multiport ! --sports 15692,15926,61592,9090,29615,29651,62951 -m multiport ! --dports 15692,15926,61592,9090,29615,29651,62951 -j NFQUEUE --queue-num 0 ; iptables -t mangle -A OUTPUT -p tcp -m mark ! --mark 15 -m multiport ! --sports 15692,15926,61592,9090,29615,29651,62951 -m multiport ! --dports 15692,15926,61592,9090,29615,29651,62951 -j NFQUEUE --queue-num 0
+{{- end }}
+
+{{- define "udpRule" -}}
+iptables -t mangle -A PREROUTING -p udp ! --sport 53 -m mark ! --mark 15 -j NFQUEUE --queue-num 0 ; iptables -t mangle -A OUTPUT -p udp ! --dport 53 -m mark ! --mark 15 -j NFQUEUE --queue-num 0
+{{- end }}
+
+{{- define "sctpRule" -}}
+iptables -t mangle -A PREROUTING -p sctp -m mark ! --mark 15 -j NFQUEUE --queue-num 0 ; iptables -t mangle -A OUTPUT -p sctp -m mark ! --mark 15 -j NFQUEUE --queue-num 0
+{{- end }}
+
+{{- /* Render imagePullSecrets for ZTX-injected pods when enabled */ -}}
+{{- define "ztxImagePullSecrets" -}}
+{{- if and .Values.ztx.enabled .Values.ztx.imagePullSecret.enabled }}
+imagePullSecrets:
+  - name: {{ .Values.ztx.imagePullSecret.name | quote }}
+{{- end }}
+{{- end -}}
+
+{{- define "ztxInitContainer" -}}
+{{ if .Values.ztx.enabled }}
+
+{{- $iptableRule := "ls" -}}
+
+{{- if .Values.ztx.tcp }}
+{{- $iptableRule = printf "%s ; %s " $iptableRule (include "tcpRule" .) }}
+{{- end }}
+
+{{- if .Values.ztx.udp }}
+{{- $iptableRule = printf "%s ; %s " $iptableRule (include "udpRule" .) }}
+{{- end }}
+
+{{- if .Values.ztx.sctp }}
+{{- $iptableRule = printf "%s ; %s " $iptableRule (include "sctpRule" .) }}
+{{- end }}
+
+{{- $iptableRule = printf "%s ; iptables-save" $iptableRule -}}
+
+{{- include "ztxImagePullSecrets" . }}
+initContainers:
+  - name: ztx-init
+    image: "{{ .Values.ztx.image.repository }}:{{ .Values.ztx.image.initTag }}"
+    securityContext:
+      capabilities:
+        add:
+        - NET_ADMIN
+    env:
+    - name: HEALTH_SERVER_PORT
+      value: {{ .Values.ztx.health.port | quote }}
+    command: ['sh', '-c']
+    args:
+    - |
+      echo "Waiting for ztx-controller health server to return HTTP 200"
+      HEALTHURI="http://{{ .Values.ztx.controllerSvc | default "ztx-controller" }}:{{ .Values.ztx.health.port }}"
+      echo "Health server URI: $HEALTHURI"
+      while true; do
+        HTTP_STATUS=$(wget --server-response --spider $HEALTHURI 2>&1 | awk '/^  HTTP/{print $2}')
+        if [ "$HTTP_STATUS" -eq 200 ]; then
+          echo "ztx-controller health server returned HTTP 200. Proceeding with startup"
+          break
+        else
+          echo "ztx-controller health server returned HTTP $HTTP_STATUS. Retrying in 5 seconds"
+          sleep 5
+        fi
+      done
+      {{ $iptableRule }}
+{{ end }}
+{{- end -}}
+
+{{- define "ztxAppTemplate" -}}
+{{ if .Values.ztx.enabled }}
+- name: {{ .Values.ztx.name | quote }}
+  image: "{{ .Values.ztx.image.repository }}:{{ .Values.ztx.image.tag }}"
+  imagePullPolicy: {{ .Values.ztx.image.pullPolicy }}
+  securityContext:
+    capabilities:
+      add:
+      - NET_ADMIN
+      - NET_RAW
+    privileged: false
+    allowPrivilegeEscalation: false
+  command: ["/tmp/5gsec/build/src/ztx"]
+  args:
+    - "-l"
+    - {{ .Values.ztx.logLevel | quote }}
+    - "-k"
+    - {{ .Values.ztx.keyLength | quote }}
+    - "-m"
+    - {{ .Values.ztx.mtlsKeyLength | quote }}
+  ports:
+    - containerPort: {{ .Values.ztx.promPort | default 9090 }}
+      name: metrics
+  env:
+  - name: ENCRYPTION_ENABLED
+    value: {{ .Values.ztx.encryption | default "false" | quote }}
+  - name: HEALTH_SERVER_PORT
+    value: {{ .Values.ztx.health.port | quote }}
+  - name: CA_SERVER_HOST
+    value: {{ .Values.ztx.caServer.host | default "ztx-controller" | quote }}
+  - name: CA_SERVER_PORT
+    value: {{ .Values.ztx.caServer.port | default "29615" | quote }}
+  - name: CA_BOOTSTRAP_PORT
+    value: {{ .Values.ztx.caServer.bootstrapPort | default "29651" | quote }}
+  - name: CA_AUTH_TOKEN
+    value: {{ .Values.ztx.caServer.authToken | default "ztxAuthToken" | quote }}
+  - name: CA_CERT_PASSWORD
+    value: {{ .Values.ztx.caServer.caCertPassword | default "ztxCaCertPassword" | quote }}
+  - name: PROMETHEUS_PORT
+    value: {{ .Values.ztx.promPort | default "9090" | quote }}
+  - name: MY_IP
+    valueFrom:
+      fieldRef:
+        fieldPath: status.podIP
+  - name: MY_NAMESPACE
+    valueFrom:
+      fieldRef:
+        fieldPath: metadata.namespace
+{{ end }}
+{{- end -}}

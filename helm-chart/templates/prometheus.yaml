@@ -1,0 +1,165 @@
+{{- define "prometheus-wait" -}}
+while ! curl -s http://prometheus:9090/-/healthy | grep "Prometheus Server is Healthy."; do
+  echo "Waiting for Prometheus to be ready";
+  sleep 5;
+done;
+echo "Prometheus Server is Healthy.";
+{{- end -}}
+
+{{- if .Values.monitoring.prometheus.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-config
+  namespace: {{ .Release.Namespace }}
+data:
+  prometheus.yml: |
+    global:
+      scrape_interval: 10s
+
+    scrape_configs:
+      - job_name: open5gs-mongodb-metrics
+        static_configs:
+          - targets:
+              - "open5gs-mongodb-metrics.{{ .Release.Namespace }}.svc.cluster.local:9090"
+      - job_name: open5gs-amf-metrics
+        static_configs:
+          - targets:
+              - "open5gs-amf-metrics.{{ .Release.Namespace }}.svc.cluster.local:9090"
+      - job_name: open5gs-ausf-metrics
+        static_configs:
+          - targets:
+              - "open5gs-ausf-metrics.{{ .Release.Namespace }}.svc.cluster.local:9090"
+      - job_name: open5gs-bsf-metrics
+        static_configs:
+          - targets:
+              - "open5gs-bsf-metrics.{{ .Release.Namespace }}.svc.cluster.local:9090"
+      - job_name: open5gs-nrf-metrics
+        static_configs:
+          - targets:
+              - "open5gs-nrf-metrics.{{ .Release.Namespace }}.svc.cluster.local:9090"
+      - job_name: open5gs-nssf-metrics
+        static_configs:
+          - targets:
+              - "open5gs-nssf-metrics.{{ .Release.Namespace }}.svc.cluster.local:9090"
+      - job_name: open5gs-pcf-metrics
+        static_configs:
+          - targets:
+              - "open5gs-pcf-metrics.{{ .Release.Namespace }}.svc.cluster.local:9090"
+      - job_name: open5gs-scp-metrics
+        static_configs:
+          - targets:
+              - "open5gs-scp-metrics.{{ .Release.Namespace }}.svc.cluster.local:9090"
+      - job_name: open5gs-smf-metrics
+        static_configs:
+          - targets:
+              - "open5gs-smf-metrics.{{ .Release.Namespace }}.svc.cluster.local:9090"
+      - job_name: open5gs-udm-metrics
+        static_configs:
+          - targets:
+              - "open5gs-udm-metrics.{{ .Release.Namespace }}.svc.cluster.local:9090"
+      - job_name: open5gs-udr-metrics
+        static_configs:
+          - targets:
+              - "open5gs-udr-metrics.{{ .Release.Namespace }}.svc.cluster.local:9090"
+      - job_name: open5gs-upf-metrics
+        static_configs:
+          - targets:
+              - "open5gs-upf-metrics.{{ .Release.Namespace }}.svc.cluster.local:9090"
+      - job_name: ztx-controller-metrics
+        static_configs:
+          - targets:
+              - "ztx-controller.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.ztx.promPort | default 9090 }}"
+      - job_name: 'ztx-sidecar-metrics'
+        kubernetes_sd_configs:
+          - role: pod
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_pod_container_name]
+            regex: "{{ .Values.ztx.name }}"
+            action: keep
+          - source_labels: [__address__]
+            target_label: __address__
+            regex: (.+):\d+
+            replacement: $1:{{ .Values.ztx.promPort }}
+          - source_labels: [__meta_kubernetes_pod_name]
+            target_label: instance
+          - target_label: job
+            replacement: ztx-sidecar
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: prometheus
+  namespace: {{ .Release.Namespace }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prometheus
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prometheus
+  template:
+    metadata:
+      labels:
+        app: prometheus
+    spec:
+      serviceAccountName: prometheus
+      containers:
+        - name: prometheus
+          image: "{{ .Values.monitoring.prometheus.image.repository }}:{{ .Values.monitoring.prometheus.image.tag }}"
+          ports:
+            - containerPort: 9090
+          volumeMounts:
+            - name: prometheus-config
+              mountPath: /etc/prometheus/
+      volumes:
+        - name: prometheus-config
+          configMap:
+            name: prometheus-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-manage-backend-security-group-rules: "true"
+    service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout: "60"
+    service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags: "environment=dev,owner=team"
+    service.beta.kubernetes.io/aws-load-balancer-cleanup-on-delete: "true" 
+spec:
+  type: LoadBalancer
+  selector:
+    app: prometheus
+  ports:
+    - protocol: TCP
+      port: 9090
+      targetPort: 9090
+      nodePort:  {{ .Values.monitoring.prometheus.nodeport | default 30090 }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: prometheus-pod-scrape
+rules:
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: prometheus-pod-scrape-binding
+subjects:
+  - kind: ServiceAccount
+    name: prometheus
+    namespace: {{ .Release.Namespace }}
+roleRef:
+  kind: ClusterRole
+  name: prometheus-pod-scrape
+  apiGroup: rbac.authorization.k8s.io
+{{- end }}

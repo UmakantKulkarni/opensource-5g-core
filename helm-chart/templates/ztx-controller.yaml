@@ -1,0 +1,173 @@
+{{ if .Values.ztx.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.ztx.controllerSvc | default "ztx-controller" }}
+  labels:
+    app: ztx-controller
+spec:
+  selector:
+    app: ztx-controller
+  ports:
+    - protocol: TCP
+      port: 15692   
+      targetPort: 15692
+      name: mtls
+    - protocol: TCP
+      port: 15926   
+      targetPort: 15926
+      name: rest
+    - protocol: TCP
+      port: 61592   
+      targetPort: 61592
+      name: external
+    - protocol: TCP
+      port: {{ .Values.ztx.health.port }}
+      targetPort: {{ .Values.ztx.health.port }}
+      name: health
+    - protocol: TCP
+      port: {{ .Values.ztx.caServer.port }}
+      targetPort: {{ .Values.ztx.caServer.port }}
+      name: caserver
+    - protocol: TCP
+      port: {{ .Values.ztx.caServer.bootstrapPort }}
+      targetPort: {{ .Values.ztx.caServer.bootstrapPort }}
+      name: caserver-bootstrap
+    - protocol: TCP
+      port: {{ .Values.ztx.promPort | default 9090 }}
+      targetPort: {{ .Values.ztx.promPort | default 9090 }}
+      name: metrics
+    - protocol: TCP
+      port: 9090
+      targetPort: 9090
+      name: cametrics
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ztx-controller-external
+  namespace: {{ .Release.Namespace }}
+spec:
+  type: LoadBalancer
+  selector:
+    app: ztx-controller
+  ports:
+    - name: ztx-external
+      protocol: TCP
+      port: {{ .Values.ztx.health.port | default 8080 }}
+      targetPort: {{ .Values.ztx.health.port | default 8080 }}
+      nodePort:  {{ .Values.ztx.health.nodeport | default 32080 }}
+---  
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ztx-controller-deployment
+spec:
+  selector:
+    matchLabels:
+      app: ztx-controller
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: ztx-controller
+    spec:
+      {{- include "ztxImagePullSecrets" . | nindent 6 }}
+      {{ if .Values.pcs.nodeAffinity.enabled }}
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: pcs-nf-type
+                operator: In
+                values:
+                - {{ .Values.pcs.nodeAffinity.ztx | quote }}
+      {{ end }}
+      serviceAccountName: open5gs
+      containers:
+        - name: ztx-controller
+          image: "{{ .Values.ztx.image.repository }}:{{ .Values.ztx.image.controllerTag }}"
+          imagePullPolicy: {{ .Values.ztx.image.pullPolicy }}
+          securityContext:
+            capabilities:
+              add:
+              - NET_ADMIN
+              - NET_RAW
+            privileged: false
+            allowPrivilegeEscalation: false
+          command: ["/tmp/5gsec/build/src/ztx"]
+          args:
+            - "-l"
+            - {{ .Values.ztx.logLevel | quote }}
+            - "-k"
+            - {{ .Values.ztx.keyLength | quote }}
+            - "-m"
+            - {{ .Values.ztx.mtlsKeyLength | quote }}
+          ports:
+            - containerPort: {{ .Values.ztx.promPort | default 9090 }}
+              name: metrics
+          env:
+            - name: ENCRYPTION_ENABLED
+              value: {{ .Values.ztx.encryption | default "false" | quote }}
+            - name: ZTX_CONTROLLER
+              value: "true"
+            - name: AUTHENTICATION_ENABLED
+              value: {{ .Values.ztx.authentication | default "false" | quote }}
+            - name: HEALTH_SERVER_PORT
+              value: {{ .Values.ztx.health.port | quote }}
+            - name: CA_SERVER_HOST
+              value: {{ .Values.ztx.caServer.host | default "ztx-controller" | quote }}
+            - name: CA_SERVER_PORT
+              value: {{ .Values.ztx.caServer.port | default "29615" | quote }}
+            - name: CA_BOOTSTRAP_PORT
+              value: {{ .Values.ztx.caServer.bootstrapPort | default "29651" | quote }}
+            - name: CA_AUTH_TOKEN
+              value: {{ .Values.ztx.caServer.authToken | default "ztxAuthToken" | quote }}
+            - name: CA_CERT_PASSWORD
+              value: {{ .Values.ztx.caServer.caCertPassword | default "ztxCaCertPassword" | quote }}
+            - name: PROMETHEUS_PORT
+              value: {{ .Values.ztx.promPort | default "9090" | quote }}
+            - name: MY_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: MY_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+        - name: ca-server
+          image: "{{ .Values.ztx.caServer.image.repository }}:{{ .Values.ztx.caServer.image.tag }}"
+          imagePullPolicy: {{ .Values.ztx.caServer.image.pullPolicy }}
+          command: ["python3"]
+          args:
+            - "/app/ca_server.py"
+          ports:
+            - containerPort: 9090
+              name: cametrics
+            - containerPort: {{ .Values.ztx.caServer.port }}
+              name: ca
+          env:
+            - name: CA_SERVER_HOST
+              value: {{ .Values.ztx.caServer.host | default "ztx-controller" | quote }}
+            - name: CERT_TTL_HOURS
+              value: {{ .Values.ztx.caServer.certTTLHours | quote }}
+            - name: CA_SERVER_PORT
+              value: {{ .Values.ztx.caServer.port | default "29615" | quote }}
+            - name: CA_BOOTSTRAP_PORT
+              value: {{ .Values.ztx.caServer.bootstrapPort | default "29651" | quote }}
+            - name: CA_AUTH_TOKEN
+              value: {{ .Values.ztx.caServer.authToken | default "ztxAuthToken" | quote }}
+            - name: CA_CERT_PASSWORD
+              value: {{ .Values.ztx.caServer.caCertPassword | default "ztxCaCertPassword" | quote }}
+            - name: PROMETHEUS_PORT
+              value: {{ .Values.ztx.promPort | default "9090" | quote }}
+            - name: MY_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: MY_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+{{ end }}

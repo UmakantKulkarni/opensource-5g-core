@@ -7,38 +7,59 @@ metadata:
 data:
   smf.yaml: |
     logger:
-        file: /var/log/open5gs/smf.log
+      file:
+        path: /var/log/open5gs/smf.log
+    #  level: info   # fatal|error|warn|info(default)|debug|trace
 
-    parameter:
-        no_ipv6: true
+    global:
+      max:
+        ue: 2048  # The number of UE can be increased depending on memory size.
+    #    peer: 64
 
     smf:
-        sbi:     
-        - addr: 0.0.0.0
-          advertise: open5gs-smf
-        pfcp:
-           dev: {{ .Values.k8s.interface }}
-        gtpc:
-          dev: {{ .Values.k8s.interface }}
-        gtpu:
-          dev: {{ .Values.k8s.interface }}    
-        subnet:
-         - addr: 10.45.0.1/16
-           dnn: {{ .Values.dnn }}
-        dns:
-          - 8.8.8.8
-          - 8.8.4.4
-        mtu: 1400
-
-    nrf:
-     sbi:
-      name: open5gs-nrf 
-
-    upf:
+      sbi:
+        server:
+          - address: 0.0.0.0
+            port: 80
+            advertise: open5gs-smf
+            no_tls: true
+        client:
+          no_tls: true
+    #      nrf:
+    #        - uri: http://open5gs-nrf:80
+          scp:
+            - uri: http://open5gs-scp:80
       pfcp:
-        - name: upf-open5gs
-          dnn: {{ .Values.dnn }}
-    pool:
-      {{ .Values.pool.key }}: {{ .Values.pool.val }}
-    max:
-      ue: {{ .Values.max.ue }}
+        server:
+          - dev: {{ .Values.k8s.podInterface }}
+            port: {{ .Values.open5gs.pfcp.port | default 8805 }}
+        client:
+          upf:
+            - address: open5gs-upf
+      gtpc:
+        server:
+          - dev: {{ .Values.k8s.podInterface }}
+      gtpu:
+        server:
+          - dev: {{ .Values.k8s.podInterface }}
+      metrics:
+        server:
+          - address: 0.0.0.0
+            port: 9090
+      session:
+        - subnet: 10.45.0.1/16
+          gateway: 10.45.0.1
+        - subnet: 2001:db8:cafe::1/48
+          gateway: 2001:db8:cafe::1
+      dns:
+        - 8.8.8.8
+        - 8.8.4.4
+        - 2001:4860:4860::8888
+        - 2001:4860:4860::8844
+      mtu: 1400
+    #  p-cscf:
+    #    - 0.0.0.0
+    #    - ::1
+    #  ctf:
+    #    enabled: auto   # auto(default)|yes|no
+    #  freeDiameter: @sysconfdir@/freeDiameter/smf.conf

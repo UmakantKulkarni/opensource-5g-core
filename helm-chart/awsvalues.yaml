@@ -1,0 +1,214 @@
+open5gs:
+  image:
+    repository: umakantk/open5gs
+    pullPolicy: Always
+    tag: "v2.7.2"
+  upf:
+    hostNetwork: false
+    tunintf: "ogstun"
+  pfcp:
+    port: 8805
+  gtpv1:
+    port: 2152
+  gtpv2:
+    port: 2153
+  ran:
+    port: 30412
+
+ztx:
+  enabled: true
+  authentication: true
+  encryption: true
+  tcp: true
+  udp: true
+  sctp: true
+  name: "ztx"
+  logLevel: 1
+  keyLength: 256
+  mtlsKeyLength: 2048
+  promPort: 62951 # Should not be 9090
+  controllerSvc: "ztx-controller"
+  image:
+    repository: umakantk/ztx
+    pullPolicy: Always
+    tag: "ztx_demo_aug"
+    initTag: "init"
+    controllerTag: "ztx_demo_aug"
+  health:
+    port: 8080
+    nodePort: 32080
+  caServer:
+    image:
+      repository: umakantk/ztx
+      pullPolicy: Always
+      tag: "ca"
+    host: "ztx-controller"
+    port: 29615
+    bootstrapPort: 29651
+    certTTLHours: 240
+    caCertPassword: "ztxCaCertPassword"
+    authToken: "ztxAuthToken"
+  
+
+attack:
+  enabled: false
+  hostNetwork: false
+  image:
+    repository: umakantk/ueransim
+    pullPolicy: Always
+    tag: "ztx_demo_aug"
+
+monitoring:
+  prometheus:
+    enabled: true
+    nodeport: 30090
+    image:
+      repository: prom/prometheus
+      pullPolicy: IfNotPresent
+      tag: "v2.53.5"
+  grafana:
+    enabled: true
+    nodeport: 30080
+    image:
+      repository: grafana/grafana
+      pullPolicy: IfNotPresent
+      tag: "12.0.2"
+  kubernetesui:
+    enabled: true
+    nodeport: 30070
+    image:
+      repository: kubernetesui/dashboard
+      pullPolicy: IfNotPresent
+      tag: "v2.7.0"
+  metricsScraper:
+    enabled: true
+    image:
+      repository: kubernetesui/metrics-scraper
+      pullPolicy: IfNotPresent
+      tag: "v1.0.8"
+  logforwarder:
+    enabled: true
+    namespace: ztx5gc
+    remoteUrl: "http://127.0.0.1:9000/logs"
+    labelSelector: ""
+    containerRegex: "microservice|amf|ausf|bsf|nrf|nssf|pcf|scp|smf|test|udm|udr|upf"
+    image:
+      repository: umakantk/k8slogforwarder
+      tag: v1.0
+    mode: real
+
+pool:
+  key: 128
+  val: 65536
+
+max:
+  ue: 2048
+
+ueransim:
+  image:
+    repository: umakantk/ueransim
+    pullPolicy: Always
+    tag: "ztx_demo_aug"
+
+dnn: internet
+
+amf:
+  mcc: 208
+  mnc: 93
+  tac: 1
+
+# Primary/Native kubernetes interface
+k8s:
+  podInterface: eth0
+
+webui:
+  image:
+    repository: registry.gitlab.com/infinitydon/registry/open5gs-webui
+    pullPolicy: Always
+    tag: "v2.2.2"
+  ingress:
+    enabled: false
+    hosts:
+      - name: open5gs-epc.local
+        paths: ["/"]
+        tls: false
+
+pcs:
+  nodeAffinity:
+    enabled: false
+    amf: amf
+    smf: smf
+    upf: upf
+    ausf: amf
+    bsf: amf
+    pcf: smf
+    mongo: upf
+    nrf: upf
+    nssf: upf
+    scp: upf
+    udr: smf
+    udm: smf
+    microservice: amf
+    test: amf
+    webui: master
+    ztx: master
+  enableMongoReplicaSet: false
+  dbCommEnabled:
+    amf: false
+    smf: false
+    upf: false
+  upsertApiEnabled:
+    amf:
+      create: false
+    smf:
+      create: false
+    upf:
+      create: false
+  updateApiEnabled:
+    amf:
+      n1n2: true
+      modify: true
+    smf:
+      n1n2: true
+      modify: true
+    upf:
+      modify: true
+  replaceApiEnabled:
+    amf:
+      n1n2: false
+      modify: false
+    smf:
+      n1n2: false
+      modify: false
+    upf:
+      modify: false
+  blockingApiEnabled:
+    amf:
+      create: true
+      n1n2: true
+      modifyreq: true
+      modifyrsp: true
+    upf:
+      create: true
+      modifyrsp: true
+
+  isProceduralStateless:
+    amf: false
+    smf: false
+    upf: false
+  dbCollectioname:
+    amf: "amf"
+    smf: "smf"
+    upf: "upf"
+  enableSingleRead:
+    amf: false
+    smf: false
+    upf: false
+
+mongodb:
+  username: root
+  password: root
+  image:
+    repository: umakantk/open5gs-mongo
+    pullPolicy: IfNotPresent
+    tag: "ztx_demo_aug"

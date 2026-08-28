@@ -1,0 +1,45 @@
+{{- if .Values.intruder.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: network-intruder
+spec:
+  selector:
+    matchLabels:
+      app: intruder
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: intruder
+    spec:
+      {{ if .Values.pcs.nodeAffinity.enabled }}
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: pcs-nf-type
+                operator: In
+                values:
+                - {{ .Values.pcs.nodeAffinity.intruder | quote }}
+      {{ end }}
+      hostNetwork: {{ .Values.intruder.hostNetwork }}
+      serviceAccountName: open5gs
+      containers:
+        - name: intruder
+          image: "{{ .Values.intruder.image.repository }}:{{ .Values.intruder.image.tag }}"
+          imagePullPolicy: {{ .Values.intruder.image.pullPolicy }}
+          command: [ "python3", "/root/5GUnSec/ciliumAttack.py", "{{ .Values.intruder.attack.enabled }}"]
+          env:
+            - name: DB_URI
+              {{ if .Values.pcs.enableMongoReplicaSet }}
+              value: "mongodb://mongodb-svc/"
+              {{ else }}
+              value: "mongodb://mongodb-svc/"
+              {{ end }}
+            - name: MY_POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+{{- end }}

@@ -1,3 +1,19 @@
+{{- define "mongodbUri" -}}
+{{- if .Values.pcs.enableMongoReplicaSet -}}
+mongodb://mongodb-svc/open5gs
+{{- else -}}
+mongodb://mongodb-svc/open5gs
+{{- end -}}
+{{- end -}}
+
+{{- define "mongodb-wait" -}}
+while ! mongosh {{ include "mongodbUri" . | quote }} --eval "db.runCommand('ping').ok" --quiet | grep 1; do
+  echo 'Waiting for MongoDB';
+  sleep 5;
+done;
+echo 'MongoDB is ready!';
+{{- end -}}
+
 {{- if not .Values.pcs.enableMongoReplicaSet }}
 apiVersion: v1
 kind: Service
@@ -5,7 +21,19 @@ metadata:
   name: mongodb-svc
 spec:
   ports:
-  - port: 27017
+    - port: 27017
+  selector:
+    app: open5gs-mongodb
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: open5gs-mongodb-metrics
+spec:
+  ports:
+    - protocol: TCP
+      port: 9090
+      targetPort: 9090
   selector:
     app: open5gs-mongodb
 ---
@@ -28,31 +56,60 @@ spec:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
             - matchExpressions:
-              - key: kubernetes.io/pcs-nf-type
+              - key: pcs-nf-type
                 operator: In
                 values:
                 - {{ .Values.pcs.nodeAffinity.mongo | quote }}
       {{ end }}
+      {{- include "ztxInitContainer" . | nindent 6 }}
+      serviceAccountName: open5gs
       containers:
-      - image: "{{ .Values.mongodb.image.repository }}:{{ .Values.mongodb.image.tag }}"
-        command: ["mongod", "--bind_ip_all"]
-        imagePullPolicy: {{ .Values.mongodb.image.pullPolicy }}
-        name: open5gs-mongodb
-        ports:
-        - containerPort: 27017
-          name: mongodb
-        volumeMounts:
-        - name: mongodb-persistent-storage
-          mountPath: /data/db
+        {{- include "ztxAppTemplate" . | nindent 8 }}
+        - image: "{{ .Values.mongodb.image.repository }}:{{ .Values.mongodb.image.tag }}"
+          command: ["mongod", "--bind_ip_all"]
+          imagePullPolicy: {{ .Values.mongodb.image.pullPolicy }}
+          name: open5gs-mongodb
+          ports:
+            - containerPort: 27017
+              name: mongodb
+          env:
+          - name: MONGO_INITDB_ROOT_USERNAME
+            value: {{ .Values.mongodb.username | default "root" | quote }}
+          - name: MONGO_INITDB_ROOT_PASSWORD
+            value: {{ .Values.mongodb.username | default "root" | quote }}
+          volumeMounts:
+            - name: mongodb-persistent-storage-{{ .Release.Namespace }}
+              mountPath: /data/db_{{ .Release.Namespace }}
+        
+        # MongoDB Exporter Sidecar
+        - name: mongodb-exporter
+          image: percona/mongodb_exporter:0.43.0
+          args:
+            - "--mongodb.uri=mongodb://127.0.0.1:27017"
+            - "--log.level=info"
+            - "--collect-all"
+            - "--web.listen-address=:9090"
+            - "--mongodb.global-conn-pool"
+          ports:
+            - containerPort: 9090
+              name: mngoexprtmtrcs
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "200m"
+            limits:
+              memory: "512Mi"
+              cpu: "400m"
+
       volumes:
-      - name: mongodb-persistent-storage
-        persistentVolumeClaim:
-          claimName: mongodb-pv-claim-open5gs
+        - name: mongodb-persistent-storage-{{ .Release.Namespace }}
+          persistentVolumeClaim:
+            claimName: mongodb-pv-claim-{{ .Release.Namespace }}
 ---
 kind: PersistentVolume
 apiVersion: v1
 metadata:
-  name: mongodb-pv-volume-open5gs
+  name: mongodb-pv-volume-{{ .Release.Namespace }}
   labels:
     type: local
 spec:
@@ -67,7 +124,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: mongodb-pv-claim-open5gs
+  name: mongodb-pv-claim-{{ .Release.Namespace }}
 spec:
   storageClassName: ""
   accessModes:

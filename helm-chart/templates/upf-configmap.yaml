@@ -7,17 +7,34 @@ metadata:
 data:
   upf.yaml: |
     logger:
-        file: /var/log/open5gs/upf.log
+      file:
+        path: /var/log/open5gs/upf.log
+    #  level: info   # fatal|error|warn|info(default)|debug|trace
+
+    global:
+      max:
+        ue: 2048  # The number of UE can be increased depending on memory size.
+    #    peer: 64
 
     upf:
-        pfcp:
-           dev: {{ .Values.k8s.interface }}
-        gtpu:
-           dev: {{ .Values.k8s.interface }}
-        subnet:
-          - addr: 10.45.0.1/16
-            dnn: {{ .Values.dnn }}
-    pool:
-      {{ .Values.pool.key }}: {{ .Values.pool.val }}
-    max:
-      ue: {{ .Values.max.ue }}
+      pfcp:
+        server:
+          - dev: {{ .Values.k8s.podInterface }}
+            port: {{ .Values.open5gs.pfcp.port | default 8805 }}
+    #        advertise: open5gs-upf
+    #    client:
+    #      smf:     #  UPF PFCP Client try to associate SMF PFCP Server
+    #        - address: 127.0.0.4
+      gtpu:
+        server:
+          - dev: {{ .Values.k8s.podInterface }}
+            port: {{ .Values.open5gs.gtpv1.port | default 2152 }}
+      session:
+        - subnet: 10.45.0.1/16
+          gateway: 10.45.0.1
+        - subnet: 2001:db8:cafe::1/48
+          gateway: 2001:db8:cafe::1
+      metrics:
+        server:
+          - address: 0.0.0.0
+            port: 9090

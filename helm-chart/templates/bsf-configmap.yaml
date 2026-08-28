@@ -7,21 +7,29 @@ metadata:
 data:
   bsf.yaml: |
     logger:
-        file: /var/log/open5gs/bsf.log
+      file:
+        path: /var/log/open5gs/bsf.log
+    #  level: info   # fatal|error|warn|info(default)|debug|trace
 
-    {{ if .Values.pcs.enableMongoReplicaSet }}
-    db_uri: {{ .Values.mongodb.rsuri.bsf | quote }}
-    {{ else }}
-    db_uri: {{ .Values.mongodb.sauri.bsf | quote }}
-    {{ end }}
+    global:
+      max:
+        ue: 2048  # The number of UE can be increased depending on memory size.
+    #    peer: 64
+
     bsf:
       sbi:
-      - addr: 0.0.0.0
-        advertise: open5gs-bsf
-    nrf:
-     sbi:
-      name: open5gs-nrf
-    pool:
-      {{ .Values.pool.key }}: {{ .Values.pool.val }}
-    max:
-      ue: {{ .Values.max.ue }}
+        server:
+          - address: 0.0.0.0
+            port: 80
+            advertise: open5gs-bsf
+            no_tls: true
+        client:
+          no_tls: true
+    #      nrf:
+    #        - uri: http://open5gs-nrf:80
+          scp:
+            - uri: http://open5gs-scp:80
+      metrics:
+        server:
+          - address: 0.0.0.0
+            port: 9090

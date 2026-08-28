@@ -1,0 +1,64 @@
+{{- if .Values.monitoring.logforwarder.enabled }}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: logforwarder
+  namespace: {{ .Values.monitoring.logforwarder.namespace }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: logforwarder
+rules:
+  - apiGroups: [""]
+    resources: ["pods", "pods/log"]
+    verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: logforwarder
+subjects:
+  - kind: ServiceAccount
+    name: logforwarder
+    namespace: {{ .Values.monitoring.logforwarder.namespace }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: logforwarder
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: logforwarder
+  namespace: {{ .Values.monitoring.logforwarder.namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: logforwarder
+  template:
+    metadata:
+      labels:
+        app: logforwarder
+    spec:
+      serviceAccountName: logforwarder
+      containers:
+        - name: logforwarder
+          image: "{{ .Values.monitoring.logforwarder.image.repository }}:{{ .Values.monitoring.logforwarder.image.tag }}"
+          command: ["/app/logforwarder"]
+          args:
+            - "--mode={{ .Values.monitoring.logforwarder.mode }}"
+            {{- if eq .Values.monitoring.logforwarder.mode "since" }}
+            - "--since={{ .Values.monitoring.logforwarder.since }}"
+            {{- end }}
+          env:
+            - name: TARGET_NAMESPACE
+              value: "{{ .Values.monitoring.logforwarder.namespace }}"
+            - name: REMOTE_URL
+              value: "{{ .Values.monitoring.logforwarder.remoteUrl }}"
+            - name: LABEL_SELECTOR
+              value: "{{ .Values.monitoring.logforwarder.labelSelector }}"
+            - name: CONTAINER_REGEX
+              value: "{{ .Values.monitoring.logforwarder.containerRegex }}"
+{{- end }}

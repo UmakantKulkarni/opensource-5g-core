@@ -11,7 +11,21 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 80
----    
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: open5gs-nrf-metrics
+  labels:
+    epc-mode: nrf
+spec:
+  selector:
+    epc-mode: nrf
+  ports:
+    - protocol: TCP
+      port: 9090
+      targetPort: 9090
+---
 apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
 kind: Deployment
 metadata:
@@ -36,23 +50,22 @@ spec:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
             - matchExpressions:
-              - key: kubernetes.io/pcs-nf-type
+              - key: pcs-nf-type
                 operator: In
                 values:
                 - {{ .Values.pcs.nodeAffinity.nrf | quote }}
       {{ end }}
+      {{- include "ztxInitContainer" . | nindent 6 }}
+      serviceAccountName: open5gs
       containers:
+        {{- include "ztxAppTemplate" . | nindent 8 }}
         - name: nrf
           image: "{{ .Values.open5gs.image.repository }}:{{ .Values.open5gs.image.tag }}"
           imagePullPolicy: {{ .Values.open5gs.image.pullPolicy }}
           command: ["open5gs-nrfd", "-c", "/open5gs/config-map/nrf.yaml"]
           env:
           - name: DB_URI
-            {{ if .Values.pcs.enableMongoReplicaSet }}
-            value: {{ .Values.mongodb.rsuri.nrf | quote }}
-            {{ else }}
-            value: {{ .Values.mongodb.sauri.nrf | quote }}
-            {{ end }}
+            value: {{ include "mongodbUri" . | quote }}
           volumeMounts:
             - name: open5gs-nrf-config
               mountPath: /open5gs/config-map/nrf.yaml

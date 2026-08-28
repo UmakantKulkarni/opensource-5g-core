@@ -1,0 +1,14 @@
+FROM mongo:8.0
+
+ENV DEBIAN_FRONTEND=noninteractive
+ARG ARG_TIMEZONE=America/Indiana/Indianapolis
+ENV ENV_TIMEZONE=${ARG_TIMEZONE}
+ENV TZ="America/Indiana/Indianapolis"
+
+WORKDIR /root/
+RUN sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mongod.conf.orig
+
+# sync timezone
+RUN echo '$ENV_TIMEZONE' > /etc/timezone \
+    && ln -fsn /usr/share/zoneinfo/$ENV_TIMEZONE /etc/localtime \
+    && dpkg-reconfigure --frontend noninteractive tzdata

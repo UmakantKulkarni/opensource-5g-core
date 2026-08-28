@@ -1,34 +1,170 @@
-# Default values for open5gs-epc-helm.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-
 open5gs:
   image:
     repository: umakantk/open5gs
     pullPolicy: Always
-    tag: "3b6da3d_mongo"
+    tag: "v2.7.2"
+  upf:
+    hostNetwork: false
+    tunintf: "ogstun"
+  pfcp:
+    port: 8805
+  gtpv1:
+    port: 2152
+  gtpv2:
+    port: 2153
+  ran:
+    port: 30412
+
+ztx:
+  enabled: true
+  authentication: true
+  encryption: true
+  tcp: true
+  udp: true
+  sctp: false
+  name: "ztx"
+  logLevel: 1
+  keyLength: 256
+  mtlsKeyLength: 2048
+  promPort: 62951 # Should not be 9090
+  controllerSvc: "ztx-controller"
+  image:
+    repository: umakantk/ztx
+    pullPolicy: Always
+    tag: "ztx_demo_aug"
+    initTag: "init"
+    controllerTag: "ztx_demo_aug"
+  health:
+    port: 8080
+    nodePort: 32080
+  caServer:
+    image:
+      repository: umakantk/ztx
+      pullPolicy: Always
+      tag: "ca"
+    host: "ztx-controller"
+    port: 29615
+    bootstrapPort: 29651
+    certTTLHours: 240
+    caCertPassword: "ztxCaCertPassword"
+    authToken: "ztxAuthToken"
+  imagePullSecret:
+    enabled: true
+    name: ztx-private-registry
+    server: index.docker.io
+    username: token
+    password: ""
+  
+
+intruder:
+  enabled: false
+  attack:
+    enabled: false
+  hostNetwork: false
+  image:
+    repository: umakantk/ueransim
+    pullPolicy: Always
+    tag: "ztx_demo_aug"
+
+monitoring:
+  prometheus:
+    enabled: true
+    nodeport: 30090
+    image:
+      repository: prom/prometheus
+      pullPolicy: IfNotPresent
+      tag: "v2.53.5"
+  grafana:
+    enabled: true
+    nodeport: 30080
+    image:
+      repository: grafana/grafana
+      pullPolicy: IfNotPresent
+      tag: "12.0.2"
+  kubernetesui:
+    enabled: true
+    nodeport: 30070
+    image:
+      repository: kubernetesui/dashboard
+      pullPolicy: IfNotPresent
+      tag: "v2.7.0"
+  metricsScraper:
+    enabled: true
+    image:
+      repository: kubernetesui/metrics-scraper
+      pullPolicy: IfNotPresent
+      tag: "v1.0.8"
+  logforwarder:
+    enabled: false
+    namespace: ztx5gc
+    remoteUrl: "http://127.0.0.1:9000/logs"
+    labelSelector: ""
+    containerRegex: "microservice|amf|ausf|bsf|nrf|nssf|pcf|scp|smf|test|udm|udr|upf"
+    image:
+      repository: umakantk/k8slogforwarder
+      tag: v1.0
+    mode: real
+
+pool:
+  key: 128
+  val: 65536
+
+max:
+  ue: 2048
+
+ueransim:
+  image:
+    repository: umakantk/ueransim
+    pullPolicy: Always
+    tag: "ztx_demo_aug"
+
+dnn: internet
+
+amf:
+  mcc: 208
+  mnc: 93
+  tac: 1
+
+# Primary/Native kubernetes interface
+k8s:
+  podInterface: eth0
+
+webui:
+  image:
+    repository: registry.gitlab.com/infinitydon/registry/open5gs-webui
+    pullPolicy: Always
+    tag: "v2.2.2"
+  ingress:
+    enabled: false
+    hosts:
+      - name: open5gs-epc.local
+        paths: ["/"]
+        tls: false
 
 pcs:
   nodeAffinity:
-    enabled: true
+    enabled: false
     amf: amf
+    smf: smf
+    upf: upf
     ausf: amf
     bsf: amf
-    smf: smf
     pcf: smf
-    udm: smf
-    upf: upf
+    mongo: upf
     nrf: upf
     nssf: upf
-    mongo: udsf
-    udr: udsf
-    test: udsf
-    webui: udsf
+    scp: upf
+    udr: smf
+    udm: smf
+    intruder: amf
+    test: amf
+    webui: master
+    ztx: master
   enableMongoReplicaSet: false
   dbCommEnabled:
-    amf: true
-    smf: true
-    upf: true
+    amf: false
+    smf: false
+    upf: false
   upsertApiEnabled:
     amf:
       create: false
@@ -77,89 +213,10 @@ pcs:
     smf: false
     upf: false
 
-pool:
-  key: 128
-  val: 65536
-
-max:
-  ue: 2048
-
-ueransim:
-  image:
-    repository: umakantk/ueransim
-    pullPolicy: Always
-    tag: "v0.5"
-
 mongodb:
+  username: root
+  password: root
   image:
     repository: umakantk/open5gs-mongo
     pullPolicy: IfNotPresent
-    tag: "v0.3"
-  sauri:
-    ausf: "mongodb://mongodb-svc/open5gs"
-    nssf: "mongodb://mongodb-svc/open5gs"
-    udm: "mongodb://mongodb-svc/open5gs"
-    test: "mongodb://mongodb-svc/"
-    bsf: "mongodb://mongodb-svc/open5gs"
-    nrf: "mongodb://mongodb-svc/open5gs"
-    pcf: "mongodb://mongodb-svc/open5gs"
-    udr: "mongodb://mongodb-svc/open5gs"
-    webui: "mongodb://mongodb-svc/open5gs"
-    amf: "mongodb://mongodb-svc:27017/?waitQueueTimeoutMS=1000"
-    smf: "mongodb://mongodb-svc:27017/?waitQueueTimeoutMS=1000"
-    upf: "mongodb://mongodb-svc:27017/?waitQueueTimeoutMS=1000"
-  rsuri:
-    ausf: "mongodb://open5gs-mongodb-0.mongodb-svc:27017,open5gs-mongodb-1.mongodb-svc:27017,open5gs-mongodb-2.mongodb-svc:27017,open5gs-mongodb-3.mongodb-svc:27017/open5gs?replicaSet=rs0"
-    nssf: "mongodb://open5gs-mongodb-0.mongodb-svc:27017,open5gs-mongodb-1.mongodb-svc:27017,open5gs-mongodb-2.mongodb-svc:27017,open5gs-mongodb-3.mongodb-svc:27017/open5gs?replicaSet=rs0"
-    udm: "mongodb://open5gs-mongodb-0.mongodb-svc:27017,open5gs-mongodb-1.mongodb-svc:27017,open5gs-mongodb-2.mongodb-svc:27017,open5gs-mongodb-3.mongodb-svc:27017/open5gs?replicaSet=rs0"
-    test: "mongodb://open5gs-mongodb-0.mongodb-svc:27017,open5gs-mongodb-1.mongodb-svc:27017,open5gs-mongodb-2.mongodb-svc:27017,open5gs-mongodb-3.mongodb-svc:27017/replicaSet=rs0"
-    bsf: "mongodb://open5gs-mongodb-0.mongodb-svc:27017,open5gs-mongodb-1.mongodb-svc:27017,open5gs-mongodb-2.mongodb-svc:27017,open5gs-mongodb-3.mongodb-svc:27017/open5gs?replicaSet=rs0"
-    nrf: "mongodb://open5gs-mongodb-0.mongodb-svc:27017,open5gs-mongodb-1.mongodb-svc:27017,open5gs-mongodb-2.mongodb-svc:27017,open5gs-mongodb-3.mongodb-svc:27017/open5gs?replicaSet=rs0"
-    pcf: "mongodb://open5gs-mongodb-0.mongodb-svc:27017,open5gs-mongodb-1.mongodb-svc:27017,open5gs-mongodb-2.mongodb-svc:27017,open5gs-mongodb-3.mongodb-svc:27017/open5gs?replicaSet=rs0"
-    udr: "mongodb://open5gs-mongodb-0.mongodb-svc:27017,open5gs-mongodb-1.mongodb-svc:27017,open5gs-mongodb-2.mongodb-svc:27017,open5gs-mongodb-3.mongodb-svc:27017/open5gs?replicaSet=rs0"
-    webui: "mongodb://open5gs-mongodb-0.mongodb-svc:27017,open5gs-mongodb-1.mongodb-svc:27017,open5gs-mongodb-2.mongodb-svc:27017,open5gs-mongodb-3.mongodb-svc:27017/open5gs?replicaSet=rs0"
-    amf: "mongodb://open5gs-mongodb-0.mongodb-svc:27017,open5gs-mongodb-1.mongodb-svc:27017,open5gs-mongodb-2.mongodb-svc:27017,open5gs-mongodb-3.mongodb-svc:27017/replicaSet=rs0"
-    smf: "mongodb://open5gs-mongodb-0.mongodb-svc:27017,open5gs-mongodb-1.mongodb-svc:27017,open5gs-mongodb-2.mongodb-svc:27017,open5gs-mongodb-3.mongodb-svc:27017/replicaSet=rs0"
-    upf: "mongodb://open5gs-mongodb-0.mongodb-svc:27017,open5gs-mongodb-1.mongodb-svc:27017,open5gs-mongodb-2.mongodb-svc:27017,open5gs-mongodb-3.mongodb-svc:27017/replicaSet=rs0"
-
-webui:
-  image:
-    repository: registry.gitlab.com/infinitydon/registry/open5gs-webui
-    pullPolicy: Always
-    tag: "v2.2.2"
-  ingress:
-    enabled: false
-    ## Ingress annotations done as key:value pairs
-    ## For a full list of possible ingress annotations, please see
-    ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
-    ##
-    ## If tls is set to true, annotation ingress.kubernetes.io/secure-backends: true will automatically be set
-    # annotations:
-    #   kubernetes.io/ingress.class: nginx
-
-    hosts:
-      - name: open5gs-epc.local
-        paths: ["/"]
-        ## Set this to true in order to enable TLS on the ingress record
-        tls: false
-
-        ## Optionally specify the TLS hosts for the ingress record
-        ## Useful when the Ingress controller supports www-redirection
-        ## If not specified, the above host name will be used
-        # tlsHosts:
-        # - www.open5gs-epc.local
-        # - open5gs-epc.local
-
-        ## If TLS is set to true, you can declare what secret will store the key/certificate for TLS
-        # tlsSecret: open5gs-epc.local-tls
-
-dnn: internet
-
-amf:
-  mcc: 208
-  mnc: 93
-  tac: 1
-
-# Primary/Native kubernetes interface
-k8s:
-  interface: eth0
+    tag: "ztx_demo_aug"

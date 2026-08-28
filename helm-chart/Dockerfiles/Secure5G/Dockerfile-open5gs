@@ -1,0 +1,41 @@
+FROM ubuntu:22.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+ARG ARG_TIMEZONE=America/Indiana/Indianapolis
+ENV ENV_TIMEZONE=${ARG_TIMEZONE}
+
+RUN apt-get update && \
+   apt-get -yq dist-upgrade && \
+   apt-get --no-install-recommends -qqy install python3-pip python3-setuptools python3-wheel ninja-build build-essential \
+   flex bison git libsctp-dev libgnutls28-dev libgcrypt-dev libssl-dev libidn11-dev libmongoc-dev libbson-dev libyaml-dev \
+   libmicrohttpd-dev libcurl4-gnutls-dev meson iproute2 libnghttp2-dev tcpdump vim net-tools iptables iputils-ping tcpdump \
+   cmake curl wget gnupg meson openssh-client jq libtins-dev gdb tzdata ntp ntpstat ntpdate libtalloc-dev tshark 
+
+ENV TZ="America/Indiana/Indianapolis"
+
+#RUN wget https://github.com/mongodb/mongo-c-driver/releases/download/1.20.1/mongo-c-driver-1.20.1.tar.gz && tar xzf mongo-c-driver-1.20.1.tar.gz && cd mongo-c-driver-1.20.1 && mkdir cmake-build && cd cmake-build && cmake -DENABLE_AUTOMATIC_INIT_AND_CLEANUP=OFF .. && cmake --build . && cmake -DCMAKE_INSTALL_PREFIX=/usr .. && cmake --build . --target install
+
+RUN   git clone --recursive https://github.com/open5gs/open5gs && \
+   cd open5gs && git checkout v2.7.2 && meson build --prefix=/ && ninja -C build && cd build && ninja install
+
+#RUN mkdir -p /configs
+#COPY config/* /configs/
+
+# sync timezone
+RUN echo '$ENV_TIMEZONE' > /etc/timezone \
+    && ln -fsn /usr/share/zoneinfo/$ENV_TIMEZONE /etc/localtime \
+    && dpkg-reconfigure --frontend noninteractive tzdata
+
+RUN wget https://downloads.mongodb.com/compass/mongodb-mongosh_2.3.6_amd64.deb && \
+   dpkg -i mongodb-mongosh_2.3.6_amd64.deb && \
+   mongosh --version
+
+WORKDIR /
+
+# cd /opt/opensource-5g-core/helm-chart
+# docker build -t umakantk/open5gs:benchmark -f Dockerfiles/Secure5G/Dockerfile .
+# docker run -it -e NF=amf --name uk1 -d umakantk/open5gs:benchmark sleep infinity
+# docker exec -it uk1 bash
+# docker stop uk1
+# docker rm -f uk1
+# docker push umakantk/open5gs:benchmark

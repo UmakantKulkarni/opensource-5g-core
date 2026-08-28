@@ -1,3 +1,10 @@
+{{- define "wait-for-paas" -}}
+{{ include "mongodb-wait" . }}
+{{- if .Values.monitoring.prometheus.enabled -}}
+{{ include "prometheus-wait" . }}
+{{- end }}
+{{- end -}}
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -18,24 +25,43 @@ spec:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
             - matchExpressions:
-              - key: kubernetes.io/pcs-nf-type
+              - key: pcs-nf-type
                 operator: In
                 values:
                 - {{ .Values.pcs.nodeAffinity.test | quote }}
       {{ end }}
+      {{- include "ztxInitContainer" . | nindent 6 }}
+      serviceAccountName: open5gs
       containers:
-      - name: myapp-container
-        image: "{{ .Values.ueransim.image.repository }}:{{ .Values.ueransim.image.tag }}"
-        imagePullPolicy: {{ .Values.ueransim.image.pullPolicy }}
-        securityContext:
-          privileged: true
-        imagePullPolicy: Always
-        command: ["/bin/sh"]
-        args: ["-c", "sleep infinity"]
-        env:
-          - name: DB_URI
-            {{ if .Values.pcs.enableMongoReplicaSet }}
-            value: {{ .Values.mongodb.rsuri.test | quote }}
-            {{ else }}
-            value: {{ .Values.mongodb.sauri.test | quote }}
-            {{ end }}
+        {{- include "ztxAppTemplate" . | nindent 8 }}
+        - name: test
+          image: "{{ .Values.ueransim.image.repository }}:{{ .Values.ueransim.image.tag }}"
+          imagePullPolicy: {{ .Values.ueransim.image.pullPolicy }}
+          securityContext:
+            privileged: true
+          command: [ "bash", "-c" ]
+          args:
+          - {{ include "wait-for-paas" . | indent 12 }}
+            sleep infinity;
+          env:
+            - name: DB_URI
+              value: {{ include "mongodbUri" . | quote }}
+            - name: MY_POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: open5gs-test
+  labels:
+    epc-mode: test
+spec:
+  selector:
+    epc-mode: test
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+---

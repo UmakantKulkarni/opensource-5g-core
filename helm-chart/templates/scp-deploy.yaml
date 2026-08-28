@@ -1,0 +1,77 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: open5gs-scp
+  labels:
+    epc-mode: scp
+spec:
+  selector:
+    epc-mode: scp
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: open5gs-scp-metrics
+  labels:
+    epc-mode: scp
+spec:
+  selector:
+    epc-mode: scp
+  ports:
+    - protocol: TCP
+      port: 9090
+      targetPort: 9090
+---
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: open5gs-scp-deployment
+  labels:
+    epc-mode: scp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      epc-mode: scp
+  template:
+    metadata:
+#      annotations:
+#        "helm.sh/hook": pre-install    
+      labels:
+        epc-mode: scp
+    spec:
+      {{ if .Values.pcs.nodeAffinity.enabled }}
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: pcs-nf-type
+                operator: In
+                values:
+                - {{ .Values.pcs.nodeAffinity.scp | quote }}
+      {{ end }}
+      {{- include "ztxInitContainer" . | nindent 6 }}
+      serviceAccountName: open5gs
+      containers:
+        {{- include "ztxAppTemplate" . | nindent 8 }}
+        - name: scp
+          image: "{{ .Values.open5gs.image.repository }}:{{ .Values.open5gs.image.tag }}"
+          imagePullPolicy: {{ .Values.open5gs.image.pullPolicy }}
+          command: ["open5gs-scpd", "-c", "/open5gs/config-map/scp.yaml"]
+          env:
+          - name: DB_URI
+            value: {{ include "mongodbUri" . | quote }}
+          volumeMounts:
+            - name: open5gs-scp-config
+              mountPath: /open5gs/config-map/scp.yaml
+              subPath: "scp.yaml"
+      volumes:
+        - name: open5gs-scp-config
+          configMap:
+            name: open5gs-scp-config
+
